@@ -3,7 +3,7 @@
     <div class="textinput__slot">
       <slot name="left"></slot>
     </div>
-    <input @focus="focused = true" @blur="focused = false" class="textinput__input" :placeholder="placeholder"/>
+    <input :value="modelValue" @input="handleInput($event)" @focus="focused = true" @blur="focused = false" class="textinput__input" :placeholder="placeholder"/>
     <div>
       <slot name="right"></slot>
     </div>
@@ -15,9 +15,18 @@
 
   defineProps({
     placeholder: String,
+    modelValue: String
   });
 
+  const emit = defineEmits([
+    'update:modelValue'
+  ]);
+
   const focused = ref<boolean>(false);
+
+  const handleInput = (e: any) => {
+    emit('update:modelValue', e.target.value)
+  }
 </script>
 
 <style lang="scss" scoped src="./TextInput.scss"/>

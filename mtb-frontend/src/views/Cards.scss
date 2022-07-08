@@ -16,4 +16,14 @@
   &__icon {
     margin: 0 7px;
   }
+
+  &__cards {
+    padding: 3em;
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  &__card {
+    margin: 1em;
+  }
 }

@@ -28,6 +28,9 @@
       </Icon>
     </div>
     <BaseHeader>Search results</BaseHeader>
+    <div class="cards-view__cards">
+      <CardItem class="cards-view__card" v-for="index in 10" :key="index" />
+    </div>
   </div>
 </template>
 
@@ -35,6 +38,7 @@
 import TextInput from '@/components/TextInput.vue';
 import Icon from '@/components/Icon.vue';
 import BaseHeader from '@/components/typography/BaseHeader.vue';
+import CardItem from '@/components/CardItem.vue';
 
 import { ref, watch } from 'vue';
 import debounce from 'lodash.debounce';

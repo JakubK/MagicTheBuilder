@@ -5,6 +5,7 @@ specifiers:
   '@vitejs/plugin-vue': ^2.3.3
   '@vue/runtime-dom': ^3.2.37
   axios: ^0.27.2
+  lodash.debounce: ^4.0.8
   sass: ^1.53.0
   typescript: ^4.5.4
   vite: ^2.9.9
@@ -14,6 +15,7 @@ specifiers:
 
 dependencies:
   axios: 0.27.2
+  lodash.debounce: 4.0.8
   vue: 3.2.37
   vue-router: 4.1.1_vue@3.2.37
 
@@ -527,6 +529,10 @@ packages:
     resolution: {integrity: sha512-41Cifkg6e8TylSpdtTpeLVMqvSBEVzTttHvERD741+pnZ8ANv0004MRL43QKPDlK9cGvNp6NZWZUBlbGXYxxng==}
     engines: {node: '>=0.12.0'}
     dev: true
+
+  /lodash.debounce/4.0.8:
+    resolution: {integrity: sha512-FT1yDzDYEoYWhnSGnpE/4Kj1fLZkDFyqRb7fNt6FdYOSxlUWAtp42Eh6Wb0rGIv/m9Bgo7x4GhQbm5Ys4SG5ow==}
+    dev: false
 
   /magic-string/0.25.9:
     resolution: {integrity: sha512-RmF0AsMzgt25qzqqLc1+MbHmhdx0ojF2Fvs4XnOqz2ZOBXzzkEwc/dJQZCYHAn7v1jbVOjAZfK8msRn4BxO4VQ==}

@@ -1,7 +1,7 @@
 <template>
   <div>
-    <Sidebar :top-items="topItems" :bottom-items="bottomItems" title="MagicTheBuilder" />
-    <main style="position: absolute; left: 200px;">
+    <Sidebar v-model="leftMargin" :top-items="topItems" :bottom-items="bottomItems" title="MagicTheBuilder" />
+    <main :style="{left: leftMargin + 'px'}">
       <router-view></router-view>
     </main>
   </div>
@@ -15,6 +15,9 @@ import githubIcon from '@/assets/github.svg?raw';
 import cogIcon from '@/assets/cog.svg?raw';
 import logoutIcon from '@/assets/logout.svg?raw';
 import usersIcon from '@/assets/users.svg?raw';
+import { ref } from 'vue';
+
+const leftMargin = ref();
 
 const topItems: SidebarItem[] = [
   {
@@ -54,6 +57,13 @@ const bottomItems: SidebarItem[] = [
 </script>
 
 <style>
+
+main {
+  position: absolute;
+  left: 200px;
+  transition: all 0.5s;
+}
+
 body {
   margin: 0;
 }

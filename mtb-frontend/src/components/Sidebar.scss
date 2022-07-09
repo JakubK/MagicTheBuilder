@@ -35,7 +35,9 @@
   }
 
   &__arrow {
-    transition: all 1s;
+    display: flex;
+    align-items: center;
+    transition: all 0.7s;
     transform: rotate(180deg);
     &--active {
       transform: rotate(0);

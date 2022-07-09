@@ -11,27 +11,10 @@
     </header>
     <div class="sidebar__content">
       <div class="sidebar__upper-content">
-        <component v-for="(item, index) in topItems" :key="index"
-          class="sidebar__item"
-          :class="{ 'sidebar__item--rolled': !active }"
-          :is="item.routerLink ? 'router-link' : 'div'"
-          :to="item.routerLink">
-            <Icon>
-              <span v-html="item.svg"></span>
-            </Icon>
-            <span v-if="active">{{ item.title }}</span>
-        </component>
+        <SidebarItemVue v-for="(item, index) in topItems" :key="index" :item="item" :active="active" />
       </div>
       <div class="sidebar__lower-content">
-        <component v-for="(item, index) in bottomItems" :key="index"
-          class="sidebar__item"
-          :class="{ 'sidebar__item--rolled': !active }"
-          :is="item.routerLink ? 'router-link' : 'div'">
-            <Icon>
-              <span v-html="item.svg"></span>
-            </Icon>
-            <span v-if="active">{{ item.title }}</span>
-        </component>
+        <SidebarItemVue v-for="(item, index) in bottomItems" :key="index" :item="item" :active="active" />
       </div>
     </div>
   </nav>
@@ -45,6 +28,8 @@ import { ref, PropType } from 'vue';
 import arrowIcon from '@/assets/arrow.svg?raw';
 
 import { SidebarItem } from '@/models/sidebarItem';
+
+import SidebarItemVue from './SidebarItem.vue';
 
 const active = ref(true);
 defineProps({
@@ -63,8 +48,6 @@ const handleArrowClick = () => {
   active.value = !active.value;
   emit('update:modelValue', active.value ? 200 : 50);
 };
-
 </script>
-
 
 <style lang="scss" scoped src="./Sidebar.scss"/>

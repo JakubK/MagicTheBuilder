@@ -22,7 +22,7 @@ const leftMargin = ref();
 const topItems: SidebarItem[] = [
   {
     title: 'Cards',
-    routerLink: '',
+    routerLink: 'friends',
     svg: usersIcon
   },
   {

@@ -11,22 +11,27 @@
     </header>
     <div class="sidebar__content">
       <div class="sidebar__upper-content">
-        <div v-for="(item, index) in topItems" :key="index" class="sidebar__item"
-          :class="{ 'sidebar__item--rolled': !active }">
-          <Icon>
-            <span v-html="item.svg"></span>
-          </Icon>
-          <span v-if="active">{{ item.title }}</span>
-        </div>
+        <component v-for="(item, index) in topItems" :key="index"
+          class="sidebar__item"
+          :class="{ 'sidebar__item--rolled': !active }"
+          :is="item.routerLink ? 'router-link' : 'div'"
+          :to="item.routerLink">
+            <Icon>
+              <span v-html="item.svg"></span>
+            </Icon>
+            <span v-if="active">{{ item.title }}</span>
+        </component>
       </div>
       <div class="sidebar__lower-content">
-        <div v-for="(item, index) in bottomItems" :key="index" class="sidebar__item"
-          :class="{ 'sidebar__item--rolled': !active }">
-          <Icon>
-            <span v-html="item.svg"></span>
-          </Icon>
-          <span v-if="active">{{ item.title }}</span>
-        </div>
+        <component v-for="(item, index) in bottomItems" :key="index"
+          class="sidebar__item"
+          :class="{ 'sidebar__item--rolled': !active }"
+          :is="item.routerLink ? 'router-link' : 'div'">
+            <Icon>
+              <span v-html="item.svg"></span>
+            </Icon>
+            <span v-if="active">{{ item.title }}</span>
+        </component>
       </div>
     </div>
   </nav>

@@ -43,6 +43,7 @@
   }
 
   &__content {
+    padding-top: 2em;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -68,9 +69,9 @@
     }
 
     &--rolled {
-      padding: 1em;
+      padding: 0.7em;
       &:hover {
-        padding: 1em;
+        padding: 0.7em;
         transform: scale(0.7);
       }
     }

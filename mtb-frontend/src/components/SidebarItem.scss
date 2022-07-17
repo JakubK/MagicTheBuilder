@@ -12,19 +12,49 @@
 
   transition: all 0.5s;
 
+  position: relative;
+
+  &__heading {
+    display: flex;
+    align-items: center;
+    span {
+      margin-right: 6px;
+    }
+  }
+
   &:hover {
     padding: 1em 3em;
   }
 
   &--rolled {
     padding: 0.7em;
+
     &:hover {
       padding: 0.7em;
       transform: scale(0.7);
     }
   }
+
+  &__icon {
+    transform: rotate(180deg);
+    &--rolled {
+      transform: rotate(0deg);
+    }
+  }
 }
 
 .router-link-active {
-  background: #2D7DD2;;
+  background: #2D7DD2;
+  ;
+}
+
+/* Sidebar items Transition */
+.v-enter-active,
+.v-leave-active {
+  transition: opacity 0.4s;
+}
+
+.v-enter-from,
+.v-leave-to {
+  opacity: 0;
 }

@@ -1,5 +1,6 @@
 export interface SidebarItem {
   title: string;
   svg: any;
-  routerLink: string;
+  routerLink?: string;
+  items?: SidebarItem[]
 }

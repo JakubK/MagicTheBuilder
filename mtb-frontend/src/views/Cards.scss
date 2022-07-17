@@ -1,0 +1,29 @@
+.cards-view {
+  padding: 2em;
+
+  &__query {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  &__input {
+    max-width: 45%;
+    width: 100%;
+    margin-right: 10px;
+  }
+
+  &__icon {
+    margin: 0 7px;
+  }
+
+  &__cards {
+    padding: 3em;
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  &__card {
+    margin: 1em;
+  }
+}

@@ -1,15 +1,22 @@
-import HelloWorld from "@/components/HelloWorld.vue";
+import Auth from "@/views/Auth.vue";
 import Cards from "@/views/Cards.vue";
+import Main from "@/views/Main.vue";
 import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
 
 const routes: RouteRecordRaw[] = [
   {
-    path: '/',
-    component: HelloWorld
+    path: '/auth',
+    component: Auth
   },
   {
-    path: '/cards',
-    component: Cards
+    path: '/',
+    component: Main,
+    children: [
+      {
+        path: 'cards',
+        component: Cards
+      }
+    ]
   }
 ]
 

@@ -3,7 +3,7 @@
     <div class="textinput__slot">
       <slot name="left"></slot>
     </div>
-    <input :value="modelValue" @input="handleInput($event)" @focus="focused = true" @blur="focused = false"
+    <input :type="type" :value="modelValue" @input="handleInput($event)" @focus="focused = true" @blur="focused = false"
       class="textinput__input" :placeholder="placeholder" />
     <div>
       <slot name="right"></slot>
@@ -16,7 +16,12 @@ import { ref } from 'vue';
 
 defineProps({
   placeholder: String,
-  modelValue: String
+  modelValue: String,
+  type: {
+    type: String,
+    required: false,
+    default: 'text'
+  }
 });
 
 const emit = defineEmits([

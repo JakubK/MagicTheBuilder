@@ -13,7 +13,7 @@
       <CheckBox :errors="mapErrors(v$.allowDataProcessing.$errors)" v-model="form.allowDataProcessing" label="I accept that my data will be stored and processed by this service" />
     </div>
     <br />
-    <button @click="submitRegister">Sign up</button>
+    <Button @click="submitRegister">Sign up</button>
   </div>
 </template>
 
@@ -27,6 +27,7 @@ import CheckBox from '@/components/CheckBox.vue';
 import { SignUp } from '@/models/signUp';
 import { areSame, mustBeTrue } from '@/utils/valitators';
 import { mapErrors} from '@/utils/errors';
+import Button from '@/components/Button.vue';
 
 const form = reactive<SignUp>({
   email: '',
@@ -35,7 +36,6 @@ const form = reactive<SignUp>({
   allowDataProcessing: false,
   allowNotifications: false
 });
-
 
 const rules = {
   email: {

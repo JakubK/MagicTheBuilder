@@ -13,6 +13,13 @@
     margin-top: 4em;
   }
 
+  &__forgot {
+    font-family: 'Inter', sans-serif;
+    color: #2D7DD2;
+    font-weight: 400;
+    font-size: 16px;
+  }
+
   &__remember {
     display: flex;
     justify-content: space-between;

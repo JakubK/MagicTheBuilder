@@ -8,10 +8,10 @@
       <br />
       <div class="login__remember">
         <CheckBox v-model="form.rememberMe" label="Remember me"/>
-        <span>Forgot your password?</span>
+        <span class="login__forgot">Forgot your password?</span>
       </div>
       <br />
-      <button @click="submitLogin">Sign in</button>
+      <Button @click="submitLogin">Sign in</Button>
     </div>
   </div>
 </template>
@@ -23,8 +23,10 @@ import { required, email, minLength } from '@vuelidate/validators'
 
 import TextInput from '@/components/TextInput.vue';
 import CheckBox from '@/components/CheckBox.vue';
+
 import { SignIn } from '@/models/signIn';
 import { mapErrors} from '@/utils/errors';
+import Button from '@/components/Button.vue';
 
 const form = reactive<SignIn>({
   email: '',

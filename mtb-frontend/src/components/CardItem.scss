@@ -2,7 +2,6 @@
   width: 265px;
   height: 370px;
 
-  cursor: pointer;
 
   &__content {
     position: relative;
@@ -20,6 +19,7 @@
 
   &__front {
     background: red;
+    cursor: pointer;
   }
 
   &__back {
@@ -69,6 +69,8 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+
+    cursor: pointer;
   }
 
   &__counter {
@@ -79,6 +81,10 @@
 
     position: relative;
     bottom: 2.2em;
+  }
+
+  &__flip {
+    cursor: pointer;
   }
 
   &__count {

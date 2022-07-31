@@ -1,0 +1,15 @@
+.button {
+  padding: 10px;
+  outline: none;
+  cursor: pointer;
+  color: white;
+
+  background: #2D7DD2;
+  border: none;
+
+  &--ghost {
+  
+    border: 1px solid white;
+    background: transparent;
+  }
+}

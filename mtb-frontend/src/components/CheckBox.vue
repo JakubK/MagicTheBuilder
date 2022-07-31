@@ -1,15 +1,21 @@
 <template>
-  <div class="checkbox">
-    <div @click="clicked" class="checkbox__circle">
-      <div v-if="modelValue" class="checkbox__check"></div>
+  <div>
+    <div class="checkbox">
+      <div @click="clicked" class="checkbox__circle">
+        <div v-if="modelValue" class="checkbox__check"></div>
+      </div>
+      <span class="checkbox__label">{{ label }}</span>
     </div>
-    <span class="checkbox__label">{{ label }}</span>
+    <ErrorLabel :message="error.message" v-for="(error, index) in errors" :key="index" />
   </div>
 </template>
+
 
 <style lang="scss" scoped src="./CheckBox.scss"/>
 
 <script lang="ts" setup>
+import { PropType } from 'vue';
+import ErrorLabel from './ErrorLabel.vue';
 const props = defineProps({
   modelValue: {
     type: Boolean,
@@ -18,6 +24,9 @@ const props = defineProps({
   },
   label: {
     type: String
+  },
+  errors: {
+    type: Array as PropType<Array<{message: string}>>
   }
 });
 

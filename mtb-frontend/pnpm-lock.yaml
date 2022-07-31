@@ -5,6 +5,8 @@ specifiers:
   '@types/node': ^18.0.0
   '@vitejs/plugin-vue': ^2.3.3
   '@vue/runtime-dom': ^3.2.37
+  '@vuelidate/core': 2.0.0-alpha.43
+  '@vuelidate/validators': 2.0.0-alpha.31
   axios: ^0.27.2
   lodash.debounce: ^4.0.8
   sass: ^1.53.0
@@ -15,6 +17,8 @@ specifiers:
   vue-tsc: ^0.34.7
 
 dependencies:
+  '@vuelidate/core': 2.0.0-alpha.43_vue@3.2.37
+  '@vuelidate/validators': 2.0.0-alpha.31_vue@3.2.37
   axios: 0.27.2
   lodash.debounce: 4.0.8
   vue: 3.2.37
@@ -181,6 +185,24 @@ packages:
 
   /@vue/shared/3.2.37:
     resolution: {integrity: sha512-4rSJemR2NQIo9Klm1vabqWjD8rs/ZaJSzMxkMNeJS6lHiUjjUeYFbooN19NgFjztubEKh3WlZUeOLVdbbUWHsw==}
+
+  /@vuelidate/core/2.0.0-alpha.43_vue@3.2.37:
+    resolution: {integrity: sha512-0/IoC8+A/wgNqmTIQc2eFYYnBlwIkvfM+riVDG1HAG3amdH7iNrFxNRkiHH/XJ810ZpOYPfYVslqYLbgq6E5HQ==}
+    dependencies:
+      vue-demi: 0.13.6_vue@3.2.37
+    transitivePeerDependencies:
+      - '@vue/composition-api'
+      - vue
+    dev: false
+
+  /@vuelidate/validators/2.0.0-alpha.31_vue@3.2.37:
+    resolution: {integrity: sha512-+MFA9nZ7Y9zCpq383/voPDk/hiAmu6KqiJJhLOYB/FmrUPVoyKnuKnI9Bwiq8ok9GZlVkI8BnIrKPKGj9QpwiQ==}
+    dependencies:
+      vue-demi: 0.13.6_vue@3.2.37
+    transitivePeerDependencies:
+      - '@vue/composition-api'
+      - vue
+    dev: false
 
   /anymatch/3.1.2:
     resolution: {integrity: sha512-P43ePfOAIupkguHUycrc4qJ9kz8ZiuOUijaETwX7THt0Y/GNK7v0aa8rY816xWjZ7rJdA5XdMcpVFTKMq+RvWg==}
@@ -684,6 +706,21 @@ packages:
     optionalDependencies:
       fsevents: 2.3.2
     dev: true
+
+  /vue-demi/0.13.6_vue@3.2.37:
+    resolution: {integrity: sha512-02NYpxgyGE2kKGegRPYlNQSL1UWfA/+JqvzhGCOYjhfbLWXU5QQX0+9pAm/R2sCOPKr5NBxVIab7fvFU0B1RxQ==}
+    engines: {node: '>=12'}
+    hasBin: true
+    requiresBuild: true
+    peerDependencies:
+      '@vue/composition-api': ^1.0.0-rc.1
+      vue: ^3.0.0-0 || ^2.6.0
+    peerDependenciesMeta:
+      '@vue/composition-api':
+        optional: true
+    dependencies:
+      vue: 3.2.37
+    dev: false
 
   /vue-router/4.1.1_vue@3.2.37:
     resolution: {integrity: sha512-Wp1mEf2xCwT0ez7o9JvgpfBp9JGnVb+dPERzXDbugTatzJAJ60VWOhJKifQty85k+jOreoFHER4r5fu062PhPw==}

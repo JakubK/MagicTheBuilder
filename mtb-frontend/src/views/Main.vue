@@ -73,7 +73,7 @@ const bottomItems: SidebarItem[] = [
   },
   {
     title: 'Log out',
-    routerLink: 'logout',
+    routerLink: '/logout',
     svg: logoutIcon
   }
 ]

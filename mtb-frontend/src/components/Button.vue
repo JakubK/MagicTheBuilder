@@ -11,7 +11,7 @@ type ButtonType = 'default' | 'ghost';
 
 defineProps({
   type: {
-    type: Object as PropType<ButtonType>,
+    type: String as PropType<ButtonType>,
     required: false,
     default: 'default'
   },

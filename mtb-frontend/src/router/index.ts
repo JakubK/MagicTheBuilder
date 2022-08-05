@@ -44,7 +44,7 @@ const routes: RouteRecordRaw[] = [
   },
   {
     path: '/logout',
-    redirect: 'auth',
+    redirect: '/auth',
     beforeEnter: () => localStorage.clear()
   }
 ]

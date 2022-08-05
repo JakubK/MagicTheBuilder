@@ -14,9 +14,38 @@ const routes: RouteRecordRaw[] = [
     children: [
       {
         path: 'cards',
-        component: Cards
+        redirect: 'cards/collection',
+        children: [
+          {
+            path: 'collection',
+            component: Cards
+          },
+          {
+            path: 'browse',
+            component: Cards
+          }
+        ]
+      },
+      {
+        path: 'decks',
+        redirect: 'decks/collection',
+        children: [
+          {
+            path: 'collection',
+            component: Cards
+          },
+          {
+            path: 'browse',
+            component: Cards
+          }
+        ]
       }
     ]
+  },
+  {
+    path: '/logout',
+    redirect: 'auth',
+    beforeEnter: () => localStorage.clear()
   }
 ]
 

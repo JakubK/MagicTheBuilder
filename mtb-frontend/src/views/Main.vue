@@ -27,12 +27,12 @@ const topItems: SidebarItem[] = [
       {
         title: 'Collection',
         svg: usersIcon,
-        routerLink: 'cards'
+        routerLink: '/cards/collection'
       },
       {
         title: 'Browse',
         svg: usersIcon,
-        routerLink: 'cards'
+        routerLink: '/cards/browse'
       }
     ]
   },
@@ -43,12 +43,12 @@ const topItems: SidebarItem[] = [
       {
         title: 'My decks',
         svg: usersIcon,
-        routerLink: 'cards'
+        routerLink: '/decks/collection'
       },
       {
         title: 'Community',
         svg: usersIcon,
-        routerLink: 'cards'
+        routerLink: '/decks/browse'
       }
     ]
   },
@@ -62,7 +62,8 @@ const topItems: SidebarItem[] = [
 const bottomItems: SidebarItem[] = [
   {
     title: 'Github',
-    routerLink: '',
+    routerLink: 'https://github.com/JakubK/MagicTheBuilder',
+    isOuterLink: true,
     svg: githubIcon
   },
   {
@@ -72,7 +73,7 @@ const bottomItems: SidebarItem[] = [
   },
   {
     title: 'Log out',
-    routerLink: '',
+    routerLink: 'logout',
     svg: logoutIcon
   }
 ]

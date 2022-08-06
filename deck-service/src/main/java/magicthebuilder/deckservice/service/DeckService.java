@@ -2,11 +2,14 @@ package magicthebuilder.deckservice.service;
 
 
 import magicthebuilder.deckservice.entity.Deck;
+import magicthebuilder.deckservice.entity.DeckAccessLevelEnum;
 import magicthebuilder.deckservice.repository.DeckRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class DeckService {
@@ -15,12 +18,13 @@ public class DeckService {
     private DeckRepository repository;
 
     public List<Deck> findall(){
-        var decks = (List<Deck>) repository.findAll();
-        return decks;
+        return (List<Deck>) repository.findAll();
     }
     public List<Deck> findallPublic(){
-        var decks = (List<Deck>) repository.findAllByisPrivate(false);
-        return decks;
+        return (List<Deck>) repository.findAllByAccessLevel(DeckAccessLevelEnum.PUBLIC);
+    }
+    public Optional<Deck> findById(UUID id){
+        return repository.findById(id);
     }
     public void addDeck(Deck deck){
         repository.save(deck);
@@ -29,5 +33,4 @@ public class DeckService {
     {
         repository.deleteAll();
     }
-
 }

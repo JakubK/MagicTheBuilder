@@ -4,6 +4,7 @@ package magicthebuilder.deckservice.entity;
 import java.util.*;
 
 import lombok.*;
+import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 
@@ -20,12 +21,38 @@ import javax.persistence.*;
 public class Deck {
 //    public User user;
     @Id
+    @GeneratedValue(generator = "uuid2")
+    @GenericGenerator(name = "uuid2", strategy = "org.hibernate.id.UUIDGenerator")
+    @Column(name = "id")
     public UUID uuid;
     public String name;
-    public Boolean isPrivate;
     public String gameMode;
-    @OneToMany(fetch = FetchType.EAGER)
-    public List<Card> cards;
+    public DeckAccessLevelEnum accessLevel;
+
+    @ElementCollection(fetch = FetchType.EAGER)
+    public List<String> cards;
+
+    public Date creationDate;
+    public Date lastUpdateDate;
+
+
+    @PrePersist
+    protected void onCreate(){
+        creationDate = new Date();
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        lastUpdateDate = new Date();
+    }
+
+    public Deck(String name, String gameMode, DeckAccessLevelEnum accessLevel, List<String> cards)
+    {
+        setName(name);
+        setGameMode(gameMode);
+        setAccessLevel(accessLevel);
+        setCards(cards);
+    }
 
 }
 

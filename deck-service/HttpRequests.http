@@ -1,0 +1,16 @@
+
+GET http://localhost:8080/api/decks/getPublicDecks
+
+###
+
+POST http://localhost:8080/api/decks
+Content-Type: application/json
+
+{
+  "name": "TEST NAME",
+  "gameMode": "TEST MODE",
+  "accessLevel": "PUBLIC",
+  "cards": [
+    "string","string","string"
+  ]
+}

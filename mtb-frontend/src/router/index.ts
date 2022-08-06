@@ -18,11 +18,17 @@ const routes: RouteRecordRaw[] = [
         children: [
           {
             path: 'collection',
-            component: Cards
+            component: Cards,
+            props: {
+              title: 'My cards collection'
+            }
           },
           {
             path: 'browse',
-            component: Cards
+            component: Cards,
+            props: {
+              title: 'All cards'
+            }
           }
         ]
       },
@@ -32,11 +38,17 @@ const routes: RouteRecordRaw[] = [
         children: [
           {
             path: 'collection',
-            component: Cards
+            component: Cards,
+            props: {
+              title: 'My decks'
+            }
           },
           {
             path: 'browse',
-            component: Cards
+            component: Cards,
+            props: {
+              title: 'Community decks'
+            }
           }
         ]
       }

@@ -1,6 +1,6 @@
 <template>
   <div class="cards-view">
-    <BaseHeader>Cards Query Tool</BaseHeader>
+    <BaseHeader>{{ title }}</BaseHeader>
     <div class="cards-view__query">
       <TextInput class="cards-view__input" v-model="search" placeholder="Type the name of card you're looking for...">
         <template v-slot:left>
@@ -29,6 +29,8 @@
     </div>
     <BaseHeader>Search results</BaseHeader>
     <div class="cards-view__cards">
+      <div class="cards-view__add">
+      </div>
       <CardItem class="cards-view__card" v-for="index in 10" :key="index" />
     </div>
   </div>
@@ -44,6 +46,13 @@ import { ref, watch } from 'vue';
 import debounce from 'lodash.debounce';
 
 const search = ref('');
+
+defineProps({
+  title: {
+    type: String,
+    required: true
+  }
+})
 
 watch(search, debounce(async(newSearchValue: string, previousValue: string) => {
   if(newSearchValue.length > 0 && newSearchValue != previousValue) {

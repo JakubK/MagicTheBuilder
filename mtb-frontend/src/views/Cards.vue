@@ -29,8 +29,10 @@
     </div>
     <BaseHeader>Search results</BaseHeader>
     <div class="cards-view__cards">
-      <div class="cards-view__add">
-      </div>
+      <router-link to="new">
+        <div class="cards-view__add">
+        </div>
+      </router-link>
       <CardItem class="cards-view__card" v-for="index in 10" :key="index" />
     </div>
   </div>

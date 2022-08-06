@@ -33,5 +33,12 @@
     height: 370px;
     background: yellow;
     border-radius: 11px;
+    cursor: pointer;
+    transition: all 0.1s;
+    filter: none;
+    &:hover {
+      transform: scale(1.01);
+      filter: drop-shadow(0 0 0.75rem lightgray);
+    }
   }
 }

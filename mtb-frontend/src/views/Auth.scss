@@ -1,0 +1,55 @@
+.auth {
+  height: 100vh;
+  display: flex;
+  
+  justify-content: center;
+  align-items: center;
+
+  &__wrapper {
+    position: relative;
+    padding: 2em;
+    width: 100%;
+    display: grid;
+    gap: 2em;
+    grid-template-columns: 1fr 1fr;
+  }
+
+  &__card {
+    position: fixed;
+    width: 50%;
+    left: 0;
+    top: 0;
+    height: 100%;
+    background: #2D7DD2;
+    transition: all 0.5s;
+
+    &--right {
+      left: 50%;
+    }
+  }
+}
+
+.card {
+  &__text {
+    font-family: 'Inter', sans-serif;
+    text-align: center;
+
+    color: white;
+    font-weight: 400;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    flex-shrink: 0;
+    flex-grow: 0;
+    height: 100%;
+
+    h2 {
+      font-size: 48px;
+    }
+
+    p {
+      font-size: 16px;
+    }
+  }
+}

@@ -1,0 +1,66 @@
+.sidebar {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 50px;
+  height: 100%;
+  background: #011627;
+
+  transition: all 0.5s;
+
+  &--active {
+    width: 200px;
+  }
+
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1em;
+    padding-top: 1.5em;
+    color: white;
+    font-size: 12px;
+
+    position: relative;
+  }
+
+  &__header::after {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    background: white;
+    content: '';
+  }
+
+  &__arrow {
+    display: flex;
+    align-items: center;
+    transition: all 0.7s;
+    transform: rotate(180deg);
+    &--active {
+      transform: rotate(0);
+    }
+  }
+
+  &__content {
+    padding-top: 2em;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+    height: calc(100vh - 58px);
+  }
+}
+
+/* Sidebar title Transition */
+.v-enter-active,
+.v-leave-active {
+  transition: opacity 0.5s ease;
+}
+
+.v-enter-from,
+.v-leave-to {
+  opacity: 0;
+}

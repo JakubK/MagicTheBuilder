@@ -2,12 +2,17 @@
   <div class="card-item" :class="{ 'card-item--flipped': flipped }">
     <div class="card-item__content">
       <div @click="flipped = !flipped" class="card-item__front">
+        <img class="card-item__image" src="@/assets/cardMock.png"/>
       </div>
       <div class="card-item__back card-reverse">
+        <img class="card-item__image" src="@/assets/cardMock.png"/>
+        <div class="card-reverse__blur"></div>
         <header class="card-reverse__head">
           <div class="card-reverse__title">
             Sword of Light and Shadow
           </div>
+        </header>
+        <footer>
           <div class="card-reverse__actions">
             <div class="card-reverse__action">
               <Icon>
@@ -60,7 +65,7 @@
               </div>
             </div>
           </div>
-        </header>
+        </footer>
       </div>
     </div>
   </div>

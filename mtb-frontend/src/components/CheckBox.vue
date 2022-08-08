@@ -10,7 +10,6 @@
   </div>
 </template>
 
-
 <style lang="scss" scoped src="./CheckBox.scss"/>
 
 <script lang="ts" setup>

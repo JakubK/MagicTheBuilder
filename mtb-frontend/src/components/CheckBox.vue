@@ -10,8 +10,6 @@
   </div>
 </template>
 
-<style lang="scss" scoped src="./CheckBox.scss"/>
-
 <script lang="ts" setup>
 import { PropType } from 'vue';
 import ErrorLabel from './ErrorLabel.vue';
@@ -36,3 +34,5 @@ const clicked = () => {
 };
 
 </script>
+
+<style lang="scss" scoped src="./CheckBox.scss"/>

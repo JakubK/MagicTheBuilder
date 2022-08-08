@@ -4,13 +4,14 @@
   &__query {
     display: flex;
     justify-content: center;
-    align-items: center;
   }
 
   &__input {
     max-width: 45%;
     width: 100%;
     margin-right: 10px;
+
+    position: relative;
   }
 
   &__icon {
@@ -40,5 +41,22 @@
       transform: scale(1.01);
       filter: drop-shadow(0 0 0.75rem lightgray);
     }
+  }
+
+  &__filters {
+    width: 100%;
+
+    padding: 1.3em;
+    border: 1px solid black;
+
+    position: relative;
+  }
+}
+
+.filters {
+  &__row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
   }
 }

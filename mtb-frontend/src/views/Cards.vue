@@ -41,11 +41,7 @@
           <br />
           <div class="filters__row">
             Colors:
-            <CheckBox label="Red" />
-            <CheckBox label="White" />
-            <CheckBox label="Blue" />
-            <CheckBox label="Green" />
-            <CheckBox label="Black" />
+            <CheckBox :label="color.label" v-model="color.checked" v-for="color in colors" :key="color.label"/>
           </div>
         </div>
       </div>
@@ -100,6 +96,24 @@ const applyFilters = () => {
 const cardFormatOption = ref({});
 const cardTypeOption = ref({});
 const cardSetOption = ref({});
+const colors = ref([
+  {
+    label: 'White',
+    checked: false,
+  },
+  {
+    label: 'Blue',
+    checked: false,
+  },
+  {
+    label: 'Green',
+    checked: false,
+  },
+  {
+    label: 'Black',
+    checked: false,
+  }
+])
 
 const resetQuery = () => {
   areFiltersShown.value = false;

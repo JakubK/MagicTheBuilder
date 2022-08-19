@@ -2,7 +2,7 @@
   <div class="cards-view">
     <BaseHeader>{{ title }}</BaseHeader>
     <div class="cards-view__query">
-      <div class="cards-view__input">
+      <div v-click-outside="resetQuery" class="cards-view__input">
         <TextInput v-model="search" placeholder="Type the name of card you're looking for...">
           <template v-slot:left>
             <svg style="margin-right: 20px" width="24" height="24" viewBox="0 0 24 24" fill="none"
@@ -34,9 +34,9 @@
         </TextInput>
         <div class="cards-view__filters filters" v-if="areFiltersShown">
           <div class="filters__row">
-            <TextInput placeholder="Card Format" />
-            <TextInput placeholder="Card Type" />
-            <TextInput placeholder="Card Set" />
+            <Select v-model="cardFormatOption" placeholder="Card Format"/>
+            <Select v-model="cardTypeOption" placeholder="Card Type" />
+            <Select v-model="cardSetOption" placeholder="Card Set" />
           </div>
           <br />
           <div class="filters__row">
@@ -66,10 +66,14 @@ import TextInput from '@/components/TextInput.vue';
 import Icon from '@/components/Icon.vue';
 import BaseHeader from '@/components/typography/BaseHeader.vue';
 import CardItem from '@/components/CardItem.vue';
+import CheckBox from '@/components/CheckBox.vue';
+import Select from '@/components/Select.vue';
 
 import { ref, watch } from 'vue';
 import debounce from 'lodash.debounce';
-import CheckBox from '@/components/CheckBox.vue';
+import ClickOutside from 'click-outside-vue3';
+
+const vClickOutside = ClickOutside.directive;
 
 const search = ref('');
 
@@ -90,6 +94,14 @@ const areFiltersShown = ref(false);
 
 const applyFilters = () => {
   //  Send Query
+  areFiltersShown.value = false;
+}
+
+const cardFormatOption = ref({});
+const cardTypeOption = ref({});
+const cardSetOption = ref({});
+
+const resetQuery = () => {
   areFiltersShown.value = false;
 }
 

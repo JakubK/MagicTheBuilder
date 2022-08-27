@@ -2,7 +2,7 @@ package magicthebuilder.deckservice.service;
 
 
 import magicthebuilder.deckservice.entity.Deck;
-import magicthebuilder.deckservice.entity.DeckAccessLevelEnum;
+import magicthebuilder.deckservice.entity.enums.DeckAccessLevelEnum;
 import magicthebuilder.deckservice.repository.DeckRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,10 +18,10 @@ public class DeckService {
     private DeckRepository repository;
 
     public List<Deck> findall(){
-        return (List<Deck>) repository.findAll();
+        return repository.findAll();
     }
     public List<Deck> findallPublic(){
-        return (List<Deck>) repository.findAllByAccessLevel(DeckAccessLevelEnum.PUBLIC);
+        return repository.findAllByAccessLevel(DeckAccessLevelEnum.PUBLIC);
     }
     public Optional<Deck> findById(UUID id){
         return repository.findById(id);

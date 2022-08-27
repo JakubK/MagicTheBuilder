@@ -1,4 +1,4 @@
-package magicthebuilder.deckservice.entity;
+package magicthebuilder.deckservice.entity.enums;
 
 public enum DeckAccessLevelEnum {
     PUBLIC,

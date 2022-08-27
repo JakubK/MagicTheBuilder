@@ -4,6 +4,8 @@ package magicthebuilder.deckservice.entity;
 import java.util.*;
 
 import lombok.*;
+import magicthebuilder.deckservice.entity.enums.DeckAccessLevelEnum;
+import magicthebuilder.deckservice.service.DeckService;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
@@ -29,8 +31,8 @@ public class Deck {
     public String gameMode;
     public DeckAccessLevelEnum accessLevel;
 
-    @ElementCollection(fetch = FetchType.EAGER)
-    public List<String> cards;
+    @ManyToMany
+    private List<Card> cards;
 
     public Date creationDate;
     public Date lastUpdateDate;
@@ -46,12 +48,19 @@ public class Deck {
         lastUpdateDate = new Date();
     }
 
-    public Deck(String name, String gameMode, DeckAccessLevelEnum accessLevel, List<String> cards)
+    public Deck(String name, String gameMode, DeckAccessLevelEnum accessLevel, List<Card> cards)
     {
         setName(name);
         setGameMode(gameMode);
         setAccessLevel(accessLevel);
         setCards(cards);
+    }
+    public Deck(String name, String gameMode, DeckAccessLevelEnum accessLevel)
+    {
+        setName(name);
+        setGameMode(gameMode);
+        setAccessLevel(accessLevel);
+        this.cards = new ArrayList<>();
     }
 
 }

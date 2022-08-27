@@ -1,8 +1,11 @@
 package magicthebuilder.deckservice.entity;
 
 import lombok.*;
+import magicthebuilder.deckservice.entity.enums.CollectionAccessLevelEnum;
 
+import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
@@ -10,15 +13,21 @@ import java.util.UUID;
 @Setter
 @Builder
 @ToString
-@AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode
-public class User implements Serializable {
-    public String name;
-    public UUID uuid;
-    private String email;
-    //private password
-    public List<Deck> decks;
+@Entity
+@Table(name="users")
+public class User {
+    @Id
+    public Long id;
+
+    @OneToOne
+    private Collection collection;
+
+    public User(Long id, Collection coll) {
+        this.id = id;
+        this.collection = coll;
+    }
 
 
 }

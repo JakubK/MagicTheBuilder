@@ -1,7 +1,8 @@
+import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
 import Auth from "@/views/Auth.vue";
+import CardDetails from "@/views/CardDetails.vue";
 import Cards from "@/views/Cards.vue";
 import Main from "@/views/Main.vue";
-import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
 
 const routes: RouteRecordRaw[] = [
   {
@@ -29,6 +30,11 @@ const routes: RouteRecordRaw[] = [
             props: {
               title: 'All cards'
             }
+          },
+          {
+            path: ':id',
+            component: CardDetails,
+            props: true
           }
         ]
       },

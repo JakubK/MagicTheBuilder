@@ -11,7 +11,6 @@ import java.util.UUID;
 
 @Getter
 @Setter
-@Builder
 @ToString
 @NoArgsConstructor
 @EqualsAndHashCode
@@ -19,15 +18,7 @@ import java.util.UUID;
 @Table(name="users")
 public class User {
     @Id
+    @GeneratedValue
     public Long id;
-
-    @OneToOne
-    private Collection collection;
-
-    public User(Long id, Collection coll) {
-        this.id = id;
-        this.collection = coll;
-    }
-
 
 }

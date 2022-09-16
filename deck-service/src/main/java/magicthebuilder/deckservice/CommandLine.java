@@ -38,12 +38,13 @@ public class CommandLine implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
-        deckService.flushDatabase();
+
+        clearDatabase();
         prepareInitialData();
 
-        Card card = new Card("aaa");
 
-        cardService.addCard(card);
+
+        Card card = cardService.getCard("1");
         List<Card> coll= new ArrayList<>();
         coll.add(card);
         coll.add(card);
@@ -59,12 +60,19 @@ public class CommandLine implements CommandLineRunner {
     }
 
     private void prepareInitialData () {
-        Collection coll = new Collection(CollectionAccessLevelEnum.PUBLIC, Collections.emptyList());
-        collectionService.add(coll);
-
-        User us = new User(123451L,coll);
+        for(int i = 1 ; i < 100 ; i++) {
+            cardService.addCard(new Card(String.valueOf(i)));
+        }
+        User us = new User();
         userService.add(us);
 
+
+    }
+    private void clearDatabase () {
+        deckService.flushDatabase();
+        userService.flushDatabase();
+        collectionService.flushDatabase();
+        cardService.flushDatabase();
     }
 
 }

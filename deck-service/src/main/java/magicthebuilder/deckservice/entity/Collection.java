@@ -20,8 +20,7 @@ import java.util.List;
 public class Collection {
 
     @Id
-    @GeneratedValue
-    public Long id;
+    public Long userId;
 
     public CollectionAccessLevelEnum accessLevel;
 
@@ -35,7 +34,8 @@ public class Collection {
         lastUpdateDate = new Date();
     }
 
-    public Collection(CollectionAccessLevelEnum accessLevel, List<Card> cards) {
+    public Collection(Long id, CollectionAccessLevelEnum accessLevel, List<Card> cards) {
+        this.userId = id;
         this.accessLevel = accessLevel;
         this.cards = cards;
     }

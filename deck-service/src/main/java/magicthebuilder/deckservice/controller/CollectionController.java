@@ -1,5 +1,6 @@
 package magicthebuilder.deckservice.controller;
 
+import magicthebuilder.deckservice.dto.CollectionGetResponseDto;
 import magicthebuilder.deckservice.dto.CollectionUpdateRequestDto;
 import magicthebuilder.deckservice.dto.CollectionUpdateResponseDto;
 import magicthebuilder.deckservice.dto.MultipleCardDto;
@@ -22,15 +23,8 @@ public class CollectionController {
     private UserService userService;
 
     @GetMapping("/{userId}")
-    public String getCollection(@PathVariable("userId") Long id) {
-        Optional<User> user  = userService.findById(id);
-        if(user.isPresent()){
-            Optional<Collection> foundColl = collectionService.findById(user.get().getId());
-            if(foundColl.isPresent()) {
-                return foundColl.get().toString();
-            }
-        }
-        return "aa";
+    public CollectionGetResponseDto getCollection(@PathVariable("userId") Long id) {
+        return collectionService.getCollectionById(id);
     }
 
     @PostMapping("/{userId}")

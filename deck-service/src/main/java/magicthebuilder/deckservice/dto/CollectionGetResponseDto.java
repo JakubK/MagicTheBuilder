@@ -1,7 +1,5 @@
 package magicthebuilder.deckservice.dto;
 
-
-
 import lombok.*;
 import magicthebuilder.deckservice.entity.enums.CollectionAccessLevelEnum;
 
@@ -14,9 +12,8 @@ import java.util.List;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @ToString
 @EqualsAndHashCode
-public class CollectionUpdateRequestDto {
+public class CollectionGetResponseDto {
     private Long userId;
-    private List<MultipleCardDto> cardsToAdd;
-    private List<MultipleCardDto> cardsToRemove;
     private CollectionAccessLevelEnum accessLevel;
+    private List<MultipleCardDto> cards;
 }

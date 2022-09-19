@@ -27,6 +27,8 @@ public class CollectionController {
         return collectionService.getCollectionById(id);
     }
 
+    //TODO getting other user's collection if it's set to public
+
     @PostMapping("/{userId}")
     public CollectionUpdateResponseDto updateCollection(@RequestBody CollectionUpdateRequestDto deckDto) {
         Map<String, Integer> toAdd = new HashMap<>();

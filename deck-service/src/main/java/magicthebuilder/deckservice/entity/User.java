@@ -13,6 +13,7 @@ import java.util.UUID;
 @Setter
 @ToString
 @NoArgsConstructor
+@AllArgsConstructor
 @EqualsAndHashCode
 @Entity
 @Table(name="users")

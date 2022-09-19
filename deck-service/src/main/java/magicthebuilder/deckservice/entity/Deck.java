@@ -21,22 +21,24 @@ import javax.persistence.*;
 @Entity
 @Table(name="decks")
 public class Deck {
-//    public User user;
     @Id
     @GeneratedValue(generator = "uuid2")
     @GenericGenerator(name = "uuid2", strategy = "org.hibernate.id.UUIDGenerator")
     @Column(name = "id")
-    public UUID uuid;
-    public String name;
-    public String gameMode;
-    public DeckAccessLevelEnum accessLevel;
+    private UUID uuid;
+    private String name;
 
+    @ManyToOne
+    @JoinColumn(name="users_id")
+    private User owner;
+    private String gameMode;
+    private DeckAccessLevelEnum accessLevel;
     @ManyToMany
     private List<Card> cards;
-
-    public Date creationDate;
-    public Date lastUpdateDate;
-
+    @ManyToMany
+    private List<Card> sideboard;
+    private Date creationDate;
+    private Date lastUpdateDate;
 
     @PrePersist
     protected void onCreate(){
@@ -48,17 +50,19 @@ public class Deck {
         lastUpdateDate = new Date();
     }
 
-    public Deck(String name, String gameMode, DeckAccessLevelEnum accessLevel, List<Card> cards)
+    public Deck(String name, String gameMode,User owner, DeckAccessLevelEnum accessLevel, List<Card> cards)
     {
         setName(name);
         setGameMode(gameMode);
+        setOwner(owner);
         setAccessLevel(accessLevel);
         setCards(cards);
     }
-    public Deck(String name, String gameMode, DeckAccessLevelEnum accessLevel)
+    public Deck(String name, String gameMode,User owner, DeckAccessLevelEnum accessLevel)
     {
         setName(name);
         setGameMode(gameMode);
+        setOwner(owner);
         setAccessLevel(accessLevel);
         this.cards = new ArrayList<>();
     }

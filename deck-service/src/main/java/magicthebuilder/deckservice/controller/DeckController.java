@@ -2,6 +2,8 @@ package magicthebuilder.deckservice.controller;
 
 
 import magicthebuilder.deckservice.dto.CreateDeckDto;
+import magicthebuilder.deckservice.dto.DetailedDeckGetResponseDto;
+import magicthebuilder.deckservice.dto.SimpleDeckGetResponseDto;
 import magicthebuilder.deckservice.entity.Deck;
 import magicthebuilder.deckservice.service.DeckService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,41 +22,26 @@ public class DeckController {
     @Autowired
     private DeckService deckService;
 
-
-    @GetMapping("/getDecks")
-    public String findDecks() {
-        List<Deck> decks = deckService.findall();
-        return decks.toString();
+    @GetMapping("/admin")
+    public List<SimpleDeckGetResponseDto> getAllDecks() {
+        return deckService.getAllDecks();
     }
 
-    @GetMapping("/getPublicDecks")
-    public String findPublicDecks() {
-        List<Deck> decks = deckService.findallPublic();
-        return decks.toString();
+    @GetMapping("")
+    public List<SimpleDeckGetResponseDto> getPublicDecks() {
+        return deckService.getPublicDecks();
     }
 
-    @GetMapping("/{deckID}")
-    public String getDeck(@PathVariable("deckID") UUID id) {
-        Optional<Deck> deck = deckService.findById(id);
-        return deck.toString();
-    }
-
-    @GetMapping("{deckID}/addCard/{id}")
-    public String test(@PathVariable("id") int id, @PathVariable("deckID") UUID deckID)
-    {
-         // TODO - adding card to existing deck
-        //return "adding to deck - "+deckID+" a card with ID -"+id;
-        return  "";
+    @GetMapping("/{userId}/{deckID}")
+    public DetailedDeckGetResponseDto getUserDecks(@PathVariable("userId") Long userId, @PathVariable("deckID") UUID deckId) {
+        return deckService.getDeckByIdAndUserId(deckId, userId);
     }
 
    @PostMapping
-    public ResponseEntity<Void> add(@RequestBody CreateDeckDto deckDto, UriComponentsBuilder builder)
+   public UUID add(@RequestBody CreateDeckDto deckDto)
    {
-       Deck deck = CreateDeckDto.dtoToEntityMapper().apply(deckDto);
-       deckService.addDeck(deck);
-
-       return ResponseEntity.created(builder.pathSegment("api", "characters", "{id}")
-               .buildAndExpand(deck.getName()).toUri()).build();
+       Deck deck = deckService.createDeckFromDto(deckDto);
+       return deckService.addDeck(deck);
    }
 
 

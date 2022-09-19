@@ -1,19 +1,15 @@
 package magicthebuilder.deckservice.service;
 
-import magicthebuilder.deckservice.ResponseBuilder.CollectionUpdateResponseBuilder;
 import magicthebuilder.deckservice.dto.CollectionGetResponseDto;
 import magicthebuilder.deckservice.dto.CollectionUpdateResponseDto;
 import magicthebuilder.deckservice.dto.MultipleCardDto;
 import magicthebuilder.deckservice.entity.Card;
 import magicthebuilder.deckservice.entity.Collection;
-import magicthebuilder.deckservice.entity.Deck;
-import magicthebuilder.deckservice.entity.User;
 import magicthebuilder.deckservice.entity.enums.CollectionAccessLevelEnum;
 import magicthebuilder.deckservice.exception.customexceptions.UnrecognizedCardIdException;
 import magicthebuilder.deckservice.exception.customexceptions.UnrecognizedUserIdException;
 import magicthebuilder.deckservice.repository.CollectionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -38,7 +34,6 @@ public class CollectionService {
 
     public CollectionUpdateResponseDto updateCollection(Map<String,Integer> cardsToAdd, Map<String,Integer> cardsToRemove, Long userId,
                                    CollectionAccessLevelEnum accessLevelEnum) {
-        CollectionUpdateResponseBuilder collUpdateResponseBuilder = new CollectionUpdateResponseBuilder();
         Optional<Collection> collOpt = findById(userId);
         if (collOpt.isPresent()) {
             Collection coll = collOpt.get();
@@ -52,7 +47,10 @@ public class CollectionService {
             coll.cards.removeAll(toRemove);
             coll.accessLevel=accessLevelEnum;
             this.add(coll);
-            return collUpdateResponseBuilder.prepareValidCollectionUpdateResponse(userId);
+            return CollectionUpdateResponseDto.builder()
+                    .userId(userId)
+                    .details("Collection Updated")
+                    .build();
         } else {
             throw new UnrecognizedUserIdException(userId);
         }

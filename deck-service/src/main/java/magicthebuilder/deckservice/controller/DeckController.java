@@ -30,8 +30,13 @@ public class DeckController {
     }
 
     @GetMapping("/{userId}/{deckID}")
-    public DetailedDeckGetResponseDto getUserDecks(@PathVariable("userId") Long userId, @PathVariable("deckID") UUID deckId) {
+    public DetailedDeckGetResponseDto getUserDeck(@PathVariable("userId") Long userId, @PathVariable("deckID") UUID deckId) {
         return deckService.getDeckByIdAndUserId(deckId, userId);
+    } // to be changed to use headers instead of path for userId after implementing authorization
+
+    @GetMapping("/{userId}")
+    public List<SimpleDeckGetResponseDto> getUserDecks(@PathVariable("userId") Long userId) {
+        return deckService.getDecksByUserId( userId);
     }
 
     @PostMapping

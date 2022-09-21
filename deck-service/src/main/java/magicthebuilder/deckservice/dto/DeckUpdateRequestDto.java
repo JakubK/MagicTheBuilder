@@ -16,7 +16,7 @@ import java.util.UUID;
 public class DeckUpdateRequestDto {
     private UUID id;
     private String name;
-    private String gamemode;
+    private String gameMode;
     private List<MultipleCardDto> deckCardsToAdd;
     private List<MultipleCardDto> deckCardsToRemove;
     private List<MultipleCardDto> sideboardCardsToAdd;

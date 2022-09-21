@@ -60,6 +60,13 @@ public class DeckService {
         }
     }
 
+    public List<SimpleDeckGetResponseDto> getDecksByUserId(Long userId) {
+        List<Deck> decks = repository.findAllByOwner(userId);
+        return decks.stream()
+                .map(SimpleDeckGetResponseDto::new)
+                .toList();
+    }
+
     public UUID addDeck(Deck deck) {
         repository.save(deck);
         return deck.getUuid();
@@ -103,7 +110,7 @@ public class DeckService {
         }
         Deck deck = optDeck.get();
         deck.setAccessLevel(deckDto.getAccessLevel());
-        deck.setGameMode(deckDto.getGamemode());
+        deck.setGameMode(deckDto.getGameMode());
         deck.setName(deckDto.getName());
         List<Card> deckCards = deck.getCards();
         List<Card> sideboardCards = deck.getSideboard();

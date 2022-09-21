@@ -14,6 +14,7 @@ public interface DeckRepository extends JpaRepository<Deck, UUID> {
 
 
     List<Deck> findAllByAccessLevel(DeckAccessLevelEnum accLevel);
+    List<Deck> findAllByOwner(Long userId);
 
 
 }

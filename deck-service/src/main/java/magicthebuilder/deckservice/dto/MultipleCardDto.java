@@ -15,6 +15,5 @@ public class MultipleCardDto {
     @NotNull
     private String cardId;
 
-    @NotNull
     private int amount;
 }

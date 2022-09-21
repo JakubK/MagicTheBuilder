@@ -17,9 +17,7 @@ public class DeckUpdateRequestDto {
     private UUID id;
     private String name;
     private String gameMode;
-    private List<MultipleCardDto> deckCardsToAdd;
-    private List<MultipleCardDto> deckCardsToRemove;
-    private List<MultipleCardDto> sideboardCardsToAdd;
-    private List<MultipleCardDto> sideboardCardsToRemove;
+    private List<MultipleCardDto> deckCards;
+    private List<MultipleCardDto> sideboardCards;
     private DeckAccessLevelEnum accessLevel;
 }

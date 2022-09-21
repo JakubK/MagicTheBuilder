@@ -1,6 +1,7 @@
 package magicthebuilder.deckservice.service;
 
 
+import io.swagger.models.auth.In;
 import magicthebuilder.deckservice.dto.*;
 import magicthebuilder.deckservice.entity.Card;
 import magicthebuilder.deckservice.entity.Deck;
@@ -26,8 +27,7 @@ public class DeckService {
     @Autowired
     private UserRepository userRepository;
 
-    @Autowired
-    private CardService cardService;
+    private final CardService cardService = new CardService();
 
     public List<SimpleDeckGetResponseDto> getAllDecks() {
         List<Deck> decks = repository.findAll();
@@ -86,24 +86,6 @@ public class DeckService {
     }
 
     public DetailedDeckGetResponseDto updateDeck(DeckUpdateRequestDto deckDto) {
-
-        Map<String, Integer> deckToAdd = new HashMap<>();
-        for (MultipleCardDto card : deckDto.getDeckCardsToAdd()) {
-            deckToAdd.put(card.getCardId(), card.getAmount());
-        }
-        Map<String, Integer> deckToRemove = new HashMap<>();
-        for (MultipleCardDto card : deckDto.getDeckCardsToRemove()) {
-            deckToRemove.put(card.getCardId(), card.getAmount());
-        }
-        Map<String, Integer> sideboardToAdd = new HashMap<>();
-        for (MultipleCardDto card : deckDto.getSideboardCardsToAdd()) {
-            sideboardToAdd.put(card.getCardId(), card.getAmount());
-        }
-        Map<String, Integer> sideboardToRemove = new HashMap<>();
-        for (MultipleCardDto card : deckDto.getSideboardCardsToRemove()) {
-            sideboardToRemove.put(card.getCardId(), card.getAmount());
-        }
-
         Optional<Deck> optDeck = repository.findById(deckDto.getId());
         if (optDeck.isEmpty()) {
             throw new UnrecognizedDeckException(deckDto.getId());
@@ -112,14 +94,8 @@ public class DeckService {
         deck.setAccessLevel(deckDto.getAccessLevel());
         deck.setGameMode(deckDto.getGameMode());
         deck.setName(deckDto.getName());
-        List<Card> deckCards = deck.getCards();
-        List<Card> sideboardCards = deck.getSideboard();
-        deckCards.addAll(getCardListFromMap(deckToAdd));
-        deckCards.removeAll(getCardListFromMap(deckToRemove));
-        sideboardCards.addAll(getCardListFromMap(sideboardToAdd));
-        sideboardCards.removeAll(getCardListFromMap(sideboardToRemove));
-        deck.setCards(deckCards);
-        deck.setSideboard(sideboardCards);
+        deck.setCards(getCardsFromCardMultipleCardDtoList(deckDto.getDeckCards()));
+        deck.setSideboard(getCardsFromCardMultipleCardDtoList(deckDto.getSideboardCards()));
         //ADD DECK VALIDATION HERE//
         repository.save(deck);
         return getDeckByIdAndUserId(deckDto.getId(), deck.getOwner().getId());
@@ -129,14 +105,17 @@ public class DeckService {
         repository.deleteAll();
     }
 
-
-    private List<Card> getCardListFromMap(Map<String, Integer> inputMap) {
+    private List<Card>  getCardsFromCardMultipleCardDtoList(List<MultipleCardDto> cards) {
+        Map<String, Integer> map = new HashMap<>();
+        for (MultipleCardDto card : cards) {
+            map.put(card.getCardId(), card.getAmount());
+        }
         List<Card> ret = new ArrayList<>();
-        for (String cardId : inputMap.keySet()) {
+        for (String cardId : map.keySet()) {
             if (!cardService.checkCardExistance(cardId)) {
                 throw new UnrecognizedCardIdException("Unrecognized card with id: " + cardId);
             }
-            for (int j = 0; j < inputMap.get(cardId); j++) {
+            for (int j = 0; j < map.get(cardId); j++) {
                 ret.add(cardService.getCard(cardId));
             }
         }

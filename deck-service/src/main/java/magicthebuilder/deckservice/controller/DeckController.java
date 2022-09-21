@@ -45,9 +45,8 @@ public class DeckController {
         return deckService.addDeck(deck);
     }
 
-    @PostMapping("/{userId}/{deckID}")
+    @PutMapping("/{userId}/{deckID}")
     public DetailedDeckGetResponseDto updateDeck(@RequestBody DeckUpdateRequestDto deckDto) {
-
         return deckService.updateDeck(deckDto);
     }
 

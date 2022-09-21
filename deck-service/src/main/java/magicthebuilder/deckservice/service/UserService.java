@@ -23,7 +23,7 @@ public class UserService {
     public void add(User user) {
         userRepository.save(user);
         Collection coll = new Collection(user.id, CollectionAccessLevelEnum.PUBLIC, Collections.emptyList());
-        collectionService.add(coll);
+        collectionService.saveCollection(coll);
     }
 
 

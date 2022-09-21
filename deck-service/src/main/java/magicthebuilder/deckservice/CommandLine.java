@@ -42,9 +42,11 @@ public class CommandLine implements CommandLineRunner {
         coll.add(card);
         coll.add(card);
 
+        User us = userService.findById(1L).get();
 
-        Deck test = new Deck("tescik", "test", userService.findAll().stream().findFirst().get(), DeckAccessLevelEnum.PUBLIC, coll);
-        Deck test2 = new Deck("tescik 2342323232", "test", userService.findAll().stream().findFirst().get(), DeckAccessLevelEnum.NOT_PUBLIC, null);
+
+        Deck test = new Deck("tescik", "test", userService.findById(1L).get(), DeckAccessLevelEnum.PUBLIC, coll);
+        Deck test2 = new Deck("tescik 2342323232", "test", userService.findById(2L).get(), DeckAccessLevelEnum.NOT_PUBLIC, null);
 
         deckService.addDeck(test2);
         deckService.addDeck(test);
@@ -55,12 +57,8 @@ public class CommandLine implements CommandLineRunner {
     private void prepareInitialData() {
         for (int i = 1; i < 100; i++) {
             cardService.addCard(new Card(String.valueOf(i)));
-            userService.add(new User());
+            userService.add(new User((long) i));
         }
-        User us = new User();
-        userService.add(us);
-
-
     }
 
     private void clearDatabase() {

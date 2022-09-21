@@ -30,6 +30,7 @@ public class SimpleDeckGetResponseDto {
         this.id = deck.getUuid();
         this.name = deck.getName();
         this.gameMode = deck.getGameMode();
+        this.ownerId = deck.getOwner().getId();
         this.accessLevel = deck.getAccessLevel();
         this.creationDate = deck.getCreationDate();
         this.deckSize = deck.getCards().size();

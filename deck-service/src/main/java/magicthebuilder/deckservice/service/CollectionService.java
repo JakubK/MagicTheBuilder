@@ -21,11 +21,10 @@ public class CollectionService {
     @Autowired
     CollectionRepository repository;
 
-    @Autowired
-    CardService cardService;
+    CardService cardService = new CardService();
 
 
-    public void add(Collection collection) {
+    public void saveCollection(Collection collection) {
         repository.save(collection);
     }
 
@@ -34,21 +33,12 @@ public class CollectionService {
     }
 
     public CollectionUpdateResponseDto updateCollection(CollectionUpdateRequestDto collectionDto) {
-        Map<String, Integer> toAdd = new HashMap<>();
-        Map<String, Integer> toRemove = new HashMap<>();
-        for (MultipleCardDto card : collectionDto.getCardsToAdd()) {
-            toAdd.put(card.getCardId(), card.getAmount());
-        }
-        for (MultipleCardDto card : collectionDto.getCardsToRemove()) {
-            toRemove.put(card.getCardId(), card.getAmount());
-        }
         Optional<Collection> collOpt = findById(collectionDto.getUserId());
         if (collOpt.isPresent()) {
             Collection coll = collOpt.get();
-            coll.cards.addAll(getCardListFromMap(toAdd));
-            coll.cards.removeAll(getCardListFromMap(toRemove));
+            coll.setCards(getCardsFromCardMultipleCardDtoList(collectionDto.getCards()));
             coll.accessLevel = collectionDto.getAccessLevel();
-            this.add(coll);
+            this.saveCollection(coll);
             return CollectionUpdateResponseDto.builder()
                     .userId(collectionDto.getUserId())
                     .details("Collection Updated")
@@ -86,13 +76,17 @@ public class CollectionService {
         }
     }
 
-    private List<Card> getCardListFromMap(Map<String, Integer> inputMap) {
+    private List<Card>  getCardsFromCardMultipleCardDtoList(List<MultipleCardDto> cards) {
+        Map<String, Integer> map = new HashMap<>();
+        for (MultipleCardDto card : cards) {
+            map.put(card.getCardId(), card.getAmount());
+        }
         List<Card> ret = new ArrayList<>();
-        for (String cardId : inputMap.keySet()) {
+        for (String cardId : map.keySet()) {
             if (!cardService.checkCardExistance(cardId)) {
                 throw new UnrecognizedCardIdException("Unrecognized card with id: " + cardId);
             }
-            for (int j = 0; j < inputMap.get(cardId); j++) {
+            for (int j = 0; j < map.get(cardId); j++) {
                 ret.add(cardService.getCard(cardId));
             }
         }

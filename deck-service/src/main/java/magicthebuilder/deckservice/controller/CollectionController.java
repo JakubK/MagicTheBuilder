@@ -25,7 +25,7 @@ public class CollectionController {
 
     //TODO getting other user's collection if it's set to public
 
-    @PostMapping("/{userId}")
+    @PutMapping("/{userId}")
     public CollectionUpdateResponseDto updateCollection(@RequestBody CollectionUpdateRequestDto collectionDto) {
 
         return collectionService.updateCollection(collectionDto);

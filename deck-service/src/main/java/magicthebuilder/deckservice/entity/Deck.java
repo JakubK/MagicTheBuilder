@@ -30,7 +30,6 @@ public class Deck {
     private String name;
 
     @ManyToOne
-    @JoinColumn(name = "users_id")
     private User owner;
     private String gameMode;
     private DeckAccessLevelEnum accessLevel;

@@ -2,6 +2,7 @@ package magicthebuilder.deckservice.entity;
 
 
 import lombok.*;
+import magicthebuilder.deckservice.entity.enums.GameMode;
 import magicthebuilder.deckservice.entity.enums.DeckAccessLevelEnum;
 import org.hibernate.annotations.GenericGenerator;
 
@@ -31,7 +32,7 @@ public class Deck {
 
     @ManyToOne
     private User owner;
-    private String gameMode;
+    private GameMode gameMode;
     private DeckAccessLevelEnum accessLevel;
     @ManyToMany
     private List<Card> cards;
@@ -40,7 +41,7 @@ public class Deck {
     private Date creationDate;
     private Date lastUpdateDate;
 
-    public Deck(String name, String gameMode, User owner, DeckAccessLevelEnum accessLevel, List<Card> cards) {
+    public Deck(String name, GameMode gameMode, User owner, DeckAccessLevelEnum accessLevel, List<Card> cards) {
         setName(name);
         setGameMode(gameMode);
         setOwner(owner);
@@ -48,7 +49,7 @@ public class Deck {
         setCards(cards);
     }
 
-    public Deck(String name, String gameMode, User owner, DeckAccessLevelEnum accessLevel) {
+    public Deck(String name, GameMode gameMode, User owner, DeckAccessLevelEnum accessLevel) {
         setName(name);
         setGameMode(gameMode);
         setOwner(owner);

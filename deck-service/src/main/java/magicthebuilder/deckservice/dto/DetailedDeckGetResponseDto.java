@@ -3,6 +3,7 @@ package magicthebuilder.deckservice.dto;
 import lombok.*;
 import magicthebuilder.deckservice.entity.Card;
 import magicthebuilder.deckservice.entity.Deck;
+import magicthebuilder.deckservice.entity.enums.GameMode;
 import magicthebuilder.deckservice.entity.enums.DeckAccessLevelEnum;
 
 import java.util.*;
@@ -18,7 +19,7 @@ public class DetailedDeckGetResponseDto {
     private UUID id;
     private String name;
     private Long ownerId;
-    private String gameMode;
+    private GameMode gameMode;
     private DeckAccessLevelEnum accessLevel;
     private Date creationDate;
     private List<MultipleCardDto> cards;

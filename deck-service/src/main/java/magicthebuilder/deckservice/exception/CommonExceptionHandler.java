@@ -1,9 +1,6 @@
 package magicthebuilder.deckservice.exception;
 
-import magicthebuilder.deckservice.exception.customexceptions.InaccessibleDeckException;
-import magicthebuilder.deckservice.exception.customexceptions.UnrecognizedCardIdException;
-import magicthebuilder.deckservice.exception.customexceptions.UnrecognizedDeckException;
-import magicthebuilder.deckservice.exception.customexceptions.UnrecognizedUserIdException;
+import magicthebuilder.deckservice.exception.customexceptions.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -17,6 +14,7 @@ public class CommonExceptionHandler {
             UnrecognizedCardIdException.class,
             InaccessibleDeckException.class,
             UnrecognizedDeckException.class,
+            InvalidDeckDataException.class,
             UnrecognizedUserIdException.class})
     public ResponseEntity<Object> UnrecognizedCardIdExceptionHandler(RuntimeException e) {
         CustomErrorResponseEntity customErrorResponseEntity = new CustomErrorResponseEntity(

@@ -2,6 +2,7 @@ package magicthebuilder.deckservice.dto;
 
 import lombok.*;
 import magicthebuilder.deckservice.entity.Deck;
+import magicthebuilder.deckservice.entity.enums.GameMode;
 import magicthebuilder.deckservice.entity.enums.DeckAccessLevelEnum;
 
 import java.util.Collections;
@@ -18,7 +19,7 @@ import java.util.function.Function;
 public class CreateDeckDto {
 
     private String name;
-    private String gameMode;
+    private GameMode gameMode;
     private Long userId;
     private DeckAccessLevelEnum accessLevel;
 

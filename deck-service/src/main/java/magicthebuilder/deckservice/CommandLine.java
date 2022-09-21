@@ -3,6 +3,7 @@ package magicthebuilder.deckservice;
 import magicthebuilder.deckservice.entity.Card;
 import magicthebuilder.deckservice.entity.Deck;
 import magicthebuilder.deckservice.entity.User;
+import magicthebuilder.deckservice.entity.enums.GameMode;
 import magicthebuilder.deckservice.entity.enums.DeckAccessLevelEnum;
 import magicthebuilder.deckservice.service.CardService;
 import magicthebuilder.deckservice.service.CollectionService;
@@ -42,11 +43,9 @@ public class CommandLine implements CommandLineRunner {
         coll.add(card);
         coll.add(card);
 
-        User us = userService.findById(1L).get();
 
-
-        Deck test = new Deck("tescik", "test", userService.findById(1L).get(), DeckAccessLevelEnum.PUBLIC, coll);
-        Deck test2 = new Deck("tescik 2342323232", "test", userService.findById(2L).get(), DeckAccessLevelEnum.NOT_PUBLIC, null);
+        Deck test = new Deck("tescik", GameMode.DRAFT, userService.findById(1L).get(), DeckAccessLevelEnum.PUBLIC, coll);
+        Deck test2 = new Deck("tescik 2342323232", GameMode.DRAFT, userService.findById(2L).get(), DeckAccessLevelEnum.NOT_PUBLIC, null);
 
         deckService.addDeck(test2);
         deckService.addDeck(test);

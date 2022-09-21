@@ -7,10 +7,8 @@ import magicthebuilder.deckservice.entity.Card;
 import magicthebuilder.deckservice.entity.Deck;
 import magicthebuilder.deckservice.entity.User;
 import magicthebuilder.deckservice.entity.enums.DeckAccessLevelEnum;
-import magicthebuilder.deckservice.exception.customexceptions.InaccessibleDeckException;
-import magicthebuilder.deckservice.exception.customexceptions.UnrecognizedCardIdException;
-import magicthebuilder.deckservice.exception.customexceptions.UnrecognizedDeckException;
-import magicthebuilder.deckservice.exception.customexceptions.UnrecognizedUserIdException;
+import magicthebuilder.deckservice.entity.enums.GameMode;
+import magicthebuilder.deckservice.exception.customexceptions.*;
 import magicthebuilder.deckservice.repository.DeckRepository;
 import magicthebuilder.deckservice.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -77,7 +75,7 @@ public class DeckService {
         if (owner.isPresent()) {
             Deck ret = CreateDeckDto.dtoToEntityMapper().apply(dto);
             ret.setOwner(owner.get());
-            // PLACE FOR VALIDATING DECK  //
+            validateDeck(ret);
             return ret;
 
         } else {
@@ -96,7 +94,7 @@ public class DeckService {
         deck.setName(deckDto.getName());
         deck.setCards(getCardsFromCardMultipleCardDtoList(deckDto.getDeckCards()));
         deck.setSideboard(getCardsFromCardMultipleCardDtoList(deckDto.getSideboardCards()));
-        //ADD DECK VALIDATION HERE//
+        validateDeck(deck);
         repository.save(deck);
         return getDeckByIdAndUserId(deckDto.getId(), deck.getOwner().getId());
     }
@@ -120,5 +118,20 @@ public class DeckService {
             }
         }
         return ret;
+    }
+
+    private void validateDeck(Deck deck) {
+        //extend this to check if deck is legal in selected gameMode in the future
+        if(deck.getGameMode().equals(GameMode.DRAFT)){
+            return;
+        }
+        if(deck.getCards().size()<60) {
+            throw new InvalidDeckDataException("Deck must have at least 60 cards. If you still want to save your deck," +
+                    "please set the game mode to DRAFT");
+        } else if (deck.getSideboard().size()>15) {
+            throw new InvalidDeckDataException("Deck sideboard can have maximum 15 cards. If you still want to save your deck," +
+                    "please set the game mode to DRAFT");
+        }
+
     }
 }

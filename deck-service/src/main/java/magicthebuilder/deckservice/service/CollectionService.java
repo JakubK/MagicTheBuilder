@@ -37,14 +37,8 @@ public class CollectionService {
         Optional<Collection> collOpt = findById(userId);
         if (collOpt.isPresent()) {
             Collection coll = collOpt.get();
-            List<Card> toAdd = new ArrayList<>();
-            List<Card> toRemove = new ArrayList<>();
-            if (!prepareAndValidateCardLists(cardsToAdd, toAdd))
-                throw new UnrecognizedCardIdException("Unrecognized card");
-            if (!prepareAndValidateCardLists(cardsToRemove, toRemove))
-                throw new UnrecognizedCardIdException("Unrecognized card");
-            coll.cards.addAll(toAdd);
-            coll.cards.removeAll(toRemove);
+            coll.cards.addAll(getCardListFromMap(cardsToAdd));
+            coll.cards.removeAll(getCardListFromMap(cardsToRemove));
             coll.accessLevel=accessLevelEnum;
             this.add(coll);
             return CollectionUpdateResponseDto.builder()
@@ -82,16 +76,17 @@ public class CollectionService {
             throw new UnrecognizedUserIdException(userId);
         }
     }
-    private boolean prepareAndValidateCardLists(Map<String, Integer> inputMap, List<Card> returnList) {
+    private List<Card> getCardListFromMap(Map<String, Integer> inputMap) {
+        List<Card> ret = new ArrayList<>();
         for(String cardId: inputMap.keySet()) {
             if (!cardService.checkCardExistance(cardId)) {
-                return false;
+                throw new UnrecognizedCardIdException("Unrecognized card with id: "+cardId);
             }
             for (int j = 0 ; j < inputMap.get(cardId) ; j++) {
-                returnList.add(cardService.getCard(cardId));
+                ret.add(cardService.getCard(cardId));
             }
         }
-        return true;
+        return ret;
     }
 
     public void flushDatabase()

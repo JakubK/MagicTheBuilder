@@ -91,24 +91,12 @@ public class DeckService {
         deck.setAccessLevel(deckAccessLevelEnum);
         deck.setGameMode(gamemode);
         deck.setName(name);
-        List<Card> deckToAdd = new ArrayList<>();
-        List<Card> sideboardToAdd = new ArrayList<>();
-        List<Card> deckToRemove = new ArrayList<>();
-        List<Card> sideboardToRemove = new ArrayList<>();
-        if (!prepareAndValidateCardLists(deckToAddMap, deckToAdd))
-            throw new UnrecognizedCardIdException("Unrecognized card");
-        if (!prepareAndValidateCardLists(sideboardToAddMap, sideboardToAdd))
-            throw new UnrecognizedCardIdException("Unrecognized card");
-        if (!prepareAndValidateCardLists(deckToRemoveMap, deckToRemove))
-            throw new UnrecognizedCardIdException("Unrecognized card");
-        if (!prepareAndValidateCardLists(sideboardToRemoveMap, sideboardToRemove))
-            throw new UnrecognizedCardIdException("Unrecognized card");
         List<Card> deckCards = deck.getCards();
         List<Card> sideboardCards = deck.getSideboard();
-        deckCards.addAll(deckToAdd);
-        deckCards.removeAll(deckToRemove);
-        sideboardCards.addAll(sideboardToAdd);
-        sideboardCards.removeAll(sideboardToRemove);
+        deckCards.addAll(getCardListFromMap(deckToAddMap));
+        deckCards.removeAll(getCardListFromMap(deckToRemoveMap));
+        sideboardCards.addAll(getCardListFromMap(sideboardToAddMap));
+        sideboardCards.removeAll(getCardListFromMap(sideboardToRemoveMap));
         deck.setCards(deckCards);
         deck.setSideboard(sideboardCards);
         //ADD DECK VALIDATION HERE//
@@ -121,15 +109,16 @@ public class DeckService {
     }
 
 
-    private boolean prepareAndValidateCardLists(Map<String, Integer> inputMap, List<Card> returnList) {
+    private List<Card> getCardListFromMap(Map<String, Integer> inputMap) {
+        List<Card> ret = new ArrayList<>();
         for(String cardId: inputMap.keySet()) {
             if (!cardService.checkCardExistance(cardId)) {
-                return false;
+                throw new UnrecognizedCardIdException("Unrecognized card with id: "+cardId);
             }
             for (int j = 0 ; j < inputMap.get(cardId) ; j++) {
-                returnList.add(cardService.getCard(cardId));
+                ret.add(cardService.getCard(cardId));
             }
         }
-        return true;
+        return ret;
     }
 }

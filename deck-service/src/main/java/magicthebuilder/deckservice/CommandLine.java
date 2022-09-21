@@ -1,11 +1,8 @@
 package magicthebuilder.deckservice;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import magicthebuilder.deckservice.entity.Card;
-import magicthebuilder.deckservice.entity.Collection;
 import magicthebuilder.deckservice.entity.Deck;
 import magicthebuilder.deckservice.entity.User;
-import magicthebuilder.deckservice.entity.enums.CollectionAccessLevelEnum;
 import magicthebuilder.deckservice.entity.enums.DeckAccessLevelEnum;
 import magicthebuilder.deckservice.service.CardService;
 import magicthebuilder.deckservice.service.CollectionService;
@@ -16,7 +13,6 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 @SpringBootApplication
@@ -35,7 +31,6 @@ public class CommandLine implements CommandLineRunner {
     private CollectionService collectionService;
 
 
-
     @Override
     public void run(String... args) {
 
@@ -43,13 +38,13 @@ public class CommandLine implements CommandLineRunner {
         prepareInitialData();
 
         Card card = cardService.getCard("1");
-        List<Card> coll= new ArrayList<>();
+        List<Card> coll = new ArrayList<>();
         coll.add(card);
         coll.add(card);
 
 
-        Deck test = new Deck("tescik","test",userService.findAll().stream().findFirst().get(),DeckAccessLevelEnum.PUBLIC,coll );
-        Deck test2 = new Deck("tescik 2342323232","test",userService.findAll().stream().findFirst().get(),DeckAccessLevelEnum.NOT_PUBLIC, null);
+        Deck test = new Deck("tescik", "test", userService.findAll().stream().findFirst().get(), DeckAccessLevelEnum.PUBLIC, coll);
+        Deck test2 = new Deck("tescik 2342323232", "test", userService.findAll().stream().findFirst().get(), DeckAccessLevelEnum.NOT_PUBLIC, null);
 
         deckService.addDeck(test2);
         deckService.addDeck(test);
@@ -57,8 +52,8 @@ public class CommandLine implements CommandLineRunner {
         System.out.println(test.getCards());
     }
 
-    private void prepareInitialData () {
-        for(int i = 1 ; i < 100 ; i++) {
+    private void prepareInitialData() {
+        for (int i = 1; i < 100; i++) {
             cardService.addCard(new Card(String.valueOf(i)));
             userService.add(new User());
         }
@@ -67,7 +62,8 @@ public class CommandLine implements CommandLineRunner {
 
 
     }
-    private void clearDatabase () {
+
+    private void clearDatabase() {
         deckService.flushDatabase();
         userService.flushDatabase();
         collectionService.flushDatabase();

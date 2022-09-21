@@ -4,14 +4,13 @@ import magicthebuilder.deckservice.dto.CollectionGetResponseDto;
 import magicthebuilder.deckservice.dto.CollectionUpdateRequestDto;
 import magicthebuilder.deckservice.dto.CollectionUpdateResponseDto;
 import magicthebuilder.deckservice.dto.MultipleCardDto;
-import magicthebuilder.deckservice.entity.Collection;
-import magicthebuilder.deckservice.entity.User;
 import magicthebuilder.deckservice.service.CollectionService;
 import magicthebuilder.deckservice.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 @RequestMapping("api/collections")
@@ -32,14 +31,14 @@ public class CollectionController {
     @PostMapping("/{userId}")
     public CollectionUpdateResponseDto updateCollection(@RequestBody CollectionUpdateRequestDto collectionDto) {
         Map<String, Integer> toAdd = new HashMap<>();
-        for(MultipleCardDto card: collectionDto.getCardsToAdd()) {
-            toAdd.put(card.getCardId(),card.getAmount());
+        for (MultipleCardDto card : collectionDto.getCardsToAdd()) {
+            toAdd.put(card.getCardId(), card.getAmount());
         }
         Map<String, Integer> toRemove = new HashMap<>();
-        for(MultipleCardDto card: collectionDto.getCardsToRemove()) {
-            toRemove.put(card.getCardId(),card.getAmount());
+        for (MultipleCardDto card : collectionDto.getCardsToRemove()) {
+            toRemove.put(card.getCardId(), card.getAmount());
         }
-        return collectionService.updateCollection(toAdd,toRemove, collectionDto.getUserId(), collectionDto.getAccessLevel());
+        return collectionService.updateCollection(toAdd, toRemove, collectionDto.getUserId(), collectionDto.getAccessLevel());
     }
 
 }

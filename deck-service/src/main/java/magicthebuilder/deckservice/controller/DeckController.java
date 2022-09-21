@@ -5,11 +5,12 @@ import magicthebuilder.deckservice.dto.*;
 import magicthebuilder.deckservice.entity.Deck;
 import magicthebuilder.deckservice.service.DeckService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.util.UriComponentsBuilder;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("api/decks")
@@ -33,37 +34,33 @@ public class DeckController {
         return deckService.getDeckByIdAndUserId(deckId, userId);
     }
 
-   @PostMapping
-   public UUID addDeck(@RequestBody CreateDeckDto deckDto)
-   {
-       Deck deck = deckService.createDeckFromDto(deckDto);
-       return deckService.addDeck(deck);
-   }
+    @PostMapping
+    public UUID addDeck(@RequestBody CreateDeckDto deckDto) {
+        Deck deck = deckService.createDeckFromDto(deckDto);
+        return deckService.addDeck(deck);
+    }
 
     @PostMapping("/{userId}/{deckID}")
     public DetailedDeckGetResponseDto updateDeck(@RequestBody DeckUpdateRequestDto deckDto) {
         Map<String, Integer> deckToAdd = new HashMap<>();
-        for(MultipleCardDto card: deckDto.getDeckCardsToAdd()) {
-            deckToAdd.put(card.getCardId(),card.getAmount());
+        for (MultipleCardDto card : deckDto.getDeckCardsToAdd()) {
+            deckToAdd.put(card.getCardId(), card.getAmount());
         }
         Map<String, Integer> deckToRemove = new HashMap<>();
-        for(MultipleCardDto card: deckDto.getDeckCardsToRemove()) {
-            deckToRemove.put(card.getCardId(),card.getAmount());
+        for (MultipleCardDto card : deckDto.getDeckCardsToRemove()) {
+            deckToRemove.put(card.getCardId(), card.getAmount());
         }
         Map<String, Integer> sideboardToAdd = new HashMap<>();
-        for(MultipleCardDto card: deckDto.getSideboardCardsToAdd()) {
-            sideboardToAdd.put(card.getCardId(),card.getAmount());
+        for (MultipleCardDto card : deckDto.getSideboardCardsToAdd()) {
+            sideboardToAdd.put(card.getCardId(), card.getAmount());
         }
         Map<String, Integer> sideboardToRemove = new HashMap<>();
-        for(MultipleCardDto card: deckDto.getSideboardCardsToRemove()) {
-            sideboardToRemove.put(card.getCardId(),card.getAmount());
+        for (MultipleCardDto card : deckDto.getSideboardCardsToRemove()) {
+            sideboardToRemove.put(card.getCardId(), card.getAmount());
         }
-        return deckService.updateDeck(deckDto.getId(),deckToAdd,deckToRemove,sideboardToAdd,sideboardToRemove,
+        return deckService.updateDeck(deckDto.getId(), deckToAdd, deckToRemove, sideboardToAdd, sideboardToRemove,
                 deckDto.getAccessLevel(), deckDto.getGamemode(), deckDto.getName());
     }
-
-
-
 
 
 }

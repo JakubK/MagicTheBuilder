@@ -28,18 +28,18 @@ public class CollectionService {
         repository.save(collection);
     }
 
-    public Optional<Collection> findById(Long id){
+    public Optional<Collection> findById(Long id) {
         return repository.findById(id);
     }
 
-    public CollectionUpdateResponseDto updateCollection(Map<String,Integer> cardsToAdd, Map<String,Integer> cardsToRemove, Long userId,
-                                   CollectionAccessLevelEnum accessLevelEnum) {
+    public CollectionUpdateResponseDto updateCollection(Map<String, Integer> cardsToAdd, Map<String, Integer> cardsToRemove, Long userId,
+                                                        CollectionAccessLevelEnum accessLevelEnum) {
         Optional<Collection> collOpt = findById(userId);
         if (collOpt.isPresent()) {
             Collection coll = collOpt.get();
             coll.cards.addAll(getCardListFromMap(cardsToAdd));
             coll.cards.removeAll(getCardListFromMap(cardsToRemove));
-            coll.accessLevel=accessLevelEnum;
+            coll.accessLevel = accessLevelEnum;
             this.add(coll);
             return CollectionUpdateResponseDto.builder()
                     .userId(userId)
@@ -49,6 +49,7 @@ public class CollectionService {
             throw new UnrecognizedUserIdException(userId);
         }
     }
+
     public CollectionGetResponseDto getCollectionById(Long userId) {
         Optional<Collection> collOpt = findById(userId);
         if (collOpt.isPresent()) {
@@ -59,15 +60,15 @@ public class CollectionService {
             Map<String, Integer> cardsFromCollection = new HashMap<>();
             List<MultipleCardDto> cardsInResponse = new ArrayList<>();
 
-            for(Card card: coll.getCards()) {
-                if(cardsFromCollection.containsKey(card.getId())) {
+            for (Card card : coll.getCards()) {
+                if (cardsFromCollection.containsKey(card.getId())) {
                     cardsFromCollection.put(card.getId(), cardsFromCollection.get(card.getId()) + 1);
                 } else {
                     cardsFromCollection.put(card.getId(), 1);
                 }
             }
             for (Map.Entry<String, Integer> pair : cardsFromCollection.entrySet()) {
-                cardsInResponse.add(new MultipleCardDto(pair.getKey(),pair.getValue()));
+                cardsInResponse.add(new MultipleCardDto(pair.getKey(), pair.getValue()));
             }
             responseDto.setCards(cardsInResponse);
             return responseDto;
@@ -76,24 +77,23 @@ public class CollectionService {
             throw new UnrecognizedUserIdException(userId);
         }
     }
+
     private List<Card> getCardListFromMap(Map<String, Integer> inputMap) {
         List<Card> ret = new ArrayList<>();
-        for(String cardId: inputMap.keySet()) {
+        for (String cardId : inputMap.keySet()) {
             if (!cardService.checkCardExistance(cardId)) {
-                throw new UnrecognizedCardIdException("Unrecognized card with id: "+cardId);
+                throw new UnrecognizedCardIdException("Unrecognized card with id: " + cardId);
             }
-            for (int j = 0 ; j < inputMap.get(cardId) ; j++) {
+            for (int j = 0; j < inputMap.get(cardId); j++) {
                 ret.add(cardService.getCard(cardId));
             }
         }
         return ret;
     }
 
-    public void flushDatabase()
-    {
+    public void flushDatabase() {
         repository.deleteAll();
     }
-
 
 
 }

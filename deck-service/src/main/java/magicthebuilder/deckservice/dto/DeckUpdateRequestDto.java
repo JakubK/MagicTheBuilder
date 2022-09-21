@@ -1,7 +1,6 @@
 package magicthebuilder.deckservice.dto;
 
 import lombok.*;
-import magicthebuilder.deckservice.entity.enums.CollectionAccessLevelEnum;
 import magicthebuilder.deckservice.entity.enums.DeckAccessLevelEnum;
 
 import java.util.List;

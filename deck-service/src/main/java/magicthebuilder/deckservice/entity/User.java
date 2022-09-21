@@ -1,13 +1,11 @@
 package magicthebuilder.deckservice.entity;
 
 import lombok.*;
-import magicthebuilder.deckservice.entity.enums.CollectionAccessLevelEnum;
 
-import javax.persistence.*;
-import java.io.Serializable;
-import java.util.Collections;
-import java.util.List;
-import java.util.UUID;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
 @Getter
 @Setter
@@ -16,7 +14,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @EqualsAndHashCode
 @Entity
-@Table(name="users")
+@Table(name = "users")
 public class User {
     @Id
     @GeneratedValue

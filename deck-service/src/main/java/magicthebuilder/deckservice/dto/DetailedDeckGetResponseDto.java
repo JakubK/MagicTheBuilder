@@ -39,17 +39,19 @@ public class DetailedDeckGetResponseDto {
         Map<String, Integer> cardsFromCollection = new HashMap<>();
         List<MultipleCardDto> cardsInResponse = new ArrayList<>();
 
-        if(cards.isEmpty()) { return Collections.emptyList();}
+        if (cards.isEmpty()) {
+            return Collections.emptyList();
+        }
 
-        for(Card card: cards) {
-            if(cardsFromCollection.containsKey(card.getId())) {
+        for (Card card : cards) {
+            if (cardsFromCollection.containsKey(card.getId())) {
                 cardsFromCollection.put(card.getId(), cardsFromCollection.get(card.getId()) + 1);
             } else {
                 cardsFromCollection.put(card.getId(), 1);
             }
         }
         for (Map.Entry<String, Integer> pair : cardsFromCollection.entrySet()) {
-            cardsInResponse.add(new MultipleCardDto(pair.getKey(),pair.getValue()));
+            cardsInResponse.add(new MultipleCardDto(pair.getKey(), pair.getValue()));
         }
         return cardsInResponse;
     }

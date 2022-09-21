@@ -1,14 +1,15 @@
 package magicthebuilder.deckservice.entity;
 
 
-import java.util.*;
-
 import lombok.*;
 import magicthebuilder.deckservice.entity.enums.DeckAccessLevelEnum;
-import magicthebuilder.deckservice.service.DeckService;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.UUID;
 
 
 @Getter
@@ -19,7 +20,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 @EqualsAndHashCode
 @Entity
-@Table(name="decks")
+@Table(name = "decks")
 public class Deck {
     @Id
     @GeneratedValue(generator = "uuid2")
@@ -29,7 +30,7 @@ public class Deck {
     private String name;
 
     @ManyToOne
-    @JoinColumn(name="users_id")
+    @JoinColumn(name = "users_id")
     private User owner;
     private String gameMode;
     private DeckAccessLevelEnum accessLevel;
@@ -40,31 +41,30 @@ public class Deck {
     private Date creationDate;
     private Date lastUpdateDate;
 
-    @PrePersist
-    protected void onCreate(){
-        creationDate = new Date();
-    }
-
-    @PreUpdate
-    protected void onUpdate() {
-        lastUpdateDate = new Date();
-    }
-
-    public Deck(String name, String gameMode,User owner, DeckAccessLevelEnum accessLevel, List<Card> cards)
-    {
+    public Deck(String name, String gameMode, User owner, DeckAccessLevelEnum accessLevel, List<Card> cards) {
         setName(name);
         setGameMode(gameMode);
         setOwner(owner);
         setAccessLevel(accessLevel);
         setCards(cards);
     }
-    public Deck(String name, String gameMode,User owner, DeckAccessLevelEnum accessLevel)
-    {
+
+    public Deck(String name, String gameMode, User owner, DeckAccessLevelEnum accessLevel) {
         setName(name);
         setGameMode(gameMode);
         setOwner(owner);
         setAccessLevel(accessLevel);
         this.cards = new ArrayList<>();
+    }
+
+    @PrePersist
+    protected void onCreate() {
+        creationDate = new Date();
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        lastUpdateDate = new Date();
     }
 
 }

@@ -46,20 +46,20 @@ public class DeckService {
     }
 
     public DetailedDeckGetResponseDto getDeckByIdAndUserId(UUID id, Long userId) {
-         if(repository.findById(id).isPresent()) {
-             Deck deck = repository.findById(id).get();
-             if(deck.getAccessLevel() == DeckAccessLevelEnum.PRIVATE) {
-                 if (userId.equals(deck.getOwner().getId())) {
-                     return new DetailedDeckGetResponseDto(deck);
-                 } else {
-                     throw new InaccessibleDeckException(id);
-                 }
-             } else {
-                 return new DetailedDeckGetResponseDto(deck);
-             }
-         } else {
-             throw new UnrecognizedDeckException(id);
-         }
+        if (repository.findById(id).isPresent()) {
+            Deck deck = repository.findById(id).get();
+            if (deck.getAccessLevel() == DeckAccessLevelEnum.PRIVATE) {
+                if (userId.equals(deck.getOwner().getId())) {
+                    return new DetailedDeckGetResponseDto(deck);
+                } else {
+                    throw new InaccessibleDeckException(id);
+                }
+            } else {
+                return new DetailedDeckGetResponseDto(deck);
+            }
+        } else {
+            throw new UnrecognizedDeckException(id);
+        }
     }
 
     public UUID addDeck(Deck deck) {
@@ -69,24 +69,24 @@ public class DeckService {
 
     public Deck createDeckFromDto(CreateDeckDto dto) {
         Optional<User> owner = userRepository.findById(dto.getUserId());
-        if(owner.isPresent()) {
+        if (owner.isPresent()) {
             Deck ret = CreateDeckDto.dtoToEntityMapper().apply(dto);
             ret.setOwner(owner.get());
             // PLACE FOR VALIDATING DECK  //
             return ret;
 
-        }
-        else {
+        } else {
             throw new UnrecognizedUserIdException(dto.getUserId());
         }
     }
 
-    public DetailedDeckGetResponseDto updateDeck(UUID id, Map<String,Integer> deckToAddMap, Map<String,Integer> deckToRemoveMap,
-                             Map<String,Integer> sideboardToAddMap, Map<String,Integer> sideboardToRemoveMap,
-                             DeckAccessLevelEnum deckAccessLevelEnum, String gamemode, String name)
-    {
+    public DetailedDeckGetResponseDto updateDeck(UUID id, Map<String, Integer> deckToAddMap, Map<String, Integer> deckToRemoveMap,
+                                                 Map<String, Integer> sideboardToAddMap, Map<String, Integer> sideboardToRemoveMap,
+                                                 DeckAccessLevelEnum deckAccessLevelEnum, String gamemode, String name) {
         Optional<Deck> optDeck = repository.findById(id);
-        if(optDeck.isEmpty()) { throw new UnrecognizedDeckException(id);}
+        if (optDeck.isEmpty()) {
+            throw new UnrecognizedDeckException(id);
+        }
         Deck deck = optDeck.get();
         deck.setAccessLevel(deckAccessLevelEnum);
         deck.setGameMode(gamemode);
@@ -101,7 +101,7 @@ public class DeckService {
         deck.setSideboard(sideboardCards);
         //ADD DECK VALIDATION HERE//
         repository.save(deck);
-        return getDeckByIdAndUserId(id,deck.getOwner().getId());
+        return getDeckByIdAndUserId(id, deck.getOwner().getId());
     }
 
     public void flushDatabase() {
@@ -111,11 +111,11 @@ public class DeckService {
 
     private List<Card> getCardListFromMap(Map<String, Integer> inputMap) {
         List<Card> ret = new ArrayList<>();
-        for(String cardId: inputMap.keySet()) {
+        for (String cardId : inputMap.keySet()) {
             if (!cardService.checkCardExistance(cardId)) {
-                throw new UnrecognizedCardIdException("Unrecognized card with id: "+cardId);
+                throw new UnrecognizedCardIdException("Unrecognized card with id: " + cardId);
             }
-            for (int j = 0 ; j < inputMap.get(cardId) ; j++) {
+            for (int j = 0; j < inputMap.get(cardId); j++) {
                 ret.add(cardService.getCard(cardId));
             }
         }

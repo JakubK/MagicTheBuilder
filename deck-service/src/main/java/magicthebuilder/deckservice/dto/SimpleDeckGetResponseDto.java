@@ -1,11 +1,11 @@
 package magicthebuilder.deckservice.dto;
 
 import lombok.*;
-import magicthebuilder.deckservice.entity.Card;
 import magicthebuilder.deckservice.entity.Deck;
 import magicthebuilder.deckservice.entity.enums.DeckAccessLevelEnum;
 
-import java.util.*;
+import java.util.Date;
+import java.util.UUID;
 
 
 @Getter

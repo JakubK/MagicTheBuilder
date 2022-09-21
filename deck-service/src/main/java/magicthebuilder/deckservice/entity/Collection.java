@@ -2,7 +2,6 @@ package magicthebuilder.deckservice.entity;
 
 import lombok.*;
 import magicthebuilder.deckservice.entity.enums.CollectionAccessLevelEnum;
-import magicthebuilder.deckservice.entity.enums.DeckAccessLevelEnum;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -16,7 +15,7 @@ import java.util.List;
 @NoArgsConstructor
 @EqualsAndHashCode
 @Entity
-@Table(name="collections")
+@Table(name = "collections")
 public class Collection {
 
     @Id
@@ -29,15 +28,15 @@ public class Collection {
     public Date lastUpdateDate;
 
 
-    @PreUpdate
-    protected void onUpdate() {
-        lastUpdateDate = new Date();
-    }
-
     public Collection(Long id, CollectionAccessLevelEnum accessLevel, List<Card> cards) {
         this.userId = id;
         this.accessLevel = accessLevel;
         this.cards = cards;
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        lastUpdateDate = new Date();
     }
 
 }

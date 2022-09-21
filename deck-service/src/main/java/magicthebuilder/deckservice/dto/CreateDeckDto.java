@@ -1,12 +1,10 @@
 package magicthebuilder.deckservice.dto;
 
 import lombok.*;
-import magicthebuilder.deckservice.entity.Card;
 import magicthebuilder.deckservice.entity.Deck;
 import magicthebuilder.deckservice.entity.enums.DeckAccessLevelEnum;
 
 import java.util.Collections;
-import java.util.List;
 import java.util.function.Function;
 
 
@@ -24,7 +22,7 @@ public class CreateDeckDto {
     private Long userId;
     private DeckAccessLevelEnum accessLevel;
 
-    public static Function<CreateDeckDto, Deck> dtoToEntityMapper(){
+    public static Function<CreateDeckDto, Deck> dtoToEntityMapper() {
         return request -> Deck.builder()
                 .name(request.getName())
                 .gameMode(request.getGameMode())

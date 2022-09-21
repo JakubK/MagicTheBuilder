@@ -18,9 +18,6 @@ public class CollectionController {
     @Autowired
     CollectionService collectionService;
 
-    @Autowired
-    private UserService userService;
-
     @GetMapping("/{userId}")
     public CollectionGetResponseDto getCollection(@PathVariable("userId") Long id) {
         return collectionService.getCollectionById(id);
@@ -30,15 +27,8 @@ public class CollectionController {
 
     @PostMapping("/{userId}")
     public CollectionUpdateResponseDto updateCollection(@RequestBody CollectionUpdateRequestDto collectionDto) {
-        Map<String, Integer> toAdd = new HashMap<>();
-        for (MultipleCardDto card : collectionDto.getCardsToAdd()) {
-            toAdd.put(card.getCardId(), card.getAmount());
-        }
-        Map<String, Integer> toRemove = new HashMap<>();
-        for (MultipleCardDto card : collectionDto.getCardsToRemove()) {
-            toRemove.put(card.getCardId(), card.getAmount());
-        }
-        return collectionService.updateCollection(toAdd, toRemove, collectionDto.getUserId(), collectionDto.getAccessLevel());
+
+        return collectionService.updateCollection(collectionDto);
     }
 
 }

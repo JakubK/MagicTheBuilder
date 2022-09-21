@@ -1,6 +1,7 @@
 package magicthebuilder.deckservice.service;
 
 import magicthebuilder.deckservice.dto.CollectionGetResponseDto;
+import magicthebuilder.deckservice.dto.CollectionUpdateRequestDto;
 import magicthebuilder.deckservice.dto.CollectionUpdateResponseDto;
 import magicthebuilder.deckservice.dto.MultipleCardDto;
 import magicthebuilder.deckservice.entity.Card;
@@ -32,21 +33,28 @@ public class CollectionService {
         return repository.findById(id);
     }
 
-    public CollectionUpdateResponseDto updateCollection(Map<String, Integer> cardsToAdd, Map<String, Integer> cardsToRemove, Long userId,
-                                                        CollectionAccessLevelEnum accessLevelEnum) {
-        Optional<Collection> collOpt = findById(userId);
+    public CollectionUpdateResponseDto updateCollection(CollectionUpdateRequestDto collectionDto) {
+        Map<String, Integer> toAdd = new HashMap<>();
+        Map<String, Integer> toRemove = new HashMap<>();
+        for (MultipleCardDto card : collectionDto.getCardsToAdd()) {
+            toAdd.put(card.getCardId(), card.getAmount());
+        }
+        for (MultipleCardDto card : collectionDto.getCardsToRemove()) {
+            toRemove.put(card.getCardId(), card.getAmount());
+        }
+        Optional<Collection> collOpt = findById(collectionDto.getUserId());
         if (collOpt.isPresent()) {
             Collection coll = collOpt.get();
-            coll.cards.addAll(getCardListFromMap(cardsToAdd));
-            coll.cards.removeAll(getCardListFromMap(cardsToRemove));
-            coll.accessLevel = accessLevelEnum;
+            coll.cards.addAll(getCardListFromMap(toAdd));
+            coll.cards.removeAll(getCardListFromMap(toRemove));
+            coll.accessLevel = collectionDto.getAccessLevel();
             this.add(coll);
             return CollectionUpdateResponseDto.builder()
-                    .userId(userId)
+                    .userId(collectionDto.getUserId())
                     .details("Collection Updated")
                     .build();
         } else {
-            throw new UnrecognizedUserIdException(userId);
+            throw new UnrecognizedUserIdException(collectionDto.getUserId());
         }
     }
 

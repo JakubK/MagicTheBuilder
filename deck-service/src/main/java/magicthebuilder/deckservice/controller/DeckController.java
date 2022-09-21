@@ -42,24 +42,8 @@ public class DeckController {
 
     @PostMapping("/{userId}/{deckID}")
     public DetailedDeckGetResponseDto updateDeck(@RequestBody DeckUpdateRequestDto deckDto) {
-        Map<String, Integer> deckToAdd = new HashMap<>();
-        for (MultipleCardDto card : deckDto.getDeckCardsToAdd()) {
-            deckToAdd.put(card.getCardId(), card.getAmount());
-        }
-        Map<String, Integer> deckToRemove = new HashMap<>();
-        for (MultipleCardDto card : deckDto.getDeckCardsToRemove()) {
-            deckToRemove.put(card.getCardId(), card.getAmount());
-        }
-        Map<String, Integer> sideboardToAdd = new HashMap<>();
-        for (MultipleCardDto card : deckDto.getSideboardCardsToAdd()) {
-            sideboardToAdd.put(card.getCardId(), card.getAmount());
-        }
-        Map<String, Integer> sideboardToRemove = new HashMap<>();
-        for (MultipleCardDto card : deckDto.getSideboardCardsToRemove()) {
-            sideboardToRemove.put(card.getCardId(), card.getAmount());
-        }
-        return deckService.updateDeck(deckDto.getId(), deckToAdd, deckToRemove, sideboardToAdd, sideboardToRemove,
-                deckDto.getAccessLevel(), deckDto.getGamemode(), deckDto.getName());
+
+        return deckService.updateDeck(deckDto);
     }
 
 

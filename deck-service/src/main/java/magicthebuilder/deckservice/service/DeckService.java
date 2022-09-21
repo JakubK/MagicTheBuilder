@@ -1,9 +1,7 @@
 package magicthebuilder.deckservice.service;
 
 
-import magicthebuilder.deckservice.dto.CreateDeckDto;
-import magicthebuilder.deckservice.dto.DetailedDeckGetResponseDto;
-import magicthebuilder.deckservice.dto.SimpleDeckGetResponseDto;
+import magicthebuilder.deckservice.dto.*;
 import magicthebuilder.deckservice.entity.Card;
 import magicthebuilder.deckservice.entity.Deck;
 import magicthebuilder.deckservice.entity.User;
@@ -80,28 +78,44 @@ public class DeckService {
         }
     }
 
-    public DetailedDeckGetResponseDto updateDeck(UUID id, Map<String, Integer> deckToAddMap, Map<String, Integer> deckToRemoveMap,
-                                                 Map<String, Integer> sideboardToAddMap, Map<String, Integer> sideboardToRemoveMap,
-                                                 DeckAccessLevelEnum deckAccessLevelEnum, String gamemode, String name) {
-        Optional<Deck> optDeck = repository.findById(id);
+    public DetailedDeckGetResponseDto updateDeck(DeckUpdateRequestDto deckDto) {
+
+        Map<String, Integer> deckToAdd = new HashMap<>();
+        for (MultipleCardDto card : deckDto.getDeckCardsToAdd()) {
+            deckToAdd.put(card.getCardId(), card.getAmount());
+        }
+        Map<String, Integer> deckToRemove = new HashMap<>();
+        for (MultipleCardDto card : deckDto.getDeckCardsToRemove()) {
+            deckToRemove.put(card.getCardId(), card.getAmount());
+        }
+        Map<String, Integer> sideboardToAdd = new HashMap<>();
+        for (MultipleCardDto card : deckDto.getSideboardCardsToAdd()) {
+            sideboardToAdd.put(card.getCardId(), card.getAmount());
+        }
+        Map<String, Integer> sideboardToRemove = new HashMap<>();
+        for (MultipleCardDto card : deckDto.getSideboardCardsToRemove()) {
+            sideboardToRemove.put(card.getCardId(), card.getAmount());
+        }
+
+        Optional<Deck> optDeck = repository.findById(deckDto.getId());
         if (optDeck.isEmpty()) {
-            throw new UnrecognizedDeckException(id);
+            throw new UnrecognizedDeckException(deckDto.getId());
         }
         Deck deck = optDeck.get();
-        deck.setAccessLevel(deckAccessLevelEnum);
-        deck.setGameMode(gamemode);
-        deck.setName(name);
+        deck.setAccessLevel(deckDto.getAccessLevel());
+        deck.setGameMode(deckDto.getGamemode());
+        deck.setName(deckDto.getName());
         List<Card> deckCards = deck.getCards();
         List<Card> sideboardCards = deck.getSideboard();
-        deckCards.addAll(getCardListFromMap(deckToAddMap));
-        deckCards.removeAll(getCardListFromMap(deckToRemoveMap));
-        sideboardCards.addAll(getCardListFromMap(sideboardToAddMap));
-        sideboardCards.removeAll(getCardListFromMap(sideboardToRemoveMap));
+        deckCards.addAll(getCardListFromMap(deckToAdd));
+        deckCards.removeAll(getCardListFromMap(deckToRemove));
+        sideboardCards.addAll(getCardListFromMap(sideboardToAdd));
+        sideboardCards.removeAll(getCardListFromMap(sideboardToRemove));
         deck.setCards(deckCards);
         deck.setSideboard(sideboardCards);
         //ADD DECK VALIDATION HERE//
         repository.save(deck);
-        return getDeckByIdAndUserId(id, deck.getOwner().getId());
+        return getDeckByIdAndUserId(deckDto.getId(), deck.getOwner().getId());
     }
 
     public void flushDatabase() {

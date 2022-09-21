@@ -30,16 +30,16 @@ public class CollectionController {
     //TODO getting other user's collection if it's set to public
 
     @PostMapping("/{userId}")
-    public CollectionUpdateResponseDto updateCollection(@RequestBody CollectionUpdateRequestDto deckDto) {
+    public CollectionUpdateResponseDto updateCollection(@RequestBody CollectionUpdateRequestDto collectionDto) {
         Map<String, Integer> toAdd = new HashMap<>();
-        for(MultipleCardDto card: deckDto.getCardsToAdd()) {
+        for(MultipleCardDto card: collectionDto.getCardsToAdd()) {
             toAdd.put(card.getCardId(),card.getAmount());
         }
         Map<String, Integer> toRemove = new HashMap<>();
-        for(MultipleCardDto card: deckDto.getCardsToRemove()) {
+        for(MultipleCardDto card: collectionDto.getCardsToRemove()) {
             toRemove.put(card.getCardId(),card.getAmount());
         }
-        return collectionService.updateCollection(toAdd,toRemove, deckDto.getUserId(), deckDto.getAccessLevel());
+        return collectionService.updateCollection(toAdd,toRemove, collectionDto.getUserId(), collectionDto.getAccessLevel());
     }
 
 }

@@ -1,38 +1,48 @@
 package magicthebuilder.cardservice.controller;
 
 
-import io.magicthegathering.javasdk.resource.Card;
+import lombok.AllArgsConstructor;
+import magicthebuilder.cardservice.entity.MtgCard;
 import magicthebuilder.cardservice.service.CardService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
+import static org.springframework.http.HttpStatus.NOT_FOUND;
+
 @RestController
 @RequestMapping("api/cards")
+@AllArgsConstructor
 public class CardController {
     private final CardService cardService;
 
-    @Autowired
-    public CardController(CardService cardService) {
-        this.cardService = cardService;
-    }
-
-    @GetMapping
-    public List<Card> getCards() {
-        return cardService.getCards();
-    }
-
-//    @GetMapping("{id}")
-//    public Card getCard(@PathVariable("id") String id) {
-//        return cardService.getCard(id);
+//    @GetMapping
+//    public List<MtgCard> getCards() {
+//        return cardService.getCards();
 //    }
 
-    @GetMapping("{ids}")
-    public List<Card> getCard(@PathVariable("ids") List<String> ids) {
-        return cardService.getCards(ids);
+    // TODO: This endpoint should be blocked in Gateway/Reverse Proxy
+    // Otherwise huge DOS risk
+    @GetMapping("all")
+    public List<MtgCard> getAllCards() {
+        return cardService.getAllCards();
+    }
+
+    @GetMapping("{id}")
+    public MtgCard getCard(@PathVariable("id") String id) {
+        return cardService.getCard(id).
+                orElseThrow(() -> new ResponseStatusException(NOT_FOUND,
+                        "Unable to find card with id: " + id));
+    }
+
+    @GetMapping()
+    public List<MtgCard> getCards(
+            @RequestParam(value = "id", required = false) List<String> ids,
+            @RequestParam(value = "name", required = false) List<String> names,
+            @RequestParam(value = "color", required = false) List<String> colors,
+            @RequestParam(value = "type", required = false) List<String> types
+    ) {
+        return cardService.getCards(ids, names, colors, types);
     }
 }

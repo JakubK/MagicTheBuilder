@@ -9,6 +9,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.core.query.TextCriteria;
 import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.stereotype.Service;
 
@@ -42,19 +43,16 @@ public class CardService {
         return cardRepository.findById(id);
     }
 
-    public Page<MtgCard> getCards(List<String> ids, List<String> names, List<String> colors, List<String> types, Pageable pageable) {
+    public Page<MtgCard> getCards(List<String> ids, String phrase, List<String> colors, List<String> types, Pageable pageable) {
         var query = new Query().with(pageable);
 //        final List<Criteria> criteria = new ArrayList<>();
 
         if (ids != null && !ids.isEmpty())
             query.addCriteria(Criteria.where("id").in(ids));
-        if (names != null && !names.isEmpty())
-            query.addCriteria(Criteria.where("name").in(names));
+        if (phrase != null && !phrase.isEmpty())
+            query.addCriteria(new TextCriteria().caseSensitive(false).matchingPhrase(phrase));
         if (colors != null && !colors.isEmpty()) {
-//            for (String color : colors) {
-                query.addCriteria(Criteria.where("colors").all(colors));
-//            }
-//            query.addCriteria(Criteria.where("colors").is(colors));
+            query.addCriteria(Criteria.where("colors").all(colors));
         }
         if (types != null && !types.isEmpty())
             query.addCriteria(Criteria.where("types").all(types));

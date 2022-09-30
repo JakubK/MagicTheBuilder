@@ -15,6 +15,7 @@ import java.util.List;
 
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 
+@CrossOrigin
 @RestController
 @RequestMapping("api/cards")
 @AllArgsConstructor
@@ -43,7 +44,7 @@ public class CardController {
     @GetMapping()
     public Page<MtgCard> getCards(
             @RequestParam(value = "id", required = false) List<String> ids, // or
-            @RequestParam(value = "name", required = false) List<String> names, // or
+            @RequestParam(value = "phrase", required = false) String phrase,
             @RequestParam(value = "color", required = false) List<String> colors,
             @RequestParam(value = "type", required = false) List<String> types,
             @RequestParam(value = "page", required = false) Integer page,
@@ -54,6 +55,6 @@ public class CardController {
                 page != null ? page : 0,
                 size != null ? size : 100,
                 sortBy != null ? Sort.by(sortBy) : Sort.unsorted());
-        return cardService.getCards(ids, names, colors, types, pageable);
+        return cardService.getCards(ids, phrase, colors, types, pageable);
     }
 }

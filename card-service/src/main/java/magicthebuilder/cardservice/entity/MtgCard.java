@@ -5,6 +5,7 @@ import io.magicthegathering.javasdk.resource.Legality;
 import io.magicthegathering.javasdk.resource.Ruling;
 import lombok.*;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.TextIndexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 
@@ -56,7 +57,9 @@ public class MtgCard {
     @Id
     private String id;
     private String layout;
+    @TextIndexed(weight = 2)
     private String name;
+    @TextIndexed(weight = 1)
     private String[] names;
     private String manaCost;
     private double cmc;

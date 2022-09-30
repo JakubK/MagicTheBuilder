@@ -4,6 +4,10 @@ package magicthebuilder.cardservice.controller;
 import lombok.AllArgsConstructor;
 import magicthebuilder.cardservice.entity.MtgCard;
 import magicthebuilder.cardservice.service.CardService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -37,12 +41,19 @@ public class CardController {
     }
 
     @GetMapping()
-    public List<MtgCard> getCards(
-            @RequestParam(value = "id", required = false) List<String> ids,
-            @RequestParam(value = "name", required = false) List<String> names,
-            @RequestParam(value = "color", required = false) List<String> colors,
-            @RequestParam(value = "type", required = false) List<String> types
+    public Page<MtgCard> getCards(
+            @RequestParam(value = "id", required = false) List<String> ids, // or
+            @RequestParam(value = "name", required = false) List<String> names, // or
+            @RequestParam(value = "color", required = false) List<String> colors, // and
+            @RequestParam(value = "type", required = false) List<String> types, // and
+            @RequestParam(value = "page", required = false) Integer page,
+            @RequestParam(value = "size", required = false) Integer size,
+            @RequestParam(value = "sortBy", required = false) String sortBy
     ) {
-        return cardService.getCards(ids, names, colors, types);
+        Pageable pageable = PageRequest.of(
+                page != null ? page : 0,
+                size != null ? size : 100,
+                sortBy != null ? Sort.by(sortBy) : Sort.unsorted());
+        return cardService.getCards(ids, names, colors, types, pageable);
     }
 }

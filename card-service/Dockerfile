@@ -6,5 +6,5 @@ RUN mvn clean package -D maven.test.skip
 
 FROM gcr.io/distroless/java17-debian11
 COPY --from=build /app/target/card-service-0.1.0.jar card-service-0.1.0.jar
-COPY allCards allCards
+COPY allCard[s] allCards
 CMD ["/card-service-0.1.0.jar"]

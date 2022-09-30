@@ -4,9 +4,12 @@ import lombok.AllArgsConstructor;
 import magicthebuilder.cardservice.entity.MtgCard;
 import magicthebuilder.cardservice.repository.CardRepository;
 import magicthebuilder.cardservice.repository.InMemoryRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -39,22 +42,31 @@ public class CardService {
         return cardRepository.findById(id);
     }
 
-    public List<MtgCard> getCards(List<String> ids, List<String> names, List<String> colors, List<String> types) {
-        var query = new Query();
+    public Page<MtgCard> getCards(List<String> ids, List<String> names, List<String> colors, List<String> types, Pageable pageable) {
+        var query = new Query().with(pageable);
 //        final List<Criteria> criteria = new ArrayList<>();
 
         if (ids != null && !ids.isEmpty())
             query.addCriteria(Criteria.where("id").in(ids));
         if (names != null && !names.isEmpty())
             query.addCriteria(Criteria.where("name").in(names));
-        if (colors != null && !colors.isEmpty())
-            query.addCriteria(Criteria.where("colors").is(colors));
+        if (colors != null && !colors.isEmpty()) {
+//            for (String color : colors) {
+                query.addCriteria(Criteria.where("colors").all(colors));
+//            }
+//            query.addCriteria(Criteria.where("colors").is(colors));
+        }
         if (types != null && !types.isEmpty())
-            query.addCriteria(Criteria.where("type").in(types));
+            query.addCriteria(Criteria.where("types").all(types));
 
 //        if (!criteria.isEmpty())
 
-        return mongoTemplate.find(query, MtgCard.class);
+//        return mongoTemplate.find(query, MtgCard.class);
+        return PageableExecutionUtils.getPage(
+                mongoTemplate.find(query, MtgCard.class),
+                pageable,
+                () -> mongoTemplate.count(query.skip(0).limit(0), MtgCard.class)
+        );
 //        return StreamSupport
 //                .stream(cardRepository.findAllById(Ids).spliterator(), true)
 //                .collect(Collectors.toList());

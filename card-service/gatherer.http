@@ -8,7 +8,7 @@ https://api.magicthegathering.io/v1/cards/758df5d5-992f-5d30-b6bc-87cb1a0788ab
 http://localhost:8080/api/cards/all
 
 ###
-http://localhost:8080/api/cards?name=Riddleform&color=Blue
+http://localhost:8080/api/cards?type=Creature,Enchantment
 
 ###
 http://localhost:8080/api/cards?id=758df5d5-992f-5d30-b6bc-87cb1a0788ab,aeb1b742-645c-5dab-ba9b-35d51649e074

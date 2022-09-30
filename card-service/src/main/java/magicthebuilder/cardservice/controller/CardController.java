@@ -44,8 +44,8 @@ public class CardController {
     public Page<MtgCard> getCards(
             @RequestParam(value = "id", required = false) List<String> ids, // or
             @RequestParam(value = "name", required = false) List<String> names, // or
-            @RequestParam(value = "color", required = false) List<String> colors, // and
-            @RequestParam(value = "type", required = false) List<String> types, // and
+            @RequestParam(value = "color", required = false) List<String> colors,
+            @RequestParam(value = "type", required = false) List<String> types,
             @RequestParam(value = "page", required = false) Integer page,
             @RequestParam(value = "size", required = false) Integer size,
             @RequestParam(value = "sortBy", required = false) String sortBy

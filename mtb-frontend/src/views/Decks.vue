@@ -2,13 +2,15 @@
   <div class="decks-view">
     <BaseHeader>{{ title }}</BaseHeader>
     <div class="decks-view__decks">
-      <CardItem class="cards-view__card" v-for="index in 10" :key="index" />
+      <CardItem class="decks-view__card" v-for="index in 10" :key="index" />
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import BaseHeader from '@/components/typography/BaseHeader.vue';
+import CardItem from '@/components/CardItem.vue';
+import { onMounted } from 'vue';
 
 defineProps({
   title: {
@@ -16,4 +18,10 @@ defineProps({
     required: true
   }
 })
+
+onMounted(async() => {
+  //Fetch decks here
+})
 </script>
+
+<style lang="scss" scoped src="./Decks.scss"/>

@@ -3,6 +3,7 @@ import Auth from "@/views/Auth.vue";
 import CardDetails from "@/views/CardDetails.vue";
 import Cards from "@/views/Cards.vue";
 import Main from "@/views/Main.vue";
+import Decks from "@/views/Decks.vue";
 
 const routes: RouteRecordRaw[] = [
   {
@@ -44,14 +45,14 @@ const routes: RouteRecordRaw[] = [
         children: [
           {
             path: 'collection',
-            component: Cards,
+            component: Decks,
             props: {
               title: 'My decks'
             }
           },
           {
             path: 'browse',
-            component: Cards,
+            component: Decks,
             props: {
               title: 'Community decks'
             }

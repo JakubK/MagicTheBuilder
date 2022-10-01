@@ -64,7 +64,7 @@ import CardItem from '@/components/CardItem.vue';
 import CheckBox from '@/components/CheckBox.vue';
 import Select from '@/components/Select.vue';
 
-import { ref, watch } from 'vue';
+import { onMounted, ref, watch } from 'vue';
 import debounce from 'lodash.debounce';
 import ClickOutside from 'click-outside-vue3';
 
@@ -77,6 +77,10 @@ defineProps({
     type: String,
     required: true
   }
+})
+
+onMounted(async() => {
+  //Fetch cards here
 })
 
 watch(search, debounce(async (newSearchValue: string, previousValue: string) => {

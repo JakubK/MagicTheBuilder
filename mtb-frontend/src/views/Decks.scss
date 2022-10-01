@@ -1,0 +1,13 @@
+.decks-view {
+  padding: 2em;
+
+  &__decks {
+    padding: 3em;
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  &__card {
+    margin: 1em;
+  }
+}

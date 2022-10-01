@@ -1,7 +1,7 @@
 <template>
   <div>
     <Sidebar v-model="leftMargin" :top-items="topItems" :bottom-items="bottomItems" title="MagicTheBuilder" />
-    <main :style="{left: leftMargin + 'px'}">
+    <main :style="{left: leftMargin + 'px', width: 'calc(100% - ' + leftMargin+'px)'}">
       <router-view></router-view>
     </main>
   </div>

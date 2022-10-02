@@ -50,7 +50,7 @@ public class CardService {
         if (ids != null && !ids.isEmpty())
             query.addCriteria(Criteria.where("id").in(ids));
         if (phrase != null && !phrase.isEmpty())
-            query.addCriteria(new TextCriteria().caseSensitive(false).matchingPhrase(phrase));
+            query.addCriteria(TextCriteria.forLanguage("en").matching(phrase));
         if (colors != null && !colors.isEmpty()) {
             query.addCriteria(Criteria.where("colors").all(colors));
         }

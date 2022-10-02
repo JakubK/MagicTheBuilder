@@ -1,7 +1,8 @@
 FROM maven:3.8.4-openjdk-17 AS build
 WORKDIR /app
-COPY /src src
 COPY pom.xml .
+RUN mvn verify --fail-never
+COPY /src src
 RUN mvn clean package -D maven.test.skip
 
 FROM gcr.io/distroless/java17-debian11

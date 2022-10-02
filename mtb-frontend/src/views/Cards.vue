@@ -51,7 +51,7 @@
       <Select placeholder="Order by"/>
     </div>
     <div class="cards-view__cards">
-      <CardItem class="cards-view__card" v-for="index in 10" :key="index" />
+      <CardItem class="cards-view__card" v-for="(card, index) in cards" :card="card" :key="index" />
     </div>
   </div>
 </template>
@@ -64,13 +64,18 @@ import CardItem from '@/components/CardItem.vue';
 import CheckBox from '@/components/CheckBox.vue';
 import Select from '@/components/Select.vue';
 
-import { onMounted, ref, watch } from 'vue';
+import { onMounted, Ref, ref, watch } from 'vue';
 import debounce from 'lodash.debounce';
 import ClickOutside from 'click-outside-vue3';
+import { GetCardsRequest } from '@/models/getCardsRequest';
+import { cardsService } from '@/services/cards';
+import { Card } from '@/models/card';
 
 const vClickOutside = ClickOutside.directive;
 
 const search = ref('');
+
+const form: Ref<Partial<GetCardsRequest>> = ref({});
 
 defineProps({
   title: {
@@ -79,8 +84,12 @@ defineProps({
   }
 })
 
+const cards: Ref<Card[]> = ref([]);
+
 onMounted(async() => {
-  //Fetch cards here
+  //Fetch all cards here
+  const cardsResponse = await cardsService.getCards({});
+  cards.value = cardsResponse.content;
 })
 
 watch(search, debounce(async (newSearchValue: string, previousValue: string) => {

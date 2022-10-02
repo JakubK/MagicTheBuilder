@@ -1,5 +1,5 @@
 export interface GetCardsRequest {
-    name: string;
+    phrase: string;
     color: string;
     type: string;
     page: number;

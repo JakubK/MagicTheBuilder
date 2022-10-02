@@ -2,14 +2,14 @@
   <div class="card-item" :class="{ 'card-item--flipped': flipped }">
     <div class="card-item__content">
       <div @click="flipped = !flipped" class="card-item__front">
-        <img class="card-item__image" src="@/assets/cardMock.png"/>
+        <img class="card-item__image" :src="card.imageUrl"/>
       </div>
       <div class="card-item__back card-reverse">
-        <img class="card-item__image" src="@/assets/cardMock.png"/>
+        <img class="card-item__image" :src="card.imageUrl"/>
         <div class="card-reverse__blur"></div>
         <header class="card-reverse__head">
           <div class="card-reverse__title">
-            Sword of Light and Shadow
+            {{ card.name }}
           </div>
         </header>
         <footer>
@@ -74,7 +74,8 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue';
+import { Card } from '@/models/card';
+import { PropType, ref } from 'vue';
 import Icon from './Icon.vue';
 
 defineProps({
@@ -82,6 +83,10 @@ defineProps({
     type: Number,
     required: false,
     default: 1
+  },
+  card: {
+    type: Object as PropType<Card>,
+    required: true,
   }
 });
 

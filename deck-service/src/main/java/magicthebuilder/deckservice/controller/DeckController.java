@@ -50,5 +50,12 @@ public class DeckController {
         return deckService.updateDeck(deckDto);
     }
 
+    @DeleteMapping("/{deckID}")
+    public void DeleteDeck(@PathVariable("deckID") UUID deckId) {
+        //validate userId with deck owner
+        deckService.deleteDeck(deckId);
+
+    }
+
 
 }

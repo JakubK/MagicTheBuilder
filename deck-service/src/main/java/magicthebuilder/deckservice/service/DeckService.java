@@ -99,6 +99,10 @@ public class DeckService {
         return getDeckByIdAndUserId(deckDto.getId(), deck.getOwner().getId());
     }
 
+    public void deleteDeck(UUID deckId){
+        repository.deleteById(deckId);
+    }
+
     public void flushDatabase() {
         repository.deleteAll();
     }

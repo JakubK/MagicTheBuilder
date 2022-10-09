@@ -53,6 +53,7 @@
     <div class="cards-view__cards">
       <CardItem class="cards-view__card" v-for="(card, index) in cards" :card="card" :key="index" />
     </div>
+    <Button class="cards-view__more" @click="loadMore">Load more results</Button>
   </div>
 </template>
 
@@ -70,6 +71,7 @@ import ClickOutside from 'click-outside-vue3';
 import { GetCardsRequest } from '@/models/getCardsRequest';
 import { cardsService } from '@/services/cards';
 import { Card } from '@/models/card';
+import Button from '@/components/Button.vue';
 
 const vClickOutside = ClickOutside.directive;
 
@@ -85,24 +87,50 @@ defineProps({
 })
 
 const cards: Ref<Card[]> = ref([]);
+const page = ref(0);
+
+const loadMore = async () => {
+  page.value++;
+  const cardsResponse = await cardsService.getCards({
+      phrase: search.value,
+      page: 0,
+      size: 30
+    });
+    cards.value = [...cards.value , ...cardsResponse.content];
+}
 
 onMounted(async() => {
   //Fetch all cards here
-  const cardsResponse = await cardsService.getCards({});
+  const cardsResponse = await cardsService.getCards({
+  });
   cards.value = cardsResponse.content;
 })
 
 watch(search, debounce(async (newSearchValue: string, previousValue: string) => {
   if (newSearchValue.length > 0 && newSearchValue != previousValue) {
     //  Send Query 
+    page.value = 0;
+    const cardsResponse = await cardsService.getCards({
+      phrase: newSearchValue,
+      page: page.value,
+      size: 30
+    });
+    cards.value = cardsResponse.content;
   }
 }, 500));
 
 const areFiltersShown = ref(false);
 
-const applyFilters = () => {
+const applyFilters = async () => {
   //  Send Query
   areFiltersShown.value = false;
+  page.value = 0;
+  const cardsResponse = await cardsService.getCards({
+    phrase: search.value,
+    page: page.value,
+    size: 30
+  });
+  cards.value = cardsResponse.content;
 }
 
 const cardFormatOption = ref({});

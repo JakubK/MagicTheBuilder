@@ -93,7 +93,7 @@ const loadMore = async () => {
   page.value++;
   const cardsResponse = await cardsService.getCards({
       phrase: search.value,
-      page: 0,
+      page: page.value,
       size: 30
     });
     cards.value = [...cards.value , ...cardsResponse.content];

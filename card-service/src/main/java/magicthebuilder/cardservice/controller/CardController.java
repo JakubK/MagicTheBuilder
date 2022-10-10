@@ -22,10 +22,6 @@ import static org.springframework.http.HttpStatus.NOT_FOUND;
 public class CardController {
     private final CardService cardService;
 
-//    @GetMapping
-//    public List<MtgCard> getCards() {
-//        return cardService.getCards();
-//    }
 
     // TODO: This endpoint should be blocked in Gateway/Reverse Proxy
     // Otherwise huge DOS risk
@@ -43,10 +39,10 @@ public class CardController {
 
     @GetMapping()
     public Page<MtgCard> getCards(
-            @RequestParam(value = "id", required = false) List<String> ids, // or
+            @RequestParam(value = "ids", required = false) List<String> ids, // or
             @RequestParam(value = "phrase", required = false) String phrase,
-            @RequestParam(value = "color", required = false) List<String> colors,
-            @RequestParam(value = "type", required = false) List<String> types,
+            @RequestParam(value = "colors", required = false) List<String> colors,
+            @RequestParam(value = "types", required = false) List<String> types,
             @RequestParam(value = "page", required = false) Integer page,
             @RequestParam(value = "size", required = false) Integer size,
             @RequestParam(value = "sortBy", required = false) String sortBy

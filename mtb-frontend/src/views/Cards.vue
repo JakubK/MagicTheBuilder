@@ -34,9 +34,9 @@
         </TextInput>
         <div class="cards-view__filters filters" v-if="areFiltersShown">
           <div class="filters__row">
-            <Select v-model="cardFormatOption" placeholder="Card Format"/>
-            <Select v-model="cardTypeOption" placeholder="Card Type" />
-            <Select v-model="cardSetOption" placeholder="Card Set" />
+            <Select v-model="cardFormats" :options="cardFormatOptions" placeholder="Card Format"/>
+            <Select v-model="cardTypes" :options="cardTypeOptions" placeholder="Card Type" />
+            <Select v-model="cardSets" :options="cardSetOptions" placeholder="Card Set" />
           </div>
           <br />
           <div class="filters__row">
@@ -67,20 +67,20 @@ import BaseHeader from '@/components/typography/BaseHeader.vue';
 import CardItem from '@/components/CardItem.vue';
 import CheckBox from '@/components/CheckBox.vue';
 import Select from '@/components/Select.vue';
+import Button from '@/components/Button.vue';
 
 import { onMounted, Ref, ref, watch } from 'vue';
 import debounce from 'lodash.debounce';
 import ClickOutside from 'click-outside-vue3';
 import { GetCardsRequest } from '@/models/getCardsRequest';
-import { cardsService } from '@/services/cards';
 import { Card } from '@/models/card';
-import Button from '@/components/Button.vue';
+import { cardsService } from '@/services/cards';
+import { metaDataService } from '@/services/metaData';
+
 
 const vClickOutside = ClickOutside.directive;
 
 const search = ref('');
-
-const form: Ref<Partial<GetCardsRequest>> = ref({});
 
 const sortBy = ref([]);
 const sortingOptions = [
@@ -110,11 +110,24 @@ const loadMore = async () => {
     cards.value = [...cards.value , ...cardsResponse.content];
 }
 
+const cardFormats = ref([]);
+const cardFormatOptions: Ref<string[]> = ref([]);
+
+const cardTypes = ref([]);
+const cardTypeOptions: Ref<string[]> = ref([]);
+
+const cardSets = ref([]);
+const cardSetOptions: Ref<string[]> = ref([]);
+
 onMounted(async() => {
-  //Fetch all cards here
-  const cardsResponse = await cardsService.getCards({
-  });
+  //  Fetch all cards here
+  const cardsResponse = await cardsService.getCards({});
   cards.value = cardsResponse.content;
+
+  //  Fetch metadata
+  cardFormatOptions.value = await metaDataService.getFormats();
+  cardTypeOptions.value = await metaDataService.getTypes();
+  cardSetOptions.value = await metaDataService.getSets();
 })
 
 watch(search, debounce(async (newSearchValue: string, previousValue: string) => {
@@ -133,9 +146,7 @@ watch(search, debounce(async (newSearchValue: string, previousValue: string) => 
 
 const areFiltersShown = ref(false);
 
-const cardFormatOption = ref([]);
-const cardTypeOption = ref([]);
-const cardSetOption = ref([]);
+
 const colors = ref([
   {
     label: 'White',

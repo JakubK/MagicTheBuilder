@@ -8,11 +8,11 @@
         </svg>
       </div>
       <div v-if="active" class="select__options">
-        <div @click="selectOption(option)" class="select__option" v-for="(option) in options" :key="option.label">
+        <div @click="selectOption(option)" class="select__option" v-for="(option) in options" :key="option">
           <div>
-          {{ option.label}}
+          {{ option }}
           </div>
-          <svg v-if="isChecked(option.label)" width="25" height="25" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <svg v-if="isChecked(option)" width="25" height="25" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M20.2522 6.65719L9.2522 17.6572L4.2522 12.6572" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
         </div>
@@ -35,9 +35,9 @@ const props = defineProps({
     required: true,
   },
   options: {
-    type: Array as PropType<Array<{label: string}>>,
+    type: Array as PropType<Array<string>>,
     required: false,
-    default: [{ label: 'Option 1'}, { label: 'Option 2'}, { label: 'Option 3'}]
+    default: ['Option 1', 'Option 2', 'Option 3']
   },
   modelValue: {
     type: Array as PropType<Array<{label: string, checked: boolean}>>,
@@ -47,21 +47,20 @@ const props = defineProps({
 });
 
 const isChecked = (label: string): boolean => {
-  console.log(props.modelValue);
   if(props.modelValue!.filter(x => x.label === label).length === 0)
     return false;
   return props.modelValue!.filter(x => x.label === label)[0].checked;
 }
 
 const active = ref(false);
-const selectOption = (option: {label: string}) => {
-  if(props.modelValue!.filter(x => x.label === option.label).length === 0) {
+const selectOption = (option: string) => {
+  if(props.modelValue!.filter(x => x.label === option).length === 0) {
       const updatedArray = props.modelValue!
-        .filter(x => x.label !== option.label)
+        .filter(x => x.label !== option)
         .map(x => x);
       //  Add item as checked
       updatedArray.push({
-      ...option,
+      label: option,
       checked: true
     });
     emit('update:modelValue', updatedArray);
@@ -70,7 +69,7 @@ const selectOption = (option: {label: string}) => {
     //  Toggle state 
     const updatedArray = props.modelValue!
         .map(x => {
-          if(x.label === option.label)
+          if(x.label === option)
             return {
               ...x,
               checked: !x.checked

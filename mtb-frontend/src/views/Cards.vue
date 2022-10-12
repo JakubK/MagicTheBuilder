@@ -84,8 +84,8 @@ const form: Ref<Partial<GetCardsRequest>> = ref({});
 
 const sortBy = ref([]);
 const sortingOptions = [
-  { label: 'toughness' },
-  { label: 'type' },
+  'toughness',
+  'type'
 ]
 
 defineProps({
@@ -133,9 +133,9 @@ watch(search, debounce(async (newSearchValue: string, previousValue: string) => 
 
 const areFiltersShown = ref(false);
 
-const cardFormatOption = ref('');
-const cardTypeOption = ref('');
-const cardSetOption = ref('');
+const cardFormatOption = ref([]);
+const cardTypeOption = ref([]);
+const cardSetOption = ref([]);
 const colors = ref([
   {
     label: 'White',

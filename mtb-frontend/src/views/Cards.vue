@@ -48,7 +48,10 @@
     </div>
     <div class="cards-view__order">
       <BaseHeader>Search results</BaseHeader>
-      <Select placeholder="Order by"/>
+      <div>
+        <p>Sort by</p>
+        <Select :options="sortingOptions" v-model="sortBy" @input="sortingChanged" @change="sortingChanged" placeholder="-"/>
+      </div>
     </div>
     <div class="cards-view__cards">
       <CardItem class="cards-view__card" v-for="(card, index) in cards" :card="card" :key="index" />
@@ -79,6 +82,12 @@ const search = ref('');
 
 const form: Ref<Partial<GetCardsRequest>> = ref({});
 
+const sortBy = ref([]);
+const sortingOptions = [
+  { label: 'toughness' },
+  { label: 'type' },
+]
+
 defineProps({
   title: {
     type: String,
@@ -94,7 +103,9 @@ const loadMore = async () => {
   const cardsResponse = await cardsService.getCards({
       phrase: search.value,
       page: page.value,
-      size: 30
+      size: 30,
+      colors: colors.value.filter(x => x.checked).map(x => x.label).join(','),
+      sortBy: sortBy.value.map(x => x.label).join(',')
     });
     cards.value = [...cards.value , ...cardsResponse.content];
 }
@@ -113,7 +124,8 @@ watch(search, debounce(async (newSearchValue: string, previousValue: string) => 
     const cardsResponse = await cardsService.getCards({
       phrase: newSearchValue,
       page: page.value,
-      size: 30
+      size: 30,
+      sortBy: sortBy.value.map(x => x.label).join(',')
     });
     cards.value = cardsResponse.content;
   }
@@ -121,21 +133,9 @@ watch(search, debounce(async (newSearchValue: string, previousValue: string) => 
 
 const areFiltersShown = ref(false);
 
-const applyFilters = async () => {
-  //  Send Query
-  areFiltersShown.value = false;
-  page.value = 0;
-  const cardsResponse = await cardsService.getCards({
-    phrase: search.value,
-    page: page.value,
-    size: 30
-  });
-  cards.value = cardsResponse.content;
-}
-
-const cardFormatOption = ref({});
-const cardTypeOption = ref({});
-const cardSetOption = ref({});
+const cardFormatOption = ref('');
+const cardTypeOption = ref('');
+const cardSetOption = ref('');
 const colors = ref([
   {
     label: 'White',
@@ -157,6 +157,32 @@ const colors = ref([
 
 const resetQuery = () => {
   areFiltersShown.value = false;
+}
+
+const applyFilters = async () => {
+  //  Send Query
+  areFiltersShown.value = false;
+  page.value = 0;
+  const cardsResponse = await cardsService.getCards({
+    phrase: search.value,
+    page: page.value,
+    size: 30,
+    colors: colors.value.filter(x => x.checked).map(x => x.label).join(','),
+    sortBy: sortBy.value.map(x => x.label).join(',')
+  });
+  cards.value = cardsResponse.content;
+}
+
+const sortingChanged = async () => {
+  page.value = 0;
+  const cardsResponse = await cardsService.getCards({
+    phrase: search.value,
+    page: page.value,
+    size: 30,
+    colors: colors.value.filter(x => x.checked).map(x => x.label).join(','),
+    sortBy: sortBy.value.map(x => x.label).join(',')
+  });
+  cards.value = cardsResponse.content;
 }
 
 </script>

@@ -1,6 +1,6 @@
 export interface GetCardsRequest {
     phrase: string;
-    color: string;
+    colors: string;
     type: string;
     page: number;
     size: number;

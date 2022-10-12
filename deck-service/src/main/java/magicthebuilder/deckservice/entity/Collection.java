@@ -21,6 +21,7 @@ public class Collection {
     @Id
     public Long userId;
 
+    @Enumerated(EnumType.STRING)
     public CollectionAccessLevelEnum accessLevel;
 
     @ManyToMany(fetch = FetchType.EAGER)

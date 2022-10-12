@@ -12,6 +12,8 @@ import magicthebuilder.deckservice.exception.customexceptions.*;
 import magicthebuilder.deckservice.repository.DeckRepository;
 import magicthebuilder.deckservice.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -34,11 +36,16 @@ public class DeckService {
                 .toList();
     }
 
-    public List<SimpleDeckGetResponseDto> getPublicDecks() {
-        List<Deck> decks = repository.findAllByAccessLevel(DeckAccessLevelEnum.PUBLIC);
+    public List<SimpleDeckGetResponseDto> getPublicDecks(Pageable paging) {
+
+        Page<Deck> pageTuts;
+        Page<Deck> decks = repository.findAllByAccessLevel(DeckAccessLevelEnum.PUBLIC,paging);
+
         return decks.stream()
                 .map(SimpleDeckGetResponseDto::new)
                 .toList();
+
+
     }
 
     public DetailedDeckGetResponseDto getDeckByIdAndUserId(UUID id, Long userId) {

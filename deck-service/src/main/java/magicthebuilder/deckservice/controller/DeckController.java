@@ -5,6 +5,10 @@ import magicthebuilder.deckservice.dto.*;
 import magicthebuilder.deckservice.entity.Deck;
 import magicthebuilder.deckservice.service.DeckService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -25,8 +29,12 @@ public class DeckController {
     }
 
     @GetMapping("")
-    public List<SimpleDeckGetResponseDto> getPublicDecks() {
-        return deckService.getPublicDecks();
+    public List<SimpleDeckGetResponseDto> getPublicDecks(
+            @RequestParam(defaultValue = "0") Integer page,
+            @RequestParam(defaultValue = "20") Integer size
+    ) {
+        Pageable pageable = PageRequest.of(page,size);
+        return deckService.getPublicDecks(pageable);
     }
 
     @GetMapping("/{userId}/{deckID}")

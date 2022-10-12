@@ -33,6 +33,7 @@ public class Deck {
     @ManyToOne
     private User owner;
     private GameMode gameMode;
+    @Enumerated(EnumType.STRING)
     private DeckAccessLevelEnum accessLevel;
     @ManyToMany
     private List<Card> cards;
@@ -40,6 +41,9 @@ public class Deck {
     private List<Card> sideboard;
     private Date creationDate;
     private Date lastUpdateDate;
+    @ManyToOne
+    private Card commander;
+    private boolean isValid;
 
     public Deck(String name, GameMode gameMode, User owner, DeckAccessLevelEnum accessLevel, List<Card> cards) {
         setName(name);

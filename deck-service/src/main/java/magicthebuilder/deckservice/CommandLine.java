@@ -45,7 +45,7 @@ public class CommandLine implements CommandLineRunner {
 
 
         Deck test = new Deck("tescik", GameMode.DRAFT, userService.findById(1L).get(), DeckAccessLevelEnum.PUBLIC, coll);
-        Deck test2 = new Deck("tescik 2342323232", GameMode.DRAFT, userService.findById(2L).get(), DeckAccessLevelEnum.NOT_PUBLIC, null);
+        Deck test2 = new Deck("tescik 2342323232", GameMode.DRAFT, userService.findById(2L).get(), DeckAccessLevelEnum.PUBLIC, null);
 
         deckService.addDeck(test2);
         deckService.addDeck(test);

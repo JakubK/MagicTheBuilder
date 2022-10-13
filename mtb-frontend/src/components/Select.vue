@@ -66,16 +66,8 @@ const selectOption = (option: string) => {
     emit('update:modelValue', updatedArray);
   }
   else {
-    //  Toggle state 
-    const updatedArray = props.modelValue!
-        .map(x => {
-          if(x.label === option)
-            return {
-              ...x,
-              checked: !x.checked
-            }
-          return x;
-        });
+    //  Remove from array
+    const updatedArray = props.modelValue!.filter(x => x.label !== option);
     emit('update:modelValue', updatedArray);
   }
   emit('input');

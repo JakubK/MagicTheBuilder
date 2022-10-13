@@ -72,7 +72,6 @@ import Button from '@/components/Button.vue';
 import { onMounted, Ref, ref, watch } from 'vue';
 import debounce from 'lodash.debounce';
 import ClickOutside from 'click-outside-vue3';
-import { GetCardsRequest } from '@/models/getCardsRequest';
 import { Card } from '@/models/card';
 import { cardsService } from '@/services/cards';
 import { metaDataService } from '@/services/metaData';
@@ -105,6 +104,7 @@ const loadMore = async () => {
       page: page.value,
       size: 30,
       colors: colors.value.filter(x => x.checked).map(x => x.label).join(','),
+      types: cardTypes.value.map(x => x.label).join(','),
       sortBy: sortBy.value.map(x => x.label).join(',')
     });
     cards.value = [...cards.value , ...cardsResponse.content];
@@ -138,6 +138,8 @@ watch(search, debounce(async (newSearchValue: string, previousValue: string) => 
       phrase: newSearchValue,
       page: page.value,
       size: 30,
+      types: cardTypes.value.map(x => x.label).join(','),
+      colors: colors.value.filter(x => x.checked).map(x => x.label).join(','),
       sortBy: sortBy.value.map(x => x.label).join(',')
     });
     cards.value = cardsResponse.content;
@@ -178,6 +180,7 @@ const applyFilters = async () => {
     phrase: search.value,
     page: page.value,
     size: 30,
+    types: cardTypes.value.map(x => x.label).join(','),
     colors: colors.value.filter(x => x.checked).map(x => x.label).join(','),
     sortBy: sortBy.value.map(x => x.label).join(',')
   });
@@ -190,6 +193,7 @@ const sortingChanged = async () => {
     phrase: search.value,
     page: page.value,
     size: 30,
+    types: cardTypes.value.map(x => x.label).join(','),
     colors: colors.value.filter(x => x.checked).map(x => x.label).join(','),
     sortBy: sortBy.value.map(x => x.label).join(',')
   });

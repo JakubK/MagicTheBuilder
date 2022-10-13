@@ -93,6 +93,7 @@ public class MtgCard {
     private String setName;
     private String[] printings;
     private String imageUrl;
+    private Boolean hasCachedImage = false;
     private Legality[] legalities;
     private Ruling[] rulings;
 }

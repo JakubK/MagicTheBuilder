@@ -10,6 +10,7 @@ import magicthebuilder.cardservice.repository.RestRepository;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -27,5 +28,17 @@ public class DataLoader implements ApplicationRunner {
         List<Card> cardsOriginalFormat = readFromFile ? fileRepository.getAllCards() : restRepository.getAll();
         List<MtgCard> cards = cardsOriginalFormat.parallelStream().map(MtgCard::new).toList();
         cardRepository.saveAll(cards);
+    }
+
+    @Scheduled(cron = "* */90 * * * *")
+    public void updateAllCards() {
+        List<MtgCard> newCards = restRepository.getAll().parallelStream().map(MtgCard::new).toList();
+        List<MtgCard> oldCards = cardRepository.findAll();
+        newCards.removeAll(oldCards);
+        cardRepository.saveAll(newCards);
+    }
+
+    public void downloadImages() {
+        
     }
 }

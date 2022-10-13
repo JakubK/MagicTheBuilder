@@ -2,7 +2,7 @@ package magicthebuilder.cardservice.service;
 
 import io.magicthegathering.javasdk.resource.MtgSet;
 import lombok.AllArgsConstructor;
-import magicthebuilder.cardservice.repository.MetaDataRestRepository;
+import magicthebuilder.cardservice.repository.MetaDataRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -10,7 +10,7 @@ import java.util.List;
 @Service
 @AllArgsConstructor
 public class MetaDataService {
-    private final MetaDataRestRepository metaDataRestRepository;
+    private final MetaDataRepository metaDataRestRepository;
 
     public List<String> getTypes() {
         return metaDataRestRepository.getTypes();

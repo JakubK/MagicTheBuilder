@@ -1,6 +1,5 @@
 package magicthebuilder.cardservice.service;
 
-import io.magicthegathering.javasdk.resource.MtgSet;
 import lombok.AllArgsConstructor;
 import magicthebuilder.cardservice.repository.MetaDataRepository;
 import org.springframework.stereotype.Service;
@@ -16,7 +15,7 @@ public class MetaDataService {
         return metaDataRestRepository.getTypes();
     }
 
-    public List<MtgSet> getSets() {
+    public List<String> getSets() {
         return metaDataRestRepository.getSets();
     }
 

@@ -5,9 +5,6 @@ import lombok.AllArgsConstructor;
 import magicthebuilder.cardservice.entity.MtgCard;
 import magicthebuilder.cardservice.service.CardService;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -43,14 +40,12 @@ public class CardController {
             @RequestParam(value = "phrase", required = false) String phrase,
             @RequestParam(value = "colors", required = false) List<String> colors,
             @RequestParam(value = "types", required = false) List<String> types,
+            @RequestParam(value = "sets", required = false) List<String> sets,
+            @RequestParam(value = "formats", required = false) List<String> formats,
             @RequestParam(value = "page", required = false) Integer page,
             @RequestParam(value = "size", required = false) Integer size,
             @RequestParam(value = "sortBy", required = false) String sortBy
     ) {
-        Pageable pageable = PageRequest.of(
-                page != null ? page : 0,
-                size != null ? size : 100,
-                sortBy != null ? Sort.by(sortBy) : Sort.unsorted());
-        return cardService.getCards(ids, phrase, colors, types, pageable);
+        return cardService.getCards(ids, phrase, colors, types, sets, formats, sortBy, page, size);
     }
 }

@@ -17,7 +17,7 @@ http://localhost:8080/api/cards?id=758df5d5-992f-5d30-b6bc-87cb1a0788ab,aeb1b742
 http://localhost:8080/api/cards/aeb1b742-645c-5dab-ba9b-35d51649e074
 
 ###
-http://localhost:8080/api/cards?colors=Black&page=5&size=30
+http://localhost:8080/api/cards?sortBy=toughness&sets=Ixalan,Zendikar
 
 
 ###
@@ -32,3 +32,10 @@ http://localhost:8080/api/sets
 
 ###
 http://localhost:8080/api/formats
+
+###
+http://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=129465&type=card
+
+
+###
+http://localhost:8080/api/cards?sortBy=toughness&formats=Historicbrawl,Future,Penny,Gladiator,Alchemy,Vintage

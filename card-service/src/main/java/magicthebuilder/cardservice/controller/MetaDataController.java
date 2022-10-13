@@ -1,6 +1,5 @@
 package magicthebuilder.cardservice.controller;
 
-import io.magicthegathering.javasdk.resource.MtgSet;
 import lombok.AllArgsConstructor;
 import magicthebuilder.cardservice.service.MetaDataService;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -18,7 +17,7 @@ public class MetaDataController {
     private final MetaDataService metaDataService;
 
     @GetMapping("sets")
-    public List<MtgSet> getSets() {
+    public List<String> getSets() {
         return metaDataService.getSets();
     }
 

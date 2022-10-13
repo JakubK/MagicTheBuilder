@@ -8,19 +8,20 @@ import org.springframework.stereotype.Repository;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Repository
 public class MetaDataRepository {
     private List<String> types = downloadTypes();
 
     private List<String> formats = downloadFormats();
-    private List<MtgSet> sets = downloadSets();
+    private List<String> sets = downloadSets();
 
     public List<String> getFormats() {
         return formats == null ? downloadFormats() : formats;
     }
 
-    public List<MtgSet> getSets() {
+    public List<String> getSets() {
         return sets == null ? downloadSets() : sets;
     }
 
@@ -35,8 +36,10 @@ public class MetaDataRepository {
         formats = downloadFormats();
     }
 
-    private List<MtgSet> downloadSets() {
-        return  SetAPI.getAllSets();
+    private List<String> downloadSets() {
+        return SetAPI.getAllSets()
+                .stream().map(MtgSet::getName)
+                .collect(Collectors.toList());
     }
 
     private List<String> downloadTypes() {

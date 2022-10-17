@@ -46,6 +46,7 @@ public class CardController {
             @RequestParam(value = "size", required = false) Integer size,
             @RequestParam(value = "sortBy", required = false) String sortBy
     ) {
+        // TODO: Pack it up in some class
         return cardService.getCards(ids, phrase, colors, types, sets, formats, sortBy, page, size);
     }
 }

@@ -20,11 +20,16 @@ public class CardController {
     private final CardService cardService;
 
 
-    // TODO: This endpoint should be blocked in Gateway/Reverse Proxy
+    // TODO: This endpoints should be blocked in Gateway/Reverse Proxy
     // Otherwise huge DOS risk
     @GetMapping("all")
     public List<MtgCard> getAllCards() {
         return cardService.getAllCards();
+    }
+
+    @GetMapping("ids")
+    public List<String> getAllCardIds() {
+        return cardService.getAllIds();
     }
 
     @GetMapping("{id}")

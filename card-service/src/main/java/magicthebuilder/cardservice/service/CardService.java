@@ -85,5 +85,8 @@ public class CardService {
         return mongoTemplate.findAll(MtgCard.class);
     }
 
-
+    public List<String> getAllIds() {
+        return mongoTemplate.findAll(MtgCard.class)
+                .stream().map(MtgCard::getId).collect(Collectors.toList());
+    }
 }

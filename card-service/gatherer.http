@@ -39,3 +39,6 @@ http://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=129465&type=card
 
 ###
 http://localhost:8080/api/cards?sortBy=toughness&formats=Historicbrawl,Future,Penny,Gladiator,Alchemy,Vintage
+
+###
+http://localhost:8080/api/cards/ids

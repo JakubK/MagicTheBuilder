@@ -16,6 +16,12 @@ public class GatewayConfig {
                         .and()
                         .path("/api/collections")
                         .uri("http://localhost:8082"))
+                .route("card-service", predicateSpec -> predicateSpec
+                        .path("/api/cards")
+                        .uri("http://localhost:8085"))
+                .route("auth-service", predicateSpec -> predicateSpec
+                        .path("/api/auth")
+                        .uri("http://localhost:9000"))
                 .build();
     }
 }

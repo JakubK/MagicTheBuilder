@@ -2,8 +2,8 @@ package magicthebuilder.deckservice.entity;
 
 
 import lombok.*;
-import magicthebuilder.deckservice.entity.enums.GameMode;
 import magicthebuilder.deckservice.entity.enums.DeckAccessLevelEnum;
+import magicthebuilder.deckservice.entity.enums.GameMode;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;

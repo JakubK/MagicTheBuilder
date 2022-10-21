@@ -16,6 +16,7 @@ public interface DeckRepository extends JpaRepository<Deck, UUID> {
 
 
     Page<Deck> findAllByAccessLevel(DeckAccessLevelEnum accLevel, Pageable pageable);
+
     List<Deck> findAllByOwner(Long userId);
 
 

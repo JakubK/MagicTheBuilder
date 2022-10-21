@@ -1,7 +1,6 @@
 package magicthebuilder.deckservice.service;
 
 
-import io.swagger.models.auth.In;
 import magicthebuilder.deckservice.dto.*;
 import magicthebuilder.deckservice.entity.Card;
 import magicthebuilder.deckservice.entity.Deck;
@@ -21,13 +20,11 @@ import java.util.*;
 @Service
 public class DeckService {
 
+    private final CardService cardService = new CardService();
     @Autowired
     private DeckRepository repository;
-
     @Autowired
     private UserRepository userRepository;
-
-    private final CardService cardService = new CardService();
 
     public List<SimpleDeckGetResponseDto> getAllDecks() {
         List<Deck> decks = repository.findAll();
@@ -39,7 +36,7 @@ public class DeckService {
     public List<SimpleDeckGetResponseDto> getPublicDecks(Pageable paging) {
 
         Page<Deck> pageTuts;
-        Page<Deck> decks = repository.findAllByAccessLevel(DeckAccessLevelEnum.PUBLIC,paging);
+        Page<Deck> decks = repository.findAllByAccessLevel(DeckAccessLevelEnum.PUBLIC, paging);
 
         return decks.stream()
                 .map(SimpleDeckGetResponseDto::new)
@@ -106,7 +103,7 @@ public class DeckService {
         return getDeckByIdAndUserId(deckDto.getId(), deck.getOwner().getId());
     }
 
-    public void deleteDeck(UUID deckId){
+    public void deleteDeck(UUID deckId) {
         repository.deleteById(deckId);
     }
 
@@ -114,7 +111,7 @@ public class DeckService {
         repository.deleteAll();
     }
 
-    private List<Card>  getCardsFromCardMultipleCardDtoList(List<MultipleCardDto> cards) {
+    private List<Card> getCardsFromCardMultipleCardDtoList(List<MultipleCardDto> cards) {
         Map<String, Integer> map = new HashMap<>();
         for (MultipleCardDto card : cards) {
             map.put(card.getCardId(), card.getAmount());
@@ -133,13 +130,13 @@ public class DeckService {
 
     private void validateDeck(Deck deck) {
         //extend this to check if deck is legal in selected gameMode in the future
-        if(deck.getGameMode().equals(GameMode.DRAFT)){
+        if (deck.getGameMode().equals(GameMode.DRAFT)) {
             return;
         }
-        if(deck.getCards().size()<60) {
+        if (deck.getCards().size() < 60) {
             throw new InvalidDeckDataException("Deck must have at least 60 cards. If you still want to save your deck," +
                     "please set the game mode to DRAFT");
-        } else if (deck.getSideboard().size()>15) {
+        } else if (deck.getSideboard().size() > 15) {
             throw new InvalidDeckDataException("Deck sideboard can have maximum 15 cards. If you still want to save your deck," +
                     "please set the game mode to DRAFT");
         }

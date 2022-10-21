@@ -2,8 +2,8 @@ package magicthebuilder.deckservice.dto;
 
 import lombok.*;
 import magicthebuilder.deckservice.entity.Deck;
-import magicthebuilder.deckservice.entity.enums.GameMode;
 import magicthebuilder.deckservice.entity.enums.DeckAccessLevelEnum;
+import magicthebuilder.deckservice.entity.enums.GameMode;
 
 import java.util.Collections;
 import java.util.function.Function;

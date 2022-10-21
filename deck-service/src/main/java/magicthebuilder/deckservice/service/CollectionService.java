@@ -6,7 +6,6 @@ import magicthebuilder.deckservice.dto.CollectionUpdateResponseDto;
 import magicthebuilder.deckservice.dto.MultipleCardDto;
 import magicthebuilder.deckservice.entity.Card;
 import magicthebuilder.deckservice.entity.Collection;
-import magicthebuilder.deckservice.entity.enums.CollectionAccessLevelEnum;
 import magicthebuilder.deckservice.exception.customexceptions.UnrecognizedCardIdException;
 import magicthebuilder.deckservice.exception.customexceptions.UnrecognizedUserIdException;
 import magicthebuilder.deckservice.repository.CollectionRepository;
@@ -76,7 +75,7 @@ public class CollectionService {
         }
     }
 
-    private List<Card>  getCardsFromCardMultipleCardDtoList(List<MultipleCardDto> cards) {
+    private List<Card> getCardsFromCardMultipleCardDtoList(List<MultipleCardDto> cards) {
         Map<String, Integer> map = new HashMap<>();
         for (MultipleCardDto card : cards) {
             map.put(card.getCardId(), card.getAmount());

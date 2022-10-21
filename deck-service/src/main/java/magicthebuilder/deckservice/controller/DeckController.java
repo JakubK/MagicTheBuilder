@@ -1,19 +1,18 @@
 package magicthebuilder.deckservice.controller;
 
 
-import magicthebuilder.deckservice.dto.*;
+import magicthebuilder.deckservice.dto.CreateDeckDto;
+import magicthebuilder.deckservice.dto.DeckUpdateRequestDto;
+import magicthebuilder.deckservice.dto.DetailedDeckGetResponseDto;
+import magicthebuilder.deckservice.dto.SimpleDeckGetResponseDto;
 import magicthebuilder.deckservice.entity.Deck;
 import magicthebuilder.deckservice.service.DeckService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
 @RestController
@@ -33,7 +32,7 @@ public class DeckController {
             @RequestParam(defaultValue = "0") Integer page,
             @RequestParam(defaultValue = "20") Integer size
     ) {
-        Pageable pageable = PageRequest.of(page,size);
+        Pageable pageable = PageRequest.of(page, size);
         return deckService.getPublicDecks(pageable);
     }
 
@@ -44,7 +43,7 @@ public class DeckController {
 
     @GetMapping("/{userId}")
     public List<SimpleDeckGetResponseDto> getUserDecks(@PathVariable("userId") Long userId) {
-        return deckService.getDecksByUserId( userId);
+        return deckService.getDecksByUserId(userId);
     }
 
     @PostMapping

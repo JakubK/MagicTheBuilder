@@ -3,14 +3,9 @@ package magicthebuilder.deckservice.controller;
 import magicthebuilder.deckservice.dto.CollectionGetResponseDto;
 import magicthebuilder.deckservice.dto.CollectionUpdateRequestDto;
 import magicthebuilder.deckservice.dto.CollectionUpdateResponseDto;
-import magicthebuilder.deckservice.dto.MultipleCardDto;
 import magicthebuilder.deckservice.service.CollectionService;
-import magicthebuilder.deckservice.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.HashMap;
-import java.util.Map;
 
 @RestController
 @RequestMapping("api/collections")

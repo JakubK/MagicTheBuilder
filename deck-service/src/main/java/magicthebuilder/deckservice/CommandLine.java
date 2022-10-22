@@ -1,6 +1,5 @@
 package magicthebuilder.deckservice;
 
-import magicthebuilder.deckservice.dto.MtgCardDto;
 import magicthebuilder.deckservice.entity.Card;
 import magicthebuilder.deckservice.entity.Deck;
 import magicthebuilder.deckservice.entity.User;
@@ -92,17 +91,13 @@ public class CommandLine implements CommandLineRunner {
         RestTemplate restTemplate = new RestTemplate();
         restTemplate.setRequestFactory((new HttpComponentsClientHttpRequestFactory()));
 
-        String url = "http://localhost:8085/api/cards/all";
+        String url = "http://localhost:8085/api/cards/ids";
         ResponseEntity<?> responseEntity;
 
         try {
-            responseEntity = restTemplate.exchange(url, HttpMethod.GET, null, MtgCardDto[].class);
-            MtgCardDto[] cards = (MtgCardDto[]) responseEntity.getBody();
-            List<String> cardIds = Arrays.stream(cards)
-                    .map(card -> card.getId())
-                    .toList();
-            responseEntity.getStatusCode();
-            cardService.addCards(cardIds);
+            responseEntity = restTemplate.exchange(url, HttpMethod.GET, null, String[].class);
+            List<String> cards = Arrays.stream((String[]) responseEntity.getBody()).toList();
+            cardService.addCards(cards);
             result = responseEntity.getStatusCode();
         } catch (Exception e) {
             System.out.println("Nie udało sie pobrać kart z card-service. Za 10s kolejna próba");

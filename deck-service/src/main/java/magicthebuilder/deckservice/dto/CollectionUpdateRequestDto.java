@@ -14,7 +14,6 @@ import java.util.List;
 @ToString
 @EqualsAndHashCode
 public class CollectionUpdateRequestDto {
-    private Long userId;
     private List<MultipleCardDto> cards;
     private CollectionAccessLevelEnum accessLevel;
 }

@@ -6,6 +6,8 @@ import magicthebuilder.deckservice.dto.CollectionUpdateResponseDto;
 import magicthebuilder.deckservice.dto.MultipleCardDto;
 import magicthebuilder.deckservice.entity.Card;
 import magicthebuilder.deckservice.entity.Collection;
+import magicthebuilder.deckservice.entity.enums.CollectionAccessLevelEnum;
+import magicthebuilder.deckservice.exception.customexceptions.InaccessibleResourceException;
 import magicthebuilder.deckservice.exception.customexceptions.UnrecognizedCardIdException;
 import magicthebuilder.deckservice.exception.customexceptions.UnrecognizedUserIdException;
 import magicthebuilder.deckservice.repository.CollectionRepository;
@@ -31,49 +33,33 @@ public class CollectionService {
         return repository.findById(id);
     }
 
-    public CollectionUpdateResponseDto updateCollection(CollectionUpdateRequestDto collectionDto) {
-        Optional<Collection> collOpt = findById(collectionDto.getUserId());
-        if (collOpt.isPresent()) {
-            Collection coll = collOpt.get();
-            coll.setCards(getCardsFromCardMultipleCardDtoList(collectionDto.getCards()));
-            coll.accessLevel = collectionDto.getAccessLevel();
-            this.saveCollection(coll);
-            return CollectionUpdateResponseDto.builder()
-                    .userId(collectionDto.getUserId())
-                    .details("Collection Updated")
-                    .build();
-        } else {
-            throw new UnrecognizedUserIdException(collectionDto.getUserId());
-        }
+    public CollectionUpdateResponseDto updateCollection(CollectionUpdateRequestDto collectionDto, Long userId) {
+        Collection coll = getCollectionById(userId);
+        coll.setCards(getCardsFromCardMultipleCardDtoList(collectionDto.getCards()));
+        coll.accessLevel = collectionDto.getAccessLevel();
+        this.saveCollection(coll);
+        return CollectionUpdateResponseDto.builder()
+                .userId(userId)
+                .details("Collection Updated")
+                .build();
     }
 
-    public CollectionGetResponseDto getCollectionById(Long userId) {
-        Optional<Collection> collOpt = findById(userId);
-        if (collOpt.isPresent()) {
-            Collection coll = collOpt.get();
-            CollectionGetResponseDto responseDto = new CollectionGetResponseDto();
-            responseDto.setUserId(userId);
-            responseDto.setAccessLevel(coll.accessLevel);
-            Map<String, Integer> cardsFromCollection = new HashMap<>();
-            List<MultipleCardDto> cardsInResponse = new ArrayList<>();
+    public CollectionGetResponseDto getOwnerCollection(Long userId) {
+        Collection coll = getCollectionById(userId);
+        return new CollectionGetResponseDto(coll);
 
-            for (Card card : coll.getCards()) {
-                if (cardsFromCollection.containsKey(card.getId())) {
-                    cardsFromCollection.put(card.getId(), cardsFromCollection.get(card.getId()) + 1);
-                } else {
-                    cardsFromCollection.put(card.getId(), 1);
-                }
-            }
-            for (Map.Entry<String, Integer> pair : cardsFromCollection.entrySet()) {
-                cardsInResponse.add(new MultipleCardDto(pair.getKey(), pair.getValue()));
-            }
-            responseDto.setCards(cardsInResponse);
-            return responseDto;
-
-        } else {
-            throw new UnrecognizedUserIdException(userId);
-        }
     }
+
+    public CollectionGetResponseDto getUserCollection(Long userId) {
+        Collection coll = getCollectionById(userId);
+        if (coll.getAccessLevel() != CollectionAccessLevelEnum.PRIVATE) {
+            return new CollectionGetResponseDto(coll);
+        } else {
+            throw new InaccessibleResourceException(userId);
+        }
+
+    }
+
 
     private List<Card> getCardsFromCardMultipleCardDtoList(List<MultipleCardDto> cards) {
         Map<String, Integer> map = new HashMap<>();
@@ -82,14 +68,23 @@ public class CollectionService {
         }
         List<Card> ret = new ArrayList<>();
         for (String cardId : map.keySet()) {
-            if (!cardService.checkCardExistance(cardId)) {
+            if (!cardService.checkIfCardExists(cardId)) {
                 throw new UnrecognizedCardIdException("Unrecognized card with id: " + cardId);
             }
             for (int j = 0; j < map.get(cardId); j++) {
-                ret.add(cardService.getCard(cardId));
+                ret.add(cardService.getCardById(cardId));
             }
         }
         return ret;
+    }
+
+    private Collection getCollectionById(Long userId) {
+        Optional<Collection> collOpt = findById(userId);
+        if (collOpt.isPresent()) {
+            return collOpt.get();
+        } else {
+            throw new UnrecognizedUserIdException(userId);
+        }
     }
 
     public void flushDatabase() {

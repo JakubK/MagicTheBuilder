@@ -2,6 +2,7 @@ package magicthebuilder.deckservice.repository;
 
 
 import magicthebuilder.deckservice.entity.Deck;
+import magicthebuilder.deckservice.entity.User;
 import magicthebuilder.deckservice.entity.enums.DeckAccessLevelEnum;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -17,7 +18,10 @@ public interface DeckRepository extends JpaRepository<Deck, UUID> {
 
     Page<Deck> findAllByAccessLevel(DeckAccessLevelEnum accLevel, Pageable pageable);
 
-    List<Deck> findAllByOwner(Long userId);
+    List<Deck> findAllByAccessLevelAndOwner(DeckAccessLevelEnum accLevel, User user);
+
+
+    List<Deck> findAllByOwner(User userId);
 
 
 }

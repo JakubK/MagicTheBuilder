@@ -6,10 +6,11 @@ import magicthebuilder.deckservice.entity.Card;
 import magicthebuilder.deckservice.entity.Deck;
 import magicthebuilder.deckservice.entity.User;
 import magicthebuilder.deckservice.entity.enums.DeckAccessLevelEnum;
-import magicthebuilder.deckservice.entity.enums.GameMode;
-import magicthebuilder.deckservice.exception.customexceptions.*;
+import magicthebuilder.deckservice.exception.customexceptions.InaccessibleDeckException;
+import magicthebuilder.deckservice.exception.customexceptions.InaccessibleResourceException;
+import magicthebuilder.deckservice.exception.customexceptions.UnrecognizedCardIdException;
+import magicthebuilder.deckservice.exception.customexceptions.UnrecognizedDeckException;
 import magicthebuilder.deckservice.repository.DeckRepository;
-import magicthebuilder.deckservice.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -24,87 +25,106 @@ public class DeckService {
     @Autowired
     private DeckRepository repository;
     @Autowired
-    private UserRepository userRepository;
+    private UserService userService;
 
-    public List<SimpleDeckGetResponseDto> getAllDecks() {
-        List<Deck> decks = repository.findAll();
-        return decks.stream()
-                .map(SimpleDeckGetResponseDto::new)
-                .toList();
+
+    public DetailedDeckGetResponseDto getNotPrivateDeck(UUID id) {
+        Deck deck = getDeckById(id);
+        if (deck.getAccessLevel() != DeckAccessLevelEnum.PRIVATE) {
+            return new DetailedDeckGetResponseDto(deck);
+        } else {
+            throw new InaccessibleDeckException(id);
+        }
     }
+
+    public DetailedDeckGetResponseDto getOwnersDeck(UUID id, Long userId) {
+        Deck deck = getDeckById(id);
+        if (deck.getOwner().getId().equals(userId) || deck.getAccessLevel() != DeckAccessLevelEnum.PRIVATE) {
+            return new DetailedDeckGetResponseDto(deck);
+        } else {
+            throw new InaccessibleDeckException(id);
+        }
+    }
+
 
     public List<SimpleDeckGetResponseDto> getPublicDecks(Pageable paging) {
 
-        Page<Deck> pageTuts;
         Page<Deck> decks = repository.findAllByAccessLevel(DeckAccessLevelEnum.PUBLIC, paging);
 
         return decks.stream()
                 .map(SimpleDeckGetResponseDto::new)
                 .toList();
+    }
 
+    public List<SimpleDeckGetResponseDto> getUserPublicDecks(Long userId) {
+        return repository.findAllByAccessLevelAndOwner(DeckAccessLevelEnum.PUBLIC, userService.findById(userId)).stream()
+                .map(SimpleDeckGetResponseDto::new)
+                .toList();
+    }
 
+    public List<SimpleDeckGetResponseDto> getUserDecks(Long userId) {
+        return repository.findAllByOwner(userService.findById(userId)).stream()
+                .map(SimpleDeckGetResponseDto::new)
+                .toList();
     }
 
     public DetailedDeckGetResponseDto getDeckByIdAndUserId(UUID id, Long userId) {
-        if (repository.findById(id).isPresent()) {
-            Deck deck = repository.findById(id).get();
-            if (deck.getAccessLevel() == DeckAccessLevelEnum.PRIVATE) {
-                if (userId.equals(deck.getOwner().getId())) {
-                    return new DetailedDeckGetResponseDto(deck);
-                } else {
-                    throw new InaccessibleDeckException(id);
-                }
-            } else {
+        Deck deck = getDeckById(id);
+        if (deck.getAccessLevel() == DeckAccessLevelEnum.PRIVATE) {
+            if (userId.equals(deck.getOwner().getId())) {
                 return new DetailedDeckGetResponseDto(deck);
+            } else {
+                throw new InaccessibleDeckException(id);
             }
         } else {
-            throw new UnrecognizedDeckException(id);
+            return new DetailedDeckGetResponseDto(deck);
         }
     }
 
     public List<SimpleDeckGetResponseDto> getDecksByUserId(Long userId) {
-        List<Deck> decks = repository.findAllByOwner(userId);
+        List<Deck> decks = repository.findAllByOwner(userService.findById(userId));
         return decks.stream()
                 .map(SimpleDeckGetResponseDto::new)
                 .toList();
     }
 
-    public UUID addDeck(Deck deck) {
+
+    public void addDeck(Deck deck) {
         repository.save(deck);
-        return deck.getUuid();
     }
 
-    public Deck createDeckFromDto(CreateDeckDto dto) {
-        Optional<User> owner = userRepository.findById(dto.getUserId());
-        if (owner.isPresent()) {
-            Deck ret = CreateDeckDto.dtoToEntityMapper().apply(dto);
-            ret.setOwner(owner.get());
-            validateDeck(ret);
-            return ret;
+    public UUID createDeckFromDto(CreateDeckDto dto, long userId) {
+        User owner = userService.findById(userId);
+        Deck ret = CreateDeckDto.dtoToEntityMapper().apply(dto);
+        ret.setOwner(owner);
+        //validateDeck(ret);
+        addDeck(ret);
+        return ret.getUuid();
 
-        } else {
-            throw new UnrecognizedUserIdException(dto.getUserId());
-        }
     }
 
-    public DetailedDeckGetResponseDto updateDeck(DeckUpdateRequestDto deckDto) {
-        Optional<Deck> optDeck = repository.findById(deckDto.getId());
-        if (optDeck.isEmpty()) {
-            throw new UnrecognizedDeckException(deckDto.getId());
+    public DetailedDeckGetResponseDto updateDeck(DeckUpdateRequestDto deckDto, long userId) {
+        Deck deck = getDeckById(deckDto.getId());
+        if (deck.getOwner().getId() != userId) {
+            throw new InaccessibleResourceException(userId);
         }
-        Deck deck = optDeck.get();
         deck.setAccessLevel(deckDto.getAccessLevel());
         deck.setGameMode(deckDto.getGameMode());
         deck.setName(deckDto.getName());
         deck.setCards(getCardsFromCardMultipleCardDtoList(deckDto.getDeckCards()));
         deck.setSideboard(getCardsFromCardMultipleCardDtoList(deckDto.getSideboardCards()));
-        validateDeck(deck);
+        // validateDeck(deck);
         repository.save(deck);
         return getDeckByIdAndUserId(deckDto.getId(), deck.getOwner().getId());
     }
 
-    public void deleteDeck(UUID deckId) {
-        repository.deleteById(deckId);
+    public void deleteDeck(UUID deckId, long userId) {
+        Deck deck = getDeckById(deckId);
+        if (deck.getOwner().getId() == userId) {
+            repository.deleteById(deckId);
+        } else {
+            throw new InaccessibleResourceException(userId);
+        }
     }
 
     public void flushDatabase() {
@@ -118,28 +138,29 @@ public class DeckService {
         }
         List<Card> ret = new ArrayList<>();
         for (String cardId : map.keySet()) {
-            if (!cardService.checkCardExistance(cardId)) {
+            if (!cardService.checkIfCardExists(cardId)) {
                 throw new UnrecognizedCardIdException("Unrecognized card with id: " + cardId);
             }
             for (int j = 0; j < map.get(cardId); j++) {
-                ret.add(cardService.getCard(cardId));
+                ret.add(cardService.getCardById(cardId));
             }
         }
         return ret;
     }
 
+    private Deck getDeckById(UUID id) {
+        Optional<Deck> optDeck = repository.findById(id);
+        if (optDeck.isPresent()) {
+            return optDeck.get();
+        } else {
+            throw new UnrecognizedDeckException(id);
+        }
+
+    }
+
     private void validateDeck(Deck deck) {
         //extend this to check if deck is legal in selected gameMode in the future
-        if (deck.getGameMode().equals(GameMode.DRAFT)) {
-            return;
-        }
-        if (deck.getCards().size() < 60) {
-            throw new InvalidDeckDataException("Deck must have at least 60 cards. If you still want to save your deck," +
-                    "please set the game mode to DRAFT");
-        } else if (deck.getSideboard().size() > 15) {
-            throw new InvalidDeckDataException("Deck sideboard can have maximum 15 cards. If you still want to save your deck," +
-                    "please set the game mode to DRAFT");
-        }
+
 
     }
 }

@@ -7,7 +7,6 @@ import magicthebuilder.deckservice.entity.enums.GameMode;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -42,24 +41,18 @@ public class Deck {
     private Date creationDate;
     private Date lastUpdateDate;
     @ManyToOne
-    private Card commander;
-    private boolean isValid;
+    private Card commander = null;
+    private boolean isValid = false;
 
-    public Deck(String name, GameMode gameMode, User owner, DeckAccessLevelEnum accessLevel, List<Card> cards) {
+    public Deck(String name, GameMode gameMode, User owner, DeckAccessLevelEnum accessLevel, List<Card> cards, List<Card> sideboard) {
         setName(name);
         setGameMode(gameMode);
         setOwner(owner);
         setAccessLevel(accessLevel);
         setCards(cards);
+        setSideboard(sideboard);
     }
 
-    public Deck(String name, GameMode gameMode, User owner, DeckAccessLevelEnum accessLevel) {
-        setName(name);
-        setGameMode(gameMode);
-        setOwner(owner);
-        setAccessLevel(accessLevel);
-        this.cards = new ArrayList<>();
-    }
 
     @PrePersist
     protected void onCreate() {

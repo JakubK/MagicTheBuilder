@@ -12,11 +12,9 @@ import java.time.Instant;
 public class CommonExceptionHandler {
     @ExceptionHandler({
             UnrecognizedCardIdException.class,
-            InaccessibleDeckException.class,
             UnrecognizedDeckException.class,
-            InvalidDeckDataException.class,
             UnrecognizedUserIdException.class})
-    public ResponseEntity<Object> UnrecognizedCardIdExceptionHandler(RuntimeException e) {
+    public ResponseEntity<Object> InvalidDataExceptionHandler(RuntimeException e) {
         CustomErrorResponseEntity customErrorResponseEntity = new CustomErrorResponseEntity(
                 e.getMessage(),
                 Instant.now()
@@ -24,5 +22,15 @@ public class CommonExceptionHandler {
         return new ResponseEntity<>(customErrorResponseEntity, HttpStatus.BAD_REQUEST);
     }
 
-
+    @ExceptionHandler({
+            InaccessibleDeckException.class,
+            InaccessibleResourceException.class
+    })
+    public ResponseEntity<Object> InaccessibleResourceExceptionHandler(RuntimeException e) {
+        CustomErrorResponseEntity customErrorResponseEntity = new CustomErrorResponseEntity(
+                e.getMessage(),
+                Instant.now()
+        );
+        return new ResponseEntity<>(customErrorResponseEntity, HttpStatus.FORBIDDEN);
+    }
 }

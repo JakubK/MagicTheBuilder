@@ -1,6 +1,8 @@
 package magicthebuilder.deckservice.dto;
 
 public class MtgCardDto {
+    private final int multiverseid = -1;
+    private final Boolean hasCachedImage = false;
     private String id;
     private String layout;
     private String name;
@@ -22,7 +24,6 @@ public class MtgCardDto {
     private String power;
     private String toughness;
     private String loyalty;
-    private final int multiverseid = -1;
     private String[] variations;
     private String imageName;
     private String watermark;
@@ -37,7 +38,6 @@ public class MtgCardDto {
     private String setName;
     private String[] printings;
     private String imageUrl;
-    private final Boolean hasCachedImage = false;
     private String[] legalities;
     private String[] rulings;
 

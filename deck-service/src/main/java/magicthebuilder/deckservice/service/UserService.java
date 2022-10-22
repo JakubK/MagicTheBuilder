@@ -3,6 +3,7 @@ package magicthebuilder.deckservice.service;
 import magicthebuilder.deckservice.entity.Collection;
 import magicthebuilder.deckservice.entity.User;
 import magicthebuilder.deckservice.entity.enums.CollectionAccessLevelEnum;
+import magicthebuilder.deckservice.exception.customexceptions.UnrecognizedUserIdException;
 import magicthebuilder.deckservice.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,8 +28,13 @@ public class UserService {
     }
 
 
-    public Optional<User> findById(Long id) {
-        return userRepository.findById(id);
+    public User findById(Long id) {
+        Optional<User> user = userRepository.findById(id);
+        if (user.isPresent()) {
+            return user.get();
+        } else {
+            throw new UnrecognizedUserIdException(id);
+        }
     }
 
     public void flushDatabase() {

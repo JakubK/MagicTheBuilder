@@ -1,12 +1,14 @@
 package magicthebuilder.deckservice.service;
 
 import magicthebuilder.deckservice.entity.Card;
+import magicthebuilder.deckservice.exception.customexceptions.UnrecognizedCardIdException;
 import magicthebuilder.deckservice.repository.CardRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CardService {
@@ -14,12 +16,13 @@ public class CardService {
     @Autowired
     private CardRepository repository;
 
-    public void addCard(Card card) {
-        repository.save(card);
-    }
-
-    public Card getCard(String id) {
-        return repository.findById(id).get();
+    public Card getCardById(String id) {
+        Optional<Card> card = repository.findById(id);
+        if (card.isPresent()) {
+            return card.get();
+        } else {
+            throw new UnrecognizedCardIdException(id);
+        }
 
     }
 
@@ -31,7 +34,7 @@ public class CardService {
         repository.saveAll(cards);
     }
 
-    public Boolean checkCardExistance(String id) {
+    public Boolean checkIfCardExists(String id) {
         return repository.findById(id).isPresent();
     }
 

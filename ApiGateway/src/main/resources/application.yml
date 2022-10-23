@@ -1,0 +1,13 @@
+server:
+  port: 8080
+
+environments:
+  jwt:
+    token:
+      secret: secret
+
+
+spring:
+  application:
+    name: user-service
+

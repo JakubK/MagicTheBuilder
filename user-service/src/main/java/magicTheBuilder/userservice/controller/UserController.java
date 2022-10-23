@@ -6,12 +6,10 @@ import magicTheBuilder.userservice.dto.RegisterRequestDto;
 import magicTheBuilder.userservice.jwt.JwtUtil;
 import magicTheBuilder.userservice.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
+@CrossOrigin
 @RequestMapping("api/user")
 public class UserController {
 

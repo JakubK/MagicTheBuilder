@@ -19,4 +19,6 @@ public class RegisterRequestDto {
     private String password;
     @NotNull
     private String password_repeat;
+    private boolean allowDataProcessing=false;
+    private boolean allowNotifications=false;
 }

@@ -50,6 +50,8 @@ public class UserService {
         }
         validateEmailNotTaken(dto.getEmail());
         user.setEmail(dto.getEmail());
+        user.setAllowNotifications(dto.isAllowNotifications());
+        user.setAllowDataProcessing(dto.isAllowDataProcessing());
         user = saveUser(user);
         return user.getId().toString();
     }

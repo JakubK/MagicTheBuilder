@@ -17,6 +17,14 @@ jobs:
         include:
           - context: ./mtb-frontend
             image: ghcr.io/jakubk/mtb-frontend:latest
+          - context: ./api-gateway
+            image: ghcr.io/jakubk/mtb-api-gateway:latest
+          - context: ./card-service
+            image: ghcr.io/jakubk/mtb-card-service:latest
+          - context: ./deck-service
+            image: ghcr.io/jakubk/mtb-deck-service:latest
+          - context: ./user-service
+            image: ghcr.io/jakubk/mtb-user-service:latest
     permissions:
       contents: read
       packages: write

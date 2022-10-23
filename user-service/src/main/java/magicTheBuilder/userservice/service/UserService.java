@@ -8,7 +8,7 @@ import magicTheBuilder.userservice.entity.User;
 import magicTheBuilder.userservice.exception.customExceptions.DuplicatedEmailException;
 import magicTheBuilder.userservice.exception.customExceptions.DuplicatedUsernameException;
 import magicTheBuilder.userservice.exception.customExceptions.InvalidPasswordException;
-import magicTheBuilder.userservice.exception.customExceptions.InvalidUsernameException;
+import magicTheBuilder.userservice.exception.customExceptions.UnrecognizedEmailException;
 import magicTheBuilder.userservice.jwt.JwtUtil;
 import magicTheBuilder.userservice.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +30,7 @@ public class UserService {
 
     public String login(LoginRequestDto dto)
     {
-        User user = getUserByUsername(dto.getUsername());
+        User user = getUserByEmail(dto.getEmail());
         String encodedLoginPass = bCryptPasswordEncoder.encode(dto.getPassword());
         if(bCryptPasswordEncoder.matches(dto.getPassword(),encodedLoginPass))
         {
@@ -60,12 +60,12 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    private User getUserByUsername(String username){
-        Optional<User> user = userRepository.findByUsername(username);
+    private User getUserByEmail(String email){
+        Optional<User> user = userRepository.findByEmail(email);
         if(user.isPresent()){
             return user.get();
         } else {
-            throw new InvalidUsernameException();
+            throw new UnrecognizedEmailException();
         }
     }
 

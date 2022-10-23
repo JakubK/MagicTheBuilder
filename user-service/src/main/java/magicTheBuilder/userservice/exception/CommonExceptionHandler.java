@@ -3,7 +3,7 @@ package magicTheBuilder.userservice.exception;
 import magicTheBuilder.userservice.exception.customExceptions.DuplicatedEmailException;
 import magicTheBuilder.userservice.exception.customExceptions.DuplicatedUsernameException;
 import magicTheBuilder.userservice.exception.customExceptions.InvalidPasswordException;
-import magicTheBuilder.userservice.exception.customExceptions.InvalidUsernameException;
+import magicTheBuilder.userservice.exception.customExceptions.UnrecognizedEmailException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -16,7 +16,7 @@ public class CommonExceptionHandler {
     @ExceptionHandler({
             DuplicatedUsernameException.class,
             DuplicatedEmailException.class,
-            InvalidUsernameException.class,
+            UnrecognizedEmailException.class,
             InvalidPasswordException.class
     })
     public ResponseEntity<Object> InvalidDataExceptionHandler(RuntimeException e) {

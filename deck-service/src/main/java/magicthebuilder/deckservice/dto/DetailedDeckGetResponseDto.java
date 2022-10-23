@@ -24,6 +24,8 @@ public class DetailedDeckGetResponseDto {
     private Date creationDate;
     private List<MultipleCardDto> cards;
     private List<MultipleCardDto> sideboard;
+    private String commanderId;
+    private boolean isValid;
 
     public DetailedDeckGetResponseDto(Deck deck) {
         this.id = deck.getUuid();
@@ -34,6 +36,8 @@ public class DetailedDeckGetResponseDto {
         this.creationDate = deck.getCreationDate();
         this.cards = CardListToMultipleCardsDto(deck.getCards());
         this.sideboard = CardListToMultipleCardsDto(deck.getSideboard());
+        this.commanderId = deck.getCommander().getId();
+        this.isValid = deck.isValid();
     }
 
     private List<MultipleCardDto> CardListToMultipleCardsDto(List<Card> cards) {

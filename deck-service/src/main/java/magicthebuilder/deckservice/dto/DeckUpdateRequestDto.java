@@ -21,4 +21,5 @@ public class DeckUpdateRequestDto {
     private List<MultipleCardDto> deckCards;
     private List<MultipleCardDto> sideboardCards;
     private DeckAccessLevelEnum accessLevel;
+    private String commanderId = null;
 }

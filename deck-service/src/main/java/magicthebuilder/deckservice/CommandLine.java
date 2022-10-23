@@ -49,12 +49,12 @@ public class CommandLine implements CommandLineRunner {
     public void run(String... args) throws InterruptedException {
 
         if (true) {   // DO YOU WANT TO RE-FILL DATABASE
-            clearDatabase();
-            prepareInitialData();
             while (fillCards() != HttpStatus.OK) {  // busy-waiting, needs to be changed in the future
                 Thread.sleep(10000);
                 System.out.println("Trying again");
             }
+            clearDatabase();
+            prepareInitialData();
 
             Card card = cardService.getCardById("004adf9a-b59a-5d56-9093-df73b9929bb1");
             Card card2 = cardService.getCardById("4c1a672a-3089-563f-a852-9580a425dbf1");
@@ -115,7 +115,6 @@ public class CommandLine implements CommandLineRunner {
         deckService.flushDatabase();
         userService.flushDatabase();
         collectionService.flushDatabase();
-        cardService.flushDatabase();
     }
 
 }

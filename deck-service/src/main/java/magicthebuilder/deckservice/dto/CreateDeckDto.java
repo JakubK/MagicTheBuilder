@@ -20,7 +20,6 @@ public class CreateDeckDto {
 
     private String name;
     private GameMode gameMode;
-    private Long userId;
     private DeckAccessLevelEnum accessLevel;
 
     public static Function<CreateDeckDto, Deck> dtoToEntityMapper() {

@@ -113,6 +113,9 @@ public class DeckService {
         deck.setName(deckDto.getName());
         deck.setCards(getCardsFromCardMultipleCardDtoList(deckDto.getDeckCards()));
         deck.setSideboard(getCardsFromCardMultipleCardDtoList(deckDto.getSideboardCards()));
+        if(deckDto.getCommanderId() != null) {
+            deck.setCommander(cardService.getCardById(deckDto.getCommanderId()));
+        }
         // validateDeck(deck);
         repository.save(deck);
         return getDeckByIdAndUserId(deckDto.getId(), deck.getOwner().getId());

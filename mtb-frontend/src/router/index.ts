@@ -8,7 +8,23 @@ import Decks from "@/views/Decks.vue";
 const routes: RouteRecordRaw[] = [
   {
     path: '/auth',
-    component: Auth
+    redirect: '/auth/login',
+    children: [
+      {
+        path: 'login',
+        component: Auth,
+        props: {
+          startRight: true
+        }
+      },
+      {
+        path: 'register',
+        component: Auth,
+        props: {
+          startRight: false
+        }
+      },
+    ]
   },
   {
     path: '/',

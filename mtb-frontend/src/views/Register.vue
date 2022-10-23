@@ -1,6 +1,8 @@
 <template>
   <div class="register">
     <h2>Account creation</h2>
+    <TextInput :errors="mapErrors(v$.username.$errors)" v-model="form.username" placeholder="User name"/>
+    <br/>
     <TextInput :errors="mapErrors(v$.email.$errors)" v-model="form.email" placeholder="E-mail address"/>
     <br />
     <TextInput :errors="mapErrors(v$.password.$errors)" v-model="form.password" type="password" placeholder="Password"/>
@@ -28,8 +30,10 @@ import { SignUp } from '@/models/signUp';
 import { areSame, mustBeTrue } from '@/utils/valitators';
 import { mapErrors} from '@/utils/errors';
 import Button from '@/components/Button.vue';
+import { authService } from '@/services/auth';
 
 const form = reactive<SignUp>({
+  username: '',
   email: '',
   password: '',
   passwordRepeat: '',
@@ -38,6 +42,9 @@ const form = reactive<SignUp>({
 });
 
 const rules = {
+  username: {
+    required
+  },
   email: {
     required, email
   },
@@ -60,6 +67,7 @@ const submitRegister = async() => {
   const isValid = await v$.value.$validate();
   if(isValid) {
     //  Send the actual form
+    await authService.register(form);
   } 
 }
 

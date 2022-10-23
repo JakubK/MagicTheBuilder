@@ -26,7 +26,15 @@ import Login from "./Login.vue";
 import Register from "./Register.vue";
 import Button from '@/components/Button.vue';
 
-const right = ref(false);
+const props = defineProps({
+  startRight: {
+    type: Boolean,
+    required: false,
+    default: false,
+  }
+})
+
+const right = ref(props.startRight);
 
 </script>
 

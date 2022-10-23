@@ -18,19 +18,21 @@ public class GatewayConfig {
     @Autowired
     private AuthorizationFilter filter;
 
+    // TODO: Change hardcoded links to env variables
+    // TODO: Block cards/ids and cards/all
     @Bean
     public RouteLocator routes(RouteLocatorBuilder builder) {
         return builder.routes()
                 .route("publicDeckServiceRoute", predicateSpec -> predicateSpec
                         .path("/api/decks/**", "/api/auth/decks/**", "/api/collections/**", "/api/auth/collections/**", "api/auth/decks/myDecks")
                         .filters(f -> f.filter(filter))
-                        .uri("http://localhost:8082"))
+                        .uri("http://deck-service:8080"))
                 .route("card-service", predicateSpec -> predicateSpec
-                        .path("/api/cards")
-                        .uri("http://localhost:8085"))
+                        .path("/api/cards", "/api/sets", "/api/types", "/api/formats")
+                        .uri("http://card-service:8080"))
                 .route("user-service", predicateSpec -> predicateSpec
                         .path("/api/user/**")
-                        .uri("http://localhost:9000"))
+                        .uri("http://user-service:8080"))
                 .build();
     }
 }

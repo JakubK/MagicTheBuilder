@@ -1,8 +1,98 @@
-version: '3.1'
+version: "3.8"
+
+# TODO: Add .env file/s with env variables and secrets (Or some other recommended approach to secrets)
+
 services:
   frontend:
     build:
       context: mtb-frontend
       dockerfile: Dockerfile
     ports:
-      - 8080:80
+      - "80:80"
+  card-service:
+    build: "card-service"
+    #    ports:
+    #      - "8080:8080"
+    depends_on:
+      - cards-db
+    environment:
+      - CARDS_FILE_LOCATION=allCards
+      - MONGO_LOCATION=cards-db
+      - READ_CARDS_FROM_FILE=true
+  cards-db:
+    image: mongo
+    container_name: cards-db
+    #    ports:
+    #      - "27017:27017"
+    #    volumes:
+    #      - data:/data
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=rootuser
+      - MONGO_INITDB_ROOT_PASSWORD=rootpass
+  #  mongo-express:
+  #    image: mongo-express
+  #    container_name: mongo-express
+  #    restart: always
+  #    ports:
+  #      - "8081:8081"
+  #    environment:
+  #      - ME_CONFIG_MONGODB_ADMINUSERNAME=rootuser
+  #      - ME_CONFIG_MONGODB_ADMINPASSWORD=rootpass
+  #      - ME_CONFIG_MONGODB_SERVER=mongodb
+  deck-service:
+    build: "deck-service"
+    #    ports:
+    #      - "8082:8082"
+    depends_on:
+      - deck-db
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://deck-db:5432/mtb
+      - CARD_SERVICE_URL=http://card-service:8080
+  deck-db:
+    image: postgres
+    restart: always
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=mtb
+    #    ports:
+    #      - '5432:5432'
+    volumes:
+      - deck-db:/var/lib/postgresql/data
+  api-gateway:
+    build: "api-gateway"
+    ports:
+      - "8080:8080"
+    #    depends_on:
+    #      - card-service
+    #      - user-service
+    #      - deck-service
+    environment:
+      - jwt.token.secret=secret
+  user-service:
+    build: "user-service"
+    #    ports:
+    #      - "8082:8082"
+    depends_on:
+      - user-db
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://user-db:5432/users
+      - jwt.token.secret=secret
+      - jwt.token.time=60
+  user-db:
+    image: postgres
+    restart: always
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=users
+    #    ports:
+    #      - '5432:5432'
+    volumes:
+      - user-db:/var/lib/postgresql/data
+
+volumes:
+  deck-db:
+    driver: local
+  user-db:
+    driver: local

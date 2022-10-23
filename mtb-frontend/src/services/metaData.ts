@@ -8,7 +8,7 @@ export const metaDataService = {
 
     async getSets(): Promise<string[]> {
         const response = await request.get('sets');
-        return response.data.map(x => x.name);
+        return (response.data as any[]).map(x => x.name);
     },
 
     async getTypes(): Promise<string[]> {

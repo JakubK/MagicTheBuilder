@@ -7,12 +7,12 @@
     <br />
     <TextInput :errors="mapErrors(v$.password.$errors)" v-model="form.password" type="password" placeholder="Password"/>
     <br />
-    <TextInput :errors="mapErrors(v$.passwordRepeat.$errors)" v-model="form.passwordRepeat" type="password" placeholder="Repeat password"/>
+    <TextInput :errors="mapErrors(v$.password_repeat.$errors)" v-model="form.password_repeat" type="password" placeholder="Repeat password"/>
     <br />
     <div class="register__agreements">
-      <CheckBox v-model="form.allowNotifications" label="I want to get email notifications about changes in the service" />
+      <!-- <CheckBox v-model="form.allowNotifications" label="I want to get email notifications about changes in the service" /> -->
       <br/>
-      <CheckBox :errors="mapErrors(v$.allowDataProcessing.$errors)" v-model="form.allowDataProcessing" label="I accept that my data will be stored and processed by this service" />
+      <!-- <CheckBox :errors="mapErrors(v$.allowDataProcessing.$errors)" v-model="form.allowDataProcessing" label="I accept that my data will be stored and processed by this service" /> -->
     </div>
     <br />
     <Button @click="submitRegister">Sign up</button>
@@ -36,9 +36,9 @@ const form = reactive<SignUp>({
   username: '',
   email: '',
   password: '',
-  passwordRepeat: '',
-  allowDataProcessing: false,
-  allowNotifications: false
+  password_repeat: '',
+  // allowDataProcessing: false,
+  // allowNotifications: false
 });
 
 const rules = {
@@ -52,13 +52,13 @@ const rules = {
     required,
     minLength: minLength(8)
   },
-  passwordRepeat: { 
+  password_repeat: { 
     required,
-    sameAs: helpers.withMessage('Passwords must match',() => areSame(form.password, form.passwordRepeat))
+    sameAs: helpers.withMessage('Passwords must match',() => areSame(form.password, form.password_repeat))
   },
-  allowDataProcessing: {
-    mustBeTrue: helpers.withMessage('Accept data processing to proceed', mustBeTrue)
-  }
+  // allowDataProcessing: {
+  //   mustBeTrue: helpers.withMessage('Accept data processing to proceed', mustBeTrue)
+  // }
 }
 
 const v$ = useVuelidate(rules, form);

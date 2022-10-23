@@ -81,7 +81,7 @@ const vClickOutside = ClickOutside.directive;
 
 const search = ref('');
 
-const sortBy = ref([]);
+const sortBy: Ref<any[]> = ref([]);
 const sortingOptions = [
   'toughness',
   'type'
@@ -110,13 +110,13 @@ const loadMore = async () => {
     cards.value = [...cards.value , ...cardsResponse.content];
 }
 
-const cardFormats = ref([]);
+const cardFormats: Ref<any[]> = ref([]);
 const cardFormatOptions: Ref<string[]> = ref([]);
 
-const cardTypes = ref([]);
+const cardTypes: Ref<any[]> = ref([]);
 const cardTypeOptions: Ref<string[]> = ref([]);
 
-const cardSets = ref([]);
+const cardSets: Ref<any[]> = ref([]);
 const cardSetOptions: Ref<string[]> = ref([]);
 
 onMounted(async() => {

@@ -12,6 +12,12 @@ spring:
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher
+  rabbitmq:
+    host: ${RABBITMQ_HOST:localhost}
+    port: ${RABBITMQ_PORT:5672}
+    username: ${RABBITMQ_USERNAME:mtbRabbit}
+    password: ${RABBITMQ_PASSWORD:password}
+
 
 
 environments:

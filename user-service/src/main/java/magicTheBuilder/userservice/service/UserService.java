@@ -10,6 +10,7 @@ import magicTheBuilder.userservice.exception.customExceptions.DuplicatedUsername
 import magicTheBuilder.userservice.exception.customExceptions.InvalidPasswordException;
 import magicTheBuilder.userservice.exception.customExceptions.UnrecognizedEmailException;
 import magicTheBuilder.userservice.jwt.JwtUtil;
+import magicTheBuilder.userservice.rabbit.Sender;
 import magicTheBuilder.userservice.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -25,6 +26,9 @@ public class UserService {
 
     @Autowired
     private JwtUtil jwtUtil;
+
+    @Autowired
+    private Sender sender;
 
     private final BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
 
@@ -53,6 +57,7 @@ public class UserService {
         user.setAllowNotifications(dto.isAllowNotifications());
         user.setAllowDataProcessing(dto.isAllowDataProcessing());
         user = saveUser(user);
+        sender.sendMsg(user.getId());
         return user.getId().toString();
     }
 

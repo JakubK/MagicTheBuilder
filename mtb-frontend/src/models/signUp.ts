@@ -3,6 +3,6 @@ export interface SignUp {
   email: string;
   password: string;
   password_repeat: string;
-  // allowNotifications?: boolean;
-  // allowDataProcessing: boolean;
+  allowNotifications?: boolean;
+  allowDataProcessing: boolean;
 }

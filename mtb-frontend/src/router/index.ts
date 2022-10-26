@@ -32,6 +32,7 @@ const routes: RouteRecordRaw[] = [
     children: [
       {
         path: 'cards',
+        name: 'dashboard',
         redirect: 'cards/collection',
         children: [
           {

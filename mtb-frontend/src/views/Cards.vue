@@ -99,15 +99,7 @@ const page = ref(0);
 
 const loadMore = async () => {
   page.value++;
-  const cardsResponse = await cardsService.getCards({
-      phrase: search.value,
-      page: page.value,
-      size: 30,
-      colors: colors.value.filter(x => x.checked).map(x => x.label).join(','),
-      types: cardTypes.value.map(x => x.label).join(','),
-      sortBy: sortBy.value.map(x => x.label).join(',')
-    });
-    cards.value = [...cards.value , ...cardsResponse.content];
+  await handleQueryRequest(true);
 }
 
 const cardFormats: Ref<any[]> = ref([]);
@@ -134,15 +126,7 @@ watch(search, debounce(async (newSearchValue: string, previousValue: string) => 
   if (newSearchValue.length > 0 && newSearchValue != previousValue) {
     //  Send Query 
     page.value = 0;
-    const cardsResponse = await cardsService.getCards({
-      phrase: newSearchValue,
-      page: page.value,
-      size: 30,
-      types: cardTypes.value.map(x => x.label).join(','),
-      colors: colors.value.filter(x => x.checked).map(x => x.label).join(','),
-      sortBy: sortBy.value.map(x => x.label).join(',')
-    });
-    cards.value = cardsResponse.content;
+    await handleQueryRequest();
   }
 }, 500));
 
@@ -176,28 +160,28 @@ const applyFilters = async () => {
   //  Send Query
   areFiltersShown.value = false;
   page.value = 0;
-  const cardsResponse = await cardsService.getCards({
-    phrase: search.value,
-    page: page.value,
-    size: 30,
-    types: cardTypes.value.map(x => x.label).join(','),
-    colors: colors.value.filter(x => x.checked).map(x => x.label).join(','),
-    sortBy: sortBy.value.map(x => x.label).join(',')
-  });
-  cards.value = cardsResponse.content;
+  await handleQueryRequest();
 }
 
 const sortingChanged = async () => {
   page.value = 0;
+  await handleQueryRequest();
+}
+
+const handleQueryRequest = async(more: boolean = false) => {
   const cardsResponse = await cardsService.getCards({
     phrase: search.value,
     page: page.value,
     size: 30,
     types: cardTypes.value.map(x => x.label).join(','),
     colors: colors.value.filter(x => x.checked).map(x => x.label).join(','),
-    sortBy: sortBy.value.map(x => x.label).join(',')
+    sortBy: sortBy.value.map(x => x.label).join(','),
+    sets: cardSets.value.map(x => x.label).join(',')
   });
-  cards.value = cardsResponse.content;
+  if(more)
+    cards.value = [...cards.value , ...cardsResponse.content];
+  else
+    cards.value = cardsResponse.content;
 }
 
 </script>

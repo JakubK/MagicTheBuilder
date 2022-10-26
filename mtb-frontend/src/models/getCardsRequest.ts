@@ -5,4 +5,5 @@ export interface GetCardsRequest {
     page: number;
     size: number;
     sortBy: string;
+    sets: string;
 }

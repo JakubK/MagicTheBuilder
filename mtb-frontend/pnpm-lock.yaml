@@ -8,6 +8,7 @@ specifiers:
   '@vuelidate/core': 2.0.0-alpha.43
   '@vuelidate/validators': 2.0.0-alpha.31
   axios: ^0.27.2
+  click-outside-vue3: ^4.0.1
   lodash.debounce: ^4.0.8
   sass: ^1.53.0
   typescript: ^4.5.4
@@ -20,6 +21,7 @@ dependencies:
   '@vuelidate/core': 2.0.0-alpha.43_vue@3.2.37
   '@vuelidate/validators': 2.0.0-alpha.31_vue@3.2.37
   axios: 0.27.2
+  click-outside-vue3: 4.0.1
   lodash.debounce: 4.0.8
   vue: 3.2.37
   vue-router: 4.1.1_vue@3.2.37
@@ -251,6 +253,11 @@ packages:
     optionalDependencies:
       fsevents: 2.3.2
     dev: true
+
+  /click-outside-vue3/4.0.1:
+    resolution: {integrity: sha512-sbplNecrup5oGqA3o4bo8XmvHRT6q9fvw21Z67aDbTqB9M6LF7CuYLTlLvNtOgKU6W3zst5H5zJuEh4auqA34g==}
+    engines: {node: '>=6'}
+    dev: false
 
   /combined-stream/1.0.8:
     resolution: {integrity: sha512-FQN4MRfuJeHf7cBbBMJFXhKSDq+2kAArBlmRBvcvFE5BB1HZKXtSFASDhdlz9zOYwxh8lDdnvmMOe/+5cdoEdg==}

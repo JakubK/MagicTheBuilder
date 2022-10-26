@@ -1,7 +1,7 @@
 <template>
   <div>
     <Sidebar v-model="leftMargin" :top-items="topItems" :bottom-items="bottomItems" title="MagicTheBuilder" />
-    <main :style="{left: leftMargin + 'px'}">
+    <main :style="{left: leftMargin + 'px', width: 'calc(100% - ' + leftMargin+'px)'}">
       <router-view></router-view>
     </main>
   </div>
@@ -27,12 +27,12 @@ const topItems: SidebarItem[] = [
       {
         title: 'Collection',
         svg: usersIcon,
-        routerLink: 'cards'
+        routerLink: '/cards/collection'
       },
       {
         title: 'Browse',
         svg: usersIcon,
-        routerLink: 'cards'
+        routerLink: '/cards/browse'
       }
     ]
   },
@@ -43,12 +43,12 @@ const topItems: SidebarItem[] = [
       {
         title: 'My decks',
         svg: usersIcon,
-        routerLink: 'cards'
+        routerLink: '/decks/collection'
       },
       {
         title: 'Community',
         svg: usersIcon,
-        routerLink: 'cards'
+        routerLink: '/decks/browse'
       }
     ]
   },
@@ -62,7 +62,8 @@ const topItems: SidebarItem[] = [
 const bottomItems: SidebarItem[] = [
   {
     title: 'Github',
-    routerLink: '',
+    routerLink: 'https://github.com/JakubK/MagicTheBuilder',
+    isOuterLink: true,
     svg: githubIcon
   },
   {
@@ -72,7 +73,7 @@ const bottomItems: SidebarItem[] = [
   },
   {
     title: 'Log out',
-    routerLink: '',
+    routerLink: '/logout',
     svg: logoutIcon
   }
 ]
@@ -83,6 +84,7 @@ const bottomItems: SidebarItem[] = [
 main {
   position: absolute;
   left: 200px;
+  width: calc(100% - 200px);
   transition: all 0.5s;
 }
 </style>

@@ -1,11 +1,13 @@
 <template>
   <div class="register">
     <h2>Account creation</h2>
+    <TextInput :errors="mapErrors(v$.username.$errors)" v-model="form.username" placeholder="User name"/>
+    <br/>
     <TextInput :errors="mapErrors(v$.email.$errors)" v-model="form.email" placeholder="E-mail address"/>
     <br />
     <TextInput :errors="mapErrors(v$.password.$errors)" v-model="form.password" type="password" placeholder="Password"/>
     <br />
-    <TextInput :errors="mapErrors(v$.passwordRepeat.$errors)" v-model="form.passwordRepeat" type="password" placeholder="Repeat password"/>
+    <TextInput :errors="mapErrors(v$.password_repeat.$errors)" v-model="form.password_repeat" type="password" placeholder="Repeat password"/>
     <br />
     <div class="register__agreements">
       <CheckBox v-model="form.allowNotifications" label="I want to get email notifications about changes in the service" />
@@ -28,16 +30,21 @@ import { SignUp } from '@/models/signUp';
 import { areSame, mustBeTrue } from '@/utils/valitators';
 import { mapErrors} from '@/utils/errors';
 import Button from '@/components/Button.vue';
+import { authService } from '@/services/auth';
 
 const form = reactive<SignUp>({
+  username: '',
   email: '',
   password: '',
-  passwordRepeat: '',
+  password_repeat: '',
   allowDataProcessing: false,
   allowNotifications: false
 });
 
 const rules = {
+  username: {
+    required
+  },
   email: {
     required, email
   },
@@ -45,9 +52,9 @@ const rules = {
     required,
     minLength: minLength(8)
   },
-  passwordRepeat: { 
+  password_repeat: { 
     required,
-    sameAs: helpers.withMessage('Passwords must match',() => areSame(form.password, form.passwordRepeat))
+    sameAs: helpers.withMessage('Passwords must match',() => areSame(form.password, form.password_repeat))
   },
   allowDataProcessing: {
     mustBeTrue: helpers.withMessage('Accept data processing to proceed', mustBeTrue)
@@ -60,6 +67,7 @@ const submitRegister = async() => {
   const isValid = await v$.value.$validate();
   if(isValid) {
     //  Send the actual form
+    await authService.register(form);
   } 
 }
 

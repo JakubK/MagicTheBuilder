@@ -27,6 +27,8 @@ import CheckBox from '@/components/CheckBox.vue';
 import { SignIn } from '@/models/signIn';
 import { mapErrors} from '@/utils/errors';
 import Button from '@/components/Button.vue';
+import { authService } from '@/services/auth';
+import router from '@/router';
 
 const form = reactive<SignIn>({
   email: '',
@@ -49,6 +51,8 @@ const submitLogin = async() => {
   const isValid = await v$.value.$validate();
   if(isValid) {
     //  Send the actual form
+    await authService.login(form);
+    router.push('/');
   }
 }
 

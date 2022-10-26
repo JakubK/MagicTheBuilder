@@ -96,7 +96,7 @@ public class CommandLine implements CommandLineRunner {
         ResponseEntity<?> responseEntity;
 
         try {
-            responseEntity = restTemplate.exchange(cardServiceUrl+"/api/cards/ids", HttpMethod.GET, null, String[].class);
+            responseEntity = restTemplate.exchange(cardServiceUrl+"/api/internal/cards/ids", HttpMethod.GET, null, String[].class);
             List<String> cards = Arrays.stream((String[]) Objects.requireNonNull(responseEntity.getBody())).toList();
             cardService.addCards(cards);
             result = responseEntity.getStatusCode();

@@ -12,7 +12,6 @@ import java.util.List;
 
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 
-@CrossOrigin
 @RestController
 @RequestMapping("api/cards")
 @AllArgsConstructor
@@ -20,17 +19,6 @@ public class CardController {
     private final CardService cardService;
 
 
-    // TODO: This endpoints should be blocked in Gateway/Reverse Proxy
-    // Otherwise huge DOS risk
-    @GetMapping("all")
-    public List<MtgCard> getAllCards() {
-        return cardService.getAllCards();
-    }
-
-    @GetMapping("ids")
-    public List<String> getAllCardIds() {
-        return cardService.getAllIds();
-    }
 
     @GetMapping("{id}")
     public MtgCard getCard(@PathVariable("id") String id) {

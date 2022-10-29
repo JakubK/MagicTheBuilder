@@ -25,6 +25,8 @@ jobs:
             image: ghcr.io/jakubk/mtb-deck-service:latest
           - context: ./user-service
             image: ghcr.io/jakubk/mtb-user-service:latest
+          - context: ./reverse-proxy
+            image: ghcr.io/jakubk/mtb-reverse-proxy:latest
     permissions:
       contents: read
       packages: write

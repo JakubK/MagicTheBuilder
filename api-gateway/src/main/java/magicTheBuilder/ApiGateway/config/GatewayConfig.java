@@ -28,7 +28,7 @@ public class GatewayConfig {
                         .filters(f -> f.filter(filter))
                         .uri("http://deck-service:8080"))
                 .route("card-service", predicateSpec -> predicateSpec
-                        .path("/api/cards", "/api/sets", "/api/types", "/api/formats")
+                        .path("/api/cards/**", "/api/sets", "/api/types", "/api/formats")
                         .uri("http://card-service:8080"))
                 .route("user-service", predicateSpec -> predicateSpec
                         .path("/api/user/**")

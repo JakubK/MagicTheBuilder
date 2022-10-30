@@ -8,7 +8,6 @@ import magicthebuilder.deckservice.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,7 +22,7 @@ public class UserService {
 
     public void add(User user) {
         userRepository.save(user);
-        Collection coll = new Collection(user.id, CollectionAccessLevelEnum.PUBLIC, Collections.emptyList());
+        Collection coll = new Collection(user.id, CollectionAccessLevelEnum.PUBLIC);
         collectionService.saveCollection(coll);
     }
 

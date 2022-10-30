@@ -1,20 +1,19 @@
 package magicthebuilder.deckservice.service;
 
+import magicthebuilder.deckservice.dto.CardInCollectionPutRequest;
 import magicthebuilder.deckservice.dto.CollectionGetResponseDto;
-import magicthebuilder.deckservice.dto.CollectionUpdateRequestDto;
-import magicthebuilder.deckservice.dto.CollectionUpdateResponseDto;
-import magicthebuilder.deckservice.dto.MultipleCardDto;
-import magicthebuilder.deckservice.entity.Card;
+import magicthebuilder.deckservice.entity.CardInCollection;
 import magicthebuilder.deckservice.entity.Collection;
 import magicthebuilder.deckservice.entity.enums.CollectionAccessLevelEnum;
 import magicthebuilder.deckservice.exception.customexceptions.InaccessibleResourceException;
-import magicthebuilder.deckservice.exception.customexceptions.UnrecognizedCardIdException;
 import magicthebuilder.deckservice.exception.customexceptions.UnrecognizedUserIdException;
+import magicthebuilder.deckservice.repository.CardInCollectionRepository;
 import magicthebuilder.deckservice.repository.CollectionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CollectionService {
@@ -22,8 +21,11 @@ public class CollectionService {
     @Autowired
     CollectionRepository repository;
 
-    CardService cardService = new CardService();
+    @Autowired
+    CardInCollectionRepository cardInCollectionRepository;
 
+    @Autowired
+    private CardService cardService;
 
     public void saveCollection(Collection collection) {
         repository.save(collection);
@@ -33,15 +35,86 @@ public class CollectionService {
         return repository.findById(id);
     }
 
-    public CollectionUpdateResponseDto updateCollection(CollectionUpdateRequestDto collectionDto, Long userId) {
+    public int getCardAmountInCollection(String cardId, Long userId) {
         Collection coll = getCollectionById(userId);
-        coll.setCards(getCardsFromCardMultipleCardDtoList(collectionDto.getCards()));
-        coll.accessLevel = collectionDto.getAccessLevel();
-        this.saveCollection(coll);
-        return CollectionUpdateResponseDto.builder()
-                .userId(userId)
-                .details("Collection Updated")
-                .build();
+        Optional<CardInCollection> cardCollectionEntity = coll.getCards().stream()
+                .filter(cardInColl -> cardInColl.getCard().getId().equals(cardId)).findFirst();
+        return cardCollectionEntity.map(CardInCollection::getAmount).orElse(0);
+    }
+
+    public int addCardToCollection(String cardId, Long userId) {
+        Collection coll = getCollectionById(userId);
+        CardInCollection cardInCollection;
+        Optional<CardInCollection> cardCollectionEntity = coll.getCards().stream()
+                .filter(cardInColl -> cardInColl.getCard().getId().equals(cardId)).findFirst();
+        if (cardCollectionEntity.isPresent()) {
+            cardInCollection = cardCollectionEntity.get();
+            int entityAmount = cardInCollection.getAmount();
+            cardInCollection.setAmount(entityAmount + 1);
+            cardInCollectionRepository.save(cardInCollection);
+            saveCollection(coll);
+        } else {
+            cardInCollection = new CardInCollection(cardService.getCardById(cardId));
+            List<CardInCollection> newCollection = coll.getCards();
+            newCollection.add(cardInCollection);
+            cardInCollectionRepository.save(cardInCollection);
+            saveCollection(coll);
+        }
+        return cardInCollection.getAmount();
+    }
+
+    public int removeCardFromCollection(String cardId, Long userId) {
+        Collection coll = getCollectionById(userId);
+        List<CardInCollection> collectionCards = getCollectionById(userId).getCards();
+        Optional<CardInCollection> cardCollectionEntity = collectionCards.stream()
+                .filter(cardInColl -> cardInColl.getCard().getId().equals(cardId)).findFirst();
+        if (cardCollectionEntity.isPresent()) {
+            CardInCollection cardInCollection;
+            cardInCollection = cardCollectionEntity.get();
+            int entityAmount = cardInCollection.getAmount();
+            if (entityAmount > 1) {
+                cardInCollection.setAmount(entityAmount - 1);
+                cardInCollectionRepository.save(cardInCollection);
+                saveCollection(coll);
+            } else {
+                collectionCards.remove(cardInCollection);
+                coll.setCards(collectionCards);
+                saveCollection(coll);
+                cardInCollectionRepository.delete(cardInCollection);
+            }
+
+            return entityAmount - 1;
+        } else {
+            return 0;
+        }
+    }
+
+    public void setCardAmount(CardInCollectionPutRequest dto, Long userId) {
+        Collection coll = getCollectionById(userId);
+        List<CardInCollection> collectionCards = getCollectionById(userId).getCards();
+        CardInCollection cardInCollection;
+        Optional<CardInCollection> cardCollectionEntity = collectionCards.stream()
+                .filter(cardInColl -> cardInColl.getCard().getId().equals(dto.getCardId())).findFirst();
+        if (cardCollectionEntity.isPresent()) {
+            cardInCollection = cardCollectionEntity.get();
+            if (dto.getAmount() == 0) {
+                collectionCards.remove(cardInCollection);
+                coll.setCards(collectionCards);
+                saveCollection(coll);
+                cardInCollectionRepository.delete(cardInCollection);
+            } else {
+                cardInCollection.setAmount(dto.getAmount());
+                cardInCollectionRepository.save(cardInCollection);
+                saveCollection(coll);
+            }
+        } else {
+            cardInCollection = new CardInCollection(cardService.getCardById(dto.getCardId()));
+            cardInCollection.setAmount(dto.getAmount());
+            List<CardInCollection> newCollection = coll.getCards();
+            newCollection.add(cardInCollection);
+            cardInCollectionRepository.save(cardInCollection);
+            saveCollection(coll);
+        }
     }
 
     public CollectionGetResponseDto getOwnerCollection(Long userId) {
@@ -57,26 +130,8 @@ public class CollectionService {
         } else {
             throw new InaccessibleResourceException(userId);
         }
-
     }
 
-
-    private List<Card> getCardsFromCardMultipleCardDtoList(List<MultipleCardDto> cards) {
-        Map<String, Integer> map = new HashMap<>();
-        for (MultipleCardDto card : cards) {
-            map.put(card.getCardId(), card.getAmount());
-        }
-        List<Card> ret = new ArrayList<>();
-        for (String cardId : map.keySet()) {
-            if (!cardService.checkIfCardExists(cardId)) {
-                throw new UnrecognizedCardIdException("Unrecognized card with id: " + cardId);
-            }
-            for (int j = 0; j < map.get(cardId); j++) {
-                ret.add(cardService.getCardById(cardId));
-            }
-        }
-        return ret;
-    }
 
     private Collection getCollectionById(Long userId) {
         Optional<Collection> collOpt = findById(userId);

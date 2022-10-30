@@ -1,8 +1,7 @@
 package magicthebuilder.deckservice.controller;
 
+import magicthebuilder.deckservice.dto.CardInCollectionPutRequest;
 import magicthebuilder.deckservice.dto.CollectionGetResponseDto;
-import magicthebuilder.deckservice.dto.CollectionUpdateRequestDto;
-import magicthebuilder.deckservice.dto.CollectionUpdateResponseDto;
 import magicthebuilder.deckservice.service.CollectionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -18,10 +17,25 @@ public class AuthCollectionController {
         return collectionService.getOwnerCollection(userId);
     }
 
-    @PutMapping("")
-    public CollectionUpdateResponseDto updateCollection(@RequestBody CollectionUpdateRequestDto collectionDto, @RequestHeader(value = "id") Long userId) {
-
-        return collectionService.updateCollection(collectionDto, userId);
+    @GetMapping("/{cardId}")
+    public int getAmountOfCardsInCollection(@PathVariable("cardId") String cardId, @RequestHeader(value = "id") Long userId) {
+        return collectionService.getCardAmountInCollection(cardId, userId);
     }
+
+    @PostMapping("/add/{cardId}")
+    public int addCardToCollection(@PathVariable("cardId") String cardId, @RequestHeader(value = "id") Long userId) {
+        return collectionService.addCardToCollection(cardId, userId);
+    }
+
+    @PostMapping("/remove/{cardId}")
+    public int removeCardFromCollection(@PathVariable("cardId") String cardId, @RequestHeader(value = "id") Long userId) {
+        return collectionService.removeCardFromCollection(cardId, userId);
+    }
+
+    @PutMapping("")
+    public void setAmountOfCardInCollection(@RequestBody CardInCollectionPutRequest dto, @RequestHeader(value = "id") Long userId) {
+        collectionService.setCardAmount(dto, userId);
+    }
+
 
 }

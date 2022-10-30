@@ -4,6 +4,7 @@ import lombok.*;
 import magicthebuilder.deckservice.entity.enums.CollectionAccessLevelEnum;
 
 import javax.persistence.*;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -24,15 +25,14 @@ public class Collection {
     @Enumerated(EnumType.STRING)
     public CollectionAccessLevelEnum accessLevel;
 
-    @ManyToMany(fetch = FetchType.EAGER)
-    public List<Card> cards;
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.REMOVE, orphanRemoval = true)
+    public List<CardInCollection> cards;
     public Date lastUpdateDate;
 
-
-    public Collection(Long id, CollectionAccessLevelEnum accessLevel, List<Card> cards) {
+    public Collection(Long id, CollectionAccessLevelEnum accessLevel) {
         this.userId = id;
         this.accessLevel = accessLevel;
-        this.cards = cards;
+        this.cards = Collections.emptyList();
     }
 
     @PreUpdate

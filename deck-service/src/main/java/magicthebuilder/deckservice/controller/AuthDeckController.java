@@ -1,10 +1,7 @@
 package magicthebuilder.deckservice.controller;
 
 
-import magicthebuilder.deckservice.dto.CreateDeckDto;
-import magicthebuilder.deckservice.dto.DeckUpdateRequestDto;
-import magicthebuilder.deckservice.dto.DetailedDeckGetResponseDto;
-import magicthebuilder.deckservice.dto.SimpleDeckGetResponseDto;
+import magicthebuilder.deckservice.dto.*;
 import magicthebuilder.deckservice.service.DeckService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -39,16 +36,18 @@ public class AuthDeckController {
 
     @GetMapping("/myDecks")
     public List<SimpleDeckGetResponseDto> getOwnersDecks(@RequestHeader(value = "id") Long userId) {
+        return deckService.getUserDecksSimpleFormat(userId);
+    }
 
-        return deckService.getUserDecks(userId);
-
+    @GetMapping("/withCard/{cardId}")
+    public CardInDecksUsageDto getCardInUserDecksUsage(@PathVariable("cardId") String cardId,
+                                                       @RequestHeader(value = "id") Long userId) {
+        return deckService.getCardInDecksUsage(cardId, userId);
     }
 
     @DeleteMapping("/{deckID}")
-    public void DeleteDeck(@PathVariable("deckID") UUID deckId,
-                           @RequestHeader("id") Long userId) {
+    public void DeleteDeck(@PathVariable("deckID") UUID deckId, @RequestHeader("id") Long userId) {
         deckService.deleteDeck(deckId, userId);
-
     }
 
 

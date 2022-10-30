@@ -21,12 +21,14 @@ import java.util.*;
 @Service
 public class DeckService {
 
-    private final CardService cardService = new CardService();
+    @Autowired
+    private CardService cardService;
     @Autowired
     private DeckRepository repository;
     @Autowired
     private UserService userService;
-
+    @Autowired
+    private CollectionService collectionService;
 
     public DetailedDeckGetResponseDto getNotPrivateDeck(UUID id) {
         Deck deck = getDeckById(id);
@@ -56,6 +58,18 @@ public class DeckService {
                 .toList();
     }
 
+    public CardInDecksUsageDto getCardInDecksUsage(String cardId, Long userId) {
+        CardInDecksUsageDto response = new CardInDecksUsageDto();
+        response.setTotalAmount(collectionService.getCardAmountInCollection(cardId, userId));
+        List<Deck> userDecks = getDecksByUserId(userId);
+        List<CardInDeckStatsDto> cardInDecks = userDecks.stream()
+                .map(deck -> new CardInDeckStatsDto(deck, cardId))
+                .toList();
+        response.setUsageInDecks(cardInDecks);
+        return response;
+
+    }
+
     public List<SimpleDeckGetResponseDto> getUserPublicDecks(Long userId) {
         return repository.findAllByAccessLevelAndOwner(DeckAccessLevelEnum.PUBLIC, userService.findById(userId)).stream()
                 .map(SimpleDeckGetResponseDto::new)
@@ -63,7 +77,7 @@ public class DeckService {
     }
 
     public List<SimpleDeckGetResponseDto> getUserDecks(Long userId) {
-        return repository.findAllByOwner(userService.findById(userId)).stream()
+        return getDecksByUserId(userId).stream()
                 .map(SimpleDeckGetResponseDto::new)
                 .toList();
     }
@@ -81,7 +95,7 @@ public class DeckService {
         }
     }
 
-    public List<SimpleDeckGetResponseDto> getDecksByUserId(Long userId) {
+    public List<SimpleDeckGetResponseDto> getUserDecksSimpleFormat(Long userId) {
         List<Deck> decks = repository.findAllByOwner(userService.findById(userId));
         return decks.stream()
                 .map(SimpleDeckGetResponseDto::new)
@@ -113,7 +127,7 @@ public class DeckService {
         deck.setName(deckDto.getName());
         deck.setCards(getCardsFromCardMultipleCardDtoList(deckDto.getDeckCards()));
         deck.setSideboard(getCardsFromCardMultipleCardDtoList(deckDto.getSideboardCards()));
-        if(deckDto.getCommanderId() != null) {
+        if (deckDto.getCommanderId() != null) {
             deck.setCommander(cardService.getCardById(deckDto.getCommanderId()));
         }
         // validateDeck(deck);
@@ -158,6 +172,10 @@ public class DeckService {
         } else {
             throw new UnrecognizedDeckException(id);
         }
+    }
+
+    private List<Deck> getDecksByUserId(Long userId) {
+        return repository.findAllByOwner(userService.findById(userId));
 
     }
 

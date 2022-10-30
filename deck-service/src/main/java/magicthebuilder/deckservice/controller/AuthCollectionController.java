@@ -18,7 +18,7 @@ public class AuthCollectionController {
     }
 
     @GetMapping("/{cardId}")
-    public int getAmountOfCardsInCollection(@PathVariable("cardId") String cardId, @RequestHeader(value = "id") Long userId) {
+    public int getAmountOfCardInCollection(@PathVariable("cardId") String cardId, @RequestHeader(value = "id") Long userId) {
         return collectionService.getCardAmountInCollection(cardId, userId);
     }
 

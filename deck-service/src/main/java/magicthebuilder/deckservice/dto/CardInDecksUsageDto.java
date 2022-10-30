@@ -9,6 +9,6 @@ import java.util.List;
 @Setter
 public class CardInDecksUsageDto {
     List<CardInDeckStatsDto> usageInDecks;
-    private int totalAmount;
+    private int totalOwnedAmount;
 }
 

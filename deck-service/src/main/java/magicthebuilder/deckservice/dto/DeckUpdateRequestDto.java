@@ -15,11 +15,8 @@ import java.util.UUID;
 @ToString
 @EqualsAndHashCode
 public class DeckUpdateRequestDto {
-    private UUID id;
     private String name;
     private GameMode gameMode;
-    private List<MultipleCardDto> deckCards;
-    private List<MultipleCardDto> sideboardCards;
     private DeckAccessLevelEnum accessLevel;
-    private String commanderId = null;
+    private String commander = null;
 }

@@ -32,6 +32,8 @@ import { mapErrors} from '@/utils/errors';
 import Button from '@/components/Button.vue';
 import { authService } from '@/services/auth';
 
+import router from '@/router';
+
 const form = reactive<SignUp>({
   username: '',
   email: '',
@@ -68,6 +70,7 @@ const submitRegister = async() => {
   if(isValid) {
     //  Send the actual form
     await authService.register(form);
+    router.push('/auth');
   } 
 }
 

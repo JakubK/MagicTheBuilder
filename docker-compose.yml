@@ -52,6 +52,10 @@ services:
     environment:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://deck-db:5432/mtb
       - CARD_SERVICE_URL=http://card-service:8080
+      - RABBITMQ_HOST=rabbitMq
+      - RABBITMQ_PORT=5672
+      - RABBITMQ_USERNAME=mtbRabbit
+      - RABBITMQ_PASSWORD=password
   deck-db:
     image: postgres:15.0-alpine3.16
     restart: always
@@ -83,6 +87,10 @@ services:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://user-db:5432/users
       - jwt.token.secret=secret
       - jwt.token.time=60
+      - RABBITMQ_HOST=rabbitMq
+      - RABBITMQ_PORT=5672
+      - RABBITMQ_USERNAME=mtbRabbit
+      - RABBITMQ_PASSWORD=password
   user-db:
     image: postgres:15.0-alpine3.16
     restart: always
@@ -94,6 +102,15 @@ services:
     #      - '5432:5432'
     volumes:
       - user-db:/var/lib/postgresql/data
+  rabbitMq:
+    image: rabbitmq:3.6.10-management
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      - RABBITMQ_DEFAULT_USER=mtbRabbit
+      - RABBITMQ_DEFAULT_PASS=password
+
 
 volumes:
   deck-db:

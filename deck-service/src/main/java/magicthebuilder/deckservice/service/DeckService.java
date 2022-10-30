@@ -266,7 +266,12 @@ public class DeckService {
                 .count();
     }
 
-    private void validateDeck(Deck deck) {
+    public DeckLegalityCheckResponseDto checkDeckLegality(UUID deckId, Long userId) {
         //extend this to check if deck is legal in selected gameMode in the future
+        Deck deck = getDeckById(deckId);
+        validateUserAccessToDeck(deckId,userId);
+        DeckLegalityCheckRequestDto requestToValidationService = new DeckLegalityCheckRequestDto(deck);
+
+        return new DeckLegalityCheckResponseDto();
     }
 }

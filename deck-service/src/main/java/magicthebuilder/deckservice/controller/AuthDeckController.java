@@ -88,6 +88,12 @@ public class AuthDeckController {
         return deckService.getCardInDecksUsage(cardId, userId);
     }
 
+    @GetMapping("/{deckId}/validate")
+    public DeckLegalityCheckResponseDto checkDeckLegality(@PathVariable("deckId") UUID deckId,
+                                                       @RequestHeader(value = "id") Long userId) {
+        return deckService.checkDeckLegality(deckId,userId);
+    }
+
     @DeleteMapping("/{deckID}")
     public void DeleteDeck(@PathVariable("deckID") UUID deckId, @RequestHeader("id") Long userId) {
         deckService.deleteDeck(deckId, userId);

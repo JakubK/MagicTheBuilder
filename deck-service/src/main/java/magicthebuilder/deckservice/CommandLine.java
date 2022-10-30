@@ -76,13 +76,13 @@ public class CommandLine implements CommandLineRunner {
             coll2.add(card4);
 
 
-            Deck test = new Deck("TEST_DECK_1", GameMode.DRAFT, userService.findById(1000001L), DeckAccessLevelEnum.PUBLIC, coll, coll2);
-            Deck test2 = new Deck("TEST_DECK_2", GameMode.DRAFT, userService.findById(1000000L), DeckAccessLevelEnum.PUBLIC, Collections.emptyList(), coll2);
+            Deck test = new Deck("TEST_DECK_1", GameMode.Custom, userService.findById(1000001L), DeckAccessLevelEnum.PUBLIC, coll, coll2);
+            Deck test2 = new Deck("TEST_DECK_2", GameMode.Custom, userService.findById(1000000L), DeckAccessLevelEnum.PUBLIC, Collections.emptyList(), coll2);
 
-            deckService.addDeck(test2);
-            deckService.addDeck(test);
+            deckService.saveDeck(test2);
+            deckService.saveDeck(test);
 
-            System.out.println(test.getCards());
+            System.out.println("DATABASE FILLED");
         }
     }
 

@@ -94,7 +94,6 @@ const router = createRouter({
 
 
 router.beforeEach((to, _) => {
-  console.log(localStorage.getItem('jwt'));
   if(to.meta.requiresAuth && !localStorage.getItem('jwt')) {
     return {
       path: '/auth/login',

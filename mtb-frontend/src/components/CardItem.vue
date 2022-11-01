@@ -15,7 +15,7 @@
         <footer>
           <div class="card-reverse__actions">
             <div class="card-reverse__action">
-              <router-link :to="`/cards/${id}`">
+              <router-link :to="`/cards/${card.id}`">
                 <Icon>
                   <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path
@@ -43,7 +43,7 @@
             </Icon>
             <div class="card-reverse__counter">
               <div class="card-reverse__action">
-                <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <svg @click="incrementCollection" width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path
                     d="M16.0001 29.3333C23.3639 29.3333 29.3334 23.3638 29.3334 16C29.3334 8.63621 23.3639 2.66667 16.0001 2.66667C8.63628 2.66667 2.66675 8.63621 2.66675 16C2.66675 23.3638 8.63628 29.3333 16.0001 29.3333Z"
                     stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
@@ -56,7 +56,7 @@
               <div class="card-reverse__action card-reverse__count">
                 5
               </div>
-              <div class="card-reverse__action">
+              <div @click="decrementCollection" class="card-reverse__action">
                 <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path
                     d="M16.0001 29.3333C23.3639 29.3333 29.3334 23.3638 29.3334 16C29.3334 8.63621 23.3639 2.66667 16.0001 2.66667C8.63628 2.66667 2.66675 8.63621 2.66675 16C2.66675 23.3638 8.63628 29.3333 16.0001 29.3333Z"
@@ -75,15 +75,11 @@
 
 <script lang="ts" setup>
 import { Card } from '@/models/card';
-import { PropType, ref } from 'vue';
+import { PropType, ref, watch } from 'vue';
 import Icon from './Icon.vue';
+import { collectionService } from '@/services/collection';
 
-defineProps({
-  id: {
-    type: Number,
-    required: false,
-    default: 1
-  },
+const props = defineProps({
   card: {
     type: Object as PropType<Card>,
     required: true,
@@ -91,6 +87,25 @@ defineProps({
 });
 
 const flipped = ref(false);
+const amountInCollection = ref(0);
+
+watch(flipped, async (_, newVal) => {
+  if(newVal === false)
+  {
+    //  Fetch new count
+    amountInCollection.value = await collectionService.getCardAmountInCollection(props.card.id);
+    console.log('sent');
+  }
+});
+
+const incrementCollection = async() => {
+  amountInCollection.value = await collectionService.incrementCardAmountInCollection(props.card.id);
+}
+
+const decrementCollection = async () => {
+  amountInCollection.value = await collectionService.decrementCardAmountInCollection(props.card.id);
+}
+
 </script>
 
 <style lang="scss" scoped src="./CardItem.scss"/>

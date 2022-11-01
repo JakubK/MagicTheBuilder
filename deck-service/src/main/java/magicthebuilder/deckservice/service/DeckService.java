@@ -50,7 +50,7 @@ public class DeckService {
 
     public List<SimpleDeckGetResponseDto> getPublicDecks(Pageable paging) {
 
-        Page<Deck> decks = repository.findAllByAccessLevel(DeckAccessLevelEnum.PUBLIC.toString(), paging);
+        Page<Deck> decks = repository.findAllByAccessLevel(DeckAccessLevelEnum.PUBLIC, paging);
         return decks.stream()
                 .map(SimpleDeckGetResponseDto::new)
                 .toList();

@@ -18,7 +18,7 @@ import java.util.UUID;
 public interface DeckRepository extends JpaRepository<Deck, UUID> {
 
 
-    Page<Deck> findAllByAccessLevel(@Param("accLevel") String accLevel, Pageable pageable);
+    Page<Deck> findAllByAccessLevel(DeckAccessLevelEnum accLevel, Pageable pageable);
 
     List<Deck> findAllByAccessLevelAndOwner(DeckAccessLevelEnum accLevel, User user);
 

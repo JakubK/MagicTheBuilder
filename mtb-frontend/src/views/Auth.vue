@@ -21,7 +21,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import Login from "./Login.vue";
 import Register from "./Register.vue";
 import Button from '@/components/Button.vue';
@@ -34,6 +34,10 @@ const props = defineProps({
     required: false,
     default: false,
   }
+})
+
+onMounted(() => {
+  localStorage.clear();
 })
 
 const handleClick = () => {

@@ -29,6 +29,9 @@ const routes: RouteRecordRaw[] = [
   {
     path: '/',
     component: Main,
+    meta: {
+      requiresAuth: true
+    },
     children: [
       {
         path: 'cards',
@@ -80,14 +83,24 @@ const routes: RouteRecordRaw[] = [
   },
   {
     path: '/logout',
-    redirect: '/auth',
-    beforeEnter: () => localStorage.clear()
+    redirect: '/auth'
   }
 ]
 
 const router = createRouter({
   history: createWebHistory(),
   routes
+});
+
+
+router.beforeEach((to, _) => {
+  console.log(localStorage.getItem('jwt'));
+  if(to.meta.requiresAuth && !localStorage.getItem('jwt')) {
+    return {
+      path: '/auth/login',
+      query: { redirect: to.fullPath }
+    }
+  }
 });
 
 export default router;

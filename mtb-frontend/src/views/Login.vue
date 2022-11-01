@@ -51,7 +51,8 @@ const submitLogin = async() => {
   const isValid = await v$.value.$validate();
   if(isValid) {
     //  Send the actual form
-    await authService.login(form);
+    const jwt = await authService.login(form);
+    localStorage.setItem('jwt', jwt);
     router.push('/');
   }
 }

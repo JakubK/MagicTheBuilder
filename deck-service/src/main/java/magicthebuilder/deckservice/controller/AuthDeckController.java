@@ -4,6 +4,8 @@ package magicthebuilder.deckservice.controller;
 import magicthebuilder.deckservice.dto.*;
 import magicthebuilder.deckservice.service.DeckService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -78,8 +80,11 @@ public class AuthDeckController {
     }
 
     @GetMapping("/myDecks")
-    public List<SimpleDeckGetResponseDto> getOwnersDecks(@RequestHeader(value = "id") Long userId) {
-        return deckService.getUserDecksList(userId);
+    public List<SimpleDeckGetResponseDto> getOwnersDecks(@RequestHeader(value = "id") Long userId,
+                                                         @RequestParam(defaultValue = "0") Integer page,
+                                                         @RequestParam(defaultValue = "20") Integer size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return deckService.getUserDecksList(userId, pageable);
     }
 
     @GetMapping("/withCard/{cardId}")

@@ -6,6 +6,7 @@ import magicthebuilder.deckservice.entity.Card;
 import magicthebuilder.deckservice.entity.Deck;
 import magicthebuilder.deckservice.entity.User;
 import magicthebuilder.deckservice.entity.enums.DeckAccessLevelEnum;
+import magicthebuilder.deckservice.entity.enums.GameMode;
 import magicthebuilder.deckservice.exception.customexceptions.InaccessibleDeckException;
 import magicthebuilder.deckservice.exception.customexceptions.InaccessibleResourceException;
 import magicthebuilder.deckservice.exception.customexceptions.UnrecognizedDeckException;
@@ -16,6 +17,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class DeckService {
@@ -48,7 +50,7 @@ public class DeckService {
 
     public List<SimpleDeckGetResponseDto> getPublicDecks(Pageable paging) {
 
-        Page<Deck> decks = repository.findAllByAccessLevel(DeckAccessLevelEnum.PUBLIC, paging);
+        Page<Deck> decks = repository.findAllByAccessLevel(DeckAccessLevelEnum.PUBLIC.toString(), paging);
         return decks.stream()
                 .map(SimpleDeckGetResponseDto::new)
                 .toList();
@@ -72,8 +74,8 @@ public class DeckService {
                 .toList();
     }
 
-    public List<SimpleDeckGetResponseDto> getUserDecksList(Long userId) {
-        List<Deck> decks = repository.findAllByOwner(userService.findById(userId));
+    public List<SimpleDeckGetResponseDto> getUserDecksList(Long userId, Pageable pageable) {
+        Page<Deck> decks = repository.findAllByOwner(userService.findById(userId), pageable);
         return decks.stream()
                 .map(SimpleDeckGetResponseDto::new)
                 .toList();
@@ -224,6 +226,14 @@ public class DeckService {
         }
     }
 
+    public DeckLegalityCheckResponseDto checkDeckLegality(UUID deckId, Long userId) {
+        //extend this to check if deck is legal in selected gameMode in the future
+        Deck deck = getDeckById(deckId);
+        validateUserAccessToDeck(deckId,userId);
+        DeckLegalityCheckRequestDto requestToValidationService = new DeckLegalityCheckRequestDto(deck);
+
+        return new DeckLegalityCheckResponseDto();
+    }
     public void flushDatabase() {
         repository.deleteAll();
     }
@@ -266,12 +276,4 @@ public class DeckService {
                 .count();
     }
 
-    public DeckLegalityCheckResponseDto checkDeckLegality(UUID deckId, Long userId) {
-        //extend this to check if deck is legal in selected gameMode in the future
-        Deck deck = getDeckById(deckId);
-        validateUserAccessToDeck(deckId,userId);
-        DeckLegalityCheckRequestDto requestToValidationService = new DeckLegalityCheckRequestDto(deck);
-
-        return new DeckLegalityCheckResponseDto();
-    }
 }

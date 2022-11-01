@@ -3,6 +3,7 @@ package magicthebuilder.deckservice.controller;
 
 import magicthebuilder.deckservice.dto.DetailedDeckGetResponseDto;
 import magicthebuilder.deckservice.dto.SimpleDeckGetResponseDto;
+import magicthebuilder.deckservice.entity.enums.GameMode;
 import magicthebuilder.deckservice.service.DeckService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;

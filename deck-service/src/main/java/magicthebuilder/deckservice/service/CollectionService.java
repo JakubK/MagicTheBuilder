@@ -12,6 +12,7 @@ import magicthebuilder.deckservice.repository.CollectionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.awt.print.Pageable;
 import java.util.List;
 import java.util.Optional;
 
@@ -117,16 +118,16 @@ public class CollectionService {
         }
     }
 
-    public CollectionGetResponseDto getOwnerCollection(Long userId) {
+    public CollectionGetResponseDto getOwnerCollection(Long userId, int page, int size) {
         Collection coll = getCollectionById(userId);
-        return new CollectionGetResponseDto(coll);
+        return new CollectionGetResponseDto(coll, page, size);
 
     }
 
-    public CollectionGetResponseDto getUserCollection(Long userId) {
+    public CollectionGetResponseDto getUserCollection(Long userId, int page, int size) {
         Collection coll = getCollectionById(userId);
         if (coll.getAccessLevel() != CollectionAccessLevelEnum.PRIVATE) {
-            return new CollectionGetResponseDto(coll);
+            return new CollectionGetResponseDto(coll,page,size);
         } else {
             throw new InaccessibleResourceException(userId);
         }

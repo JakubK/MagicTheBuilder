@@ -13,21 +13,11 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
 
     @Autowired
-    private JwtUtil jwtUtil;
-
-    @Autowired
     private UserService userService;
-
-
 
     @PostMapping("/login")
     public String login(@RequestBody LoginRequestDto dto) {
         return userService.login(dto);
-    }
-
-    @PostMapping("/loginDev")
-    public String loginDev(@RequestBody LoginRequestDto dto) {
-        return jwtUtil.createToken(null);
     }
 
     @PostMapping("/register")

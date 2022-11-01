@@ -4,6 +4,8 @@ import magicthebuilder.deckservice.dto.CardInCollectionPutRequest;
 import magicthebuilder.deckservice.dto.CollectionGetResponseDto;
 import magicthebuilder.deckservice.service.CollectionService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -13,8 +15,11 @@ public class AuthCollectionController {
     CollectionService collectionService;
 
     @GetMapping("")
-    public CollectionGetResponseDto getCollection(@RequestHeader(value = "id") Long userId) {
-        return collectionService.getOwnerCollection(userId);
+    public CollectionGetResponseDto getCollection(@RequestHeader(value = "id") Long userId,
+                                                  @RequestParam(defaultValue = "0") Integer page,
+                                                  @RequestParam(defaultValue = "20") Integer size
+    ) {
+        return collectionService.getOwnerCollection(userId, page, size);
     }
 
     @GetMapping("/{cardId}")

@@ -24,7 +24,7 @@ import java.util.*;
 
 
 //    PLEASE IGNORE THIS CLASS IN CODE REVIEW, IT WILL BE DELETED AT THE END OF DEVELOPMENT, AND THE
-//    CARDS LOADING LOGIC WILL BE MOVED TO OTHER APPLICATION RUNNER
+//    CARDS LOADING FROM CARD-SERVICE WILL BE THE ONLY FUNCTIONALITY LEFT
 
 
 @SpringBootApplication
@@ -53,7 +53,7 @@ public class CommandLine implements CommandLineRunner {
             clearDatabase();
             while (fillCards() != HttpStatus.OK) {  // busy-waiting, needs to be changed in the future
                 Thread.sleep(10000);
-                System.out.println("Trying again");
+                System.out.println("Próbuje pobrać karty z serwisu kart");
             }
 
             prepareInitialData();

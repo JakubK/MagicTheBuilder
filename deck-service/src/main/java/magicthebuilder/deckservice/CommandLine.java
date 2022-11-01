@@ -53,6 +53,5 @@ public class CommandLine implements CommandLineRunner {
             System.out.println("Nie udało sie pobrać kart z card-service. Za 10s kolejna próba");
         }
         return result;
-
     }
 }

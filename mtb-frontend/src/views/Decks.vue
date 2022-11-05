@@ -2,7 +2,6 @@
   <div class="decks-view">
     <BaseHeader>{{ title }}</BaseHeader>
     <div class="decks-view__decks">
-      <CardItem class="decks-view__card" v-for="index in 10" :key="index" />
     </div>
   </div>
 </template>

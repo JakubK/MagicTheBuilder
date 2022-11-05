@@ -6,16 +6,17 @@
       </svg>
       Back
     </nav>
-    <div class="card-details__grid">
-        <img class="card-item__image" src="@/assets/cardMock.png"/>
+    <div v-if="card" class="card-details__grid">
+        <img class="card-item__image" :src="card.imageUrl"/>
         <table class="card-details__data">
-          <tr><td>Title</td><td>Sword of Light and Shadow</td></tr>
-          <tr><td>Mana</td><td>Lorem ipsum</td></tr>
-          <tr><td>Type</td><td>Lorem ipsum</td></tr>
-          <tr><td>Color</td><td>Lorem ipsum</td></tr>
-          <tr><td>Expansion</td><td>Lorem ipsum</td></tr>
-          <tr><td>Power & Toughness</td><td>Lorem ipsum</td></tr>
-          <tr><td>Description</td><td>Lorem ipsum</td></tr>
+          <tr><td>Title</td><td>{{ card.name }}</td></tr>
+          <tr><td>Mana</td><td>{{ card.manaCost }}</td></tr>
+          <tr><td>Type</td><td>{{ card.type }}</td></tr>
+          <tr><td>Colors</td><td>{{ card.colors.join(', ')}}</td></tr>
+          <tr><td>Set</td><td>{{ card.set }}</td></tr>
+          <tr><td>Power & Toughness</td><td>{{ card.power }} / {{ card.toughness }}</td></tr>
+          <tr><td><b>Description</b></td></tr>
+          <tr><td>{{ card.originalText }}</td></tr>
         </table>
         <div class="card-details__usage">
           <span>Used x of owned y in z decks:</span>
@@ -42,19 +43,27 @@
 </template>
 
 <script lang="ts" setup>
+import { Card } from '@/models/card';
 import router from '@/router';
-import { onMounted } from 'vue';
+import { cardsService } from '@/services/cards';
+import { onMounted, Ref, ref } from 'vue';
 
-onMounted(async() => {
-  //  TODO: Fetch data about card
-})
-
-defineProps({
+const props = defineProps({
   id: {
-    type: Number,
+    type: String,
     required: true
   }
 });
+
+const card: Ref<Card | null> = ref(null);
+
+onMounted(async() => {
+  //  TODO: Fetch data about card
+  card.value = await cardsService.getCard(props.id);
+  console.log(card.value);
+});
+
+
 
 const goBack = () => {
   router.go(-1);

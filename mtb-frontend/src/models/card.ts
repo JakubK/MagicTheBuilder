@@ -6,5 +6,8 @@ export interface Card {
     type: string;
     colors: string[];
     power: string;
+    originalText: string;
     toughness: string;
+    set: string;
+    manaCost: string;
 }

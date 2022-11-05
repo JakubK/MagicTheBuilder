@@ -1,8 +1,8 @@
 <template>
     <div class="card-collection">
         <BaseHeader>My Cards</BaseHeader>
-        <div class="cards-collection__cards">
-            <CardItem class="cards-collection__card" v-for="(card, index) in cards" :card="card" :key="index" />
+        <div class="card-collection__cards">
+            <CardItem class="card-collection__card" v-for="(card, index) in cards" :card="card" :key="index" />
         </div>
     </div>
 </template>
@@ -21,6 +21,8 @@ const cards: Ref<Card[]> = ref([]);
 onMounted(async() => {
     const response = await collectionService.getCollection();
     const cardsIds = response.cards.map(x => x.cardId);
+    if(cardsIds.length === 0)
+        return;
     const cardResponse = await cardsService.getCards({
         ids: cardsIds.join(',')
     })

@@ -77,6 +77,10 @@ services:
     #      - deck-service
     environment:
       - jwt.token.secret=secret
+  adminer:
+    image: adminer
+    ports:
+      - 8092:8080
   user-service:
     build: "user-service"
     ports:

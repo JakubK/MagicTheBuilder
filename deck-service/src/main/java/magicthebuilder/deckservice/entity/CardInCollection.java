@@ -2,6 +2,7 @@ package magicthebuilder.deckservice.entity;
 
 
 import lombok.*;
+import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 
@@ -17,8 +18,9 @@ import javax.persistence.*;
 public class CardInCollection {
 
     @Id
-    @GeneratedValue
-    private Long id;
+    @GeneratedValue(generator = "randomStringFromUUid")
+    @GenericGenerator(name = "randomStringFromUUid", strategy = "uuid2")
+    private String id;
     @ManyToOne
     private Card card;
     private int amount;

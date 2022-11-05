@@ -4,6 +4,7 @@ import CardDetails from "@/views/CardDetails.vue";
 import Cards from "@/views/Cards.vue";
 import Main from "@/views/Main.vue";
 import Decks from "@/views/Decks.vue";
+import CardsCollectionVue from "@/views/CardsCollection.vue";
 
 const routes: RouteRecordRaw[] = [
   {
@@ -40,10 +41,7 @@ const routes: RouteRecordRaw[] = [
         children: [
           {
             path: 'collection',
-            component: Cards,
-            props: {
-              title: 'My cards collection'
-            }
+            component: CardsCollectionVue,
           },
           {
             path: 'browse',

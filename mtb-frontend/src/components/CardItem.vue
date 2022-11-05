@@ -54,7 +54,7 @@
                 </svg>
               </div>
               <div class="card-reverse__action card-reverse__count">
-                5
+                {{ amountInCollection }}
               </div>
               <div @click="decrementCollection" class="card-reverse__action">
                 <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -94,7 +94,6 @@ watch(flipped, async (_, newVal) => {
   {
     //  Fetch new count
     amountInCollection.value = await collectionService.getCardAmountInCollection(props.card.id);
-    console.log('sent');
   }
 });
 

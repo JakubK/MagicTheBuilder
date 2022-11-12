@@ -9,4 +9,10 @@ export interface Deck {
     ownerId: number;
     sideboardSize: number;
     name: string;
+    cards: DeckCard[];
+}
+
+interface DeckCard {
+    amount: number;
+    cardId: string;
 }

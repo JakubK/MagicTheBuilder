@@ -75,13 +75,14 @@ import CheckBox from '@/components/CheckBox.vue';
 import Select from '@/components/Select.vue';
 import Button from '@/components/Button.vue';
 
-import { onMounted, Ref, ref, watch } from 'vue';
+import { onMounted, PropType, Ref, ref, watch } from 'vue';
 import debounce from 'lodash.debounce';
 import ClickOutside from 'click-outside-vue3';
 import { Card } from '@/models/card';
 import { cardsService } from '@/services/cards';
 import { metaDataService } from '@/services/metaData';
 import { collectionService } from '@/services/collection';
+import { CardSource } from '@/models/cardSource';
 
 
 const vClickOutside = ClickOutside.directive;
@@ -97,6 +98,10 @@ const sortingOptions = [
 defineProps({
   title: {
     type: String,
+    required: true
+  },
+  cardSource: {
+    type: Object as PropType<CardSource>,
     required: true
   }
 })

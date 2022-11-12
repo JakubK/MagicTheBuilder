@@ -17,5 +17,28 @@ export const decksService = {
     },
     async deleteDeck(deckId: string): Promise<any> {
         await request.delete(`auth/decks/${deckId}`);
+    },
+
+
+    async getOwnerDeck(deckId: string): Promise<Deck> {
+        const response = await request.get(`auth/decks/${deckId}`);
+        return response.data;
+    },
+    async removeFromDeck(deckId: string, cardId: string): Promise<number> {
+        const response = await request.post(`auth/decks/${deckId}/remove/deck/${cardId}`);
+        return response.data;
+    },
+    async addToDeck(deckId: string, cardId: string): Promise<number> {
+        const response = await request.post(`auth/decks/${deckId}/add/deck/${cardId}`);
+        return response.data;
+    },
+
+    async removeFromSideboard(deckId: string, cardId: string): Promise<number> {
+        const response = await request.post(`auth/decks/${deckId}/remove/sideboard/${cardId}`);
+        return response.data;
+    },
+    async addToSideboard(deckId: string, cardId: string): Promise<number> {
+        const response = await request.post(`auth/decks/${deckId}/add/sideboard/${cardId}`);
+        return response.data;
     }
 }

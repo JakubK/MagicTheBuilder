@@ -6,7 +6,6 @@ import magicthebuilder.deckservice.entity.Card;
 import java.util.*;
 
 public class ConversionUtils {
-
     public List<MultipleCardDto> CardListToMultipleCardsDto(List<Card> cards) {
         Map<String, Integer> cardsFromCollection = new HashMap<>();
         List<MultipleCardDto> cardsInResponse = new ArrayList<>();

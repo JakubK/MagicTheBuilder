@@ -17,7 +17,11 @@ http://localhost:8080/api/cards?id=758df5d5-992f-5d30-b6bc-87cb1a0788ab,aeb1b742
 http://localhost:8080/api/cards/aeb1b742-645c-5dab-ba9b-35d51649e074
 
 ###
-http://localhost:8080/api/cards?sortBy=toughness&sets=Ixalan,Zendikar
+http://localhost:8080/api/cards?phrase=Black%20Lotus
+
+
+###
+http://localhost:8080/api/cards/b2c955c0-7f0b-5748-ab5d-98af82d8c682
 
 
 ###
@@ -31,7 +35,7 @@ http://localhost:8080/api/types
 http://localhost:8080/api/sets
 
 ###
-http://localhost:8080/api/formats
+http://localhost:8081/api/formats
 
 ###
 http://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=129465&type=card
@@ -41,4 +45,4 @@ http://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=129465&type=card
 http://localhost:8080/api/cards?sortBy=toughness&formats=Historicbrawl,Future,Penny,Gladiator,Alchemy,Vintage
 
 ###
-http://localhost:8080/api/cards/ids
+http://localhost:8081/api/cards/internal/ids

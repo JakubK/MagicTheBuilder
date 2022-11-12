@@ -32,7 +32,7 @@ public class DataLoader implements ApplicationRunner {
 
     @Scheduled(cron = "* */90 * * * *")
     public void updateAllCards() {
-        List<MtgCard> newCards = restRepository.getAll().parallelStream().map(MtgCard::new).toList();
+        List<MtgCard> newCards = new java.util.ArrayList<>(restRepository.getAll().parallelStream().map(MtgCard::new).toList());
         List<MtgCard> oldCards = cardRepository.findAll();
         newCards.removeAll(oldCards);
         cardRepository.saveAll(newCards);

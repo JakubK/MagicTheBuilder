@@ -3,10 +3,10 @@ package magicthebuilder.cardservice.service;
 import io.magicthegathering.javasdk.resource.Legality;
 import lombok.AllArgsConstructor;
 import magicthebuilder.cardservice.entity.MtgCard;
+import magicthebuilder.cardservice.model.CardsRequestModel;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
@@ -31,13 +31,13 @@ public class CardService {
     }
 
 
-    public Page<MtgCard> getCards(List<String> ids, String phrase, List<String> colors, List<String> types, List<String> sets, List<String> formats, String sortBy, Integer page, Integer size) {
+    public Page<MtgCard> getCards(CardsRequestModel requestParams) {
         Pageable pageable = PageRequest.of(
-                page != null ? page : 0,
-                size != null ? size : 100,
-                sortBy != null && !sortBy.isEmpty() ? Sort.by(sortBy) : Sort.unsorted());
+                requestParams.getPage(),
+                requestParams.getSize(),
+                requestParams.getSortBy());
 
-        var query = prepareQuery(ids, phrase, colors, types, sets, formats, pageable);
+        var query = prepareQuery(requestParams, pageable);
 
         return PageableExecutionUtils.getPage(
                 mongoTemplate.find(query, MtgCard.class),
@@ -46,34 +46,35 @@ public class CardService {
         );
     }
 
-    private Query prepareQuery(List<String> ids, String phrase, List<String> colors, List<String> types, List<String> sets, List<String> formats, Pageable pageable) {
+    private Query prepareQuery(CardsRequestModel requestParams, Pageable pageable) {
         var query = new Query().with(pageable);
 
-        if (phrase != null && !phrase.isEmpty())
+        if (requestParams.getPhrase() != null)
             query = TextQuery
-                    .queryText(TextCriteria.forLanguage("en").matching(phrase))
+                    .queryText(TextCriteria.forLanguage("en").matching(requestParams.getPhrase()))
                     .sortByScore()
                     .with(pageable);
 
-        if (ids != null && !ids.isEmpty())
-            query.addCriteria(Criteria.where("id").in(ids));
+        if (requestParams.getIds() != null)
+            query.addCriteria(Criteria.where("id").in(requestParams.getIds()));
 
-        if (colors != null && !colors.isEmpty())
-            query.addCriteria(Criteria.where("colors").all(colors));
+        if (requestParams.getColors() != null)
+            query.addCriteria(Criteria.where("colors").all(requestParams.getColors()));
 
-        if (types != null && !types.isEmpty())
-            query.addCriteria(Criteria.where("types").all(types));
+        if (requestParams.getTypes() != null)
+            query.addCriteria(Criteria.where("types").all(requestParams.getTypes()));
 
-        if (sets != null && !sets.isEmpty())
-            query.addCriteria(Criteria.where("setName").in(sets));
+        if (requestParams.getSets() != null)
+            query.addCriteria(Criteria.where("setName").in(requestParams.getSets()));
 
-        if (formats != null && !formats.isEmpty()) {
-            List<Legality> legalities = formats.stream().map(f -> {
-                Legality l = new Legality();
-                l.setFormat(f);
-                l.setLegality("Legal");
-                return l;
-            }).collect(Collectors.toList());
+        if (requestParams.getFormats() != null) {
+            List<Legality> legalities = requestParams.getFormats()
+                    .stream().map(f -> {
+                        Legality l = new Legality();
+                        l.setFormat(f);
+                        l.setLegality("Legal");
+                        return l;
+                    }).collect(Collectors.toList());
 
             query.addCriteria(Criteria.where("legalities").all(legalities));
         }

@@ -25,20 +25,26 @@ public class DataLoader implements ApplicationRunner {
     private Boolean readFromFile;
 
     public void run(ApplicationArguments args) {
-        List<Card> cardsOriginalFormat = readFromFile ? fileRepository.getAllCards() : restRepository.getAll();
-        List<MtgCard> cards = cardsOriginalFormat.parallelStream().map(MtgCard::new).toList();
-        cardRepository.saveAll(cards);
+        if (readFromFile) {
+            List<Card> cardsOriginalFormat = fileRepository.getAllCards();
+            List<MtgCard> cards = cardsOriginalFormat.parallelStream().map(MtgCard::new).toList();
+            cardRepository.saveAll(cards);
+            System.out.println("Database filled with cards from file");
+        } else {
+            updateAllCards();
+        }
     }
 
-    @Scheduled(cron = "* */90 * * * *")
+    @Scheduled(cron = "* */30 * * * *")
     public void updateAllCards() {
         List<MtgCard> newCards = new java.util.ArrayList<>(restRepository.getAll().parallelStream().map(MtgCard::new).toList());
         List<MtgCard> oldCards = cardRepository.findAll();
         newCards.removeAll(oldCards);
         cardRepository.saveAll(newCards);
+        System.out.println("Database updated with cards from Gatherer");
     }
 
     public void downloadImages() {
-        
+
     }
 }

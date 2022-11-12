@@ -54,7 +54,13 @@
       </div>
     </div>
     <div class="cards-view__cards">
-      <CardItem class="cards-view__card" v-for="(card, index) in cards" :card="card" :key="index" />
+      <CardItem class="cards-view__card"
+        v-for="card in cards"
+        :card="card"
+        :key="card.id"
+        @flipped-back="handleFlipBack($event)"
+        @increment="handleIncrement($event)"
+        @decrement="handleDecrement($event)" />
     </div>
     <Button class="cards-view__more" @click="loadMore">Load more results</Button>
   </div>
@@ -75,6 +81,7 @@ import ClickOutside from 'click-outside-vue3';
 import { Card } from '@/models/card';
 import { cardsService } from '@/services/cards';
 import { metaDataService } from '@/services/metaData';
+import { collectionService } from '@/services/collection';
 
 
 const vClickOutside = ClickOutside.directive;
@@ -182,6 +189,24 @@ const handleQueryRequest = async(more: boolean = false) => {
     cards.value = [...cards.value , ...cardsResponse.content];
   else
     cards.value = cardsResponse.content;
+}
+
+const handleIncrement = async(cardId: string) => {
+  const cardToUpdate = cards.value.find(x => x.id === cardId);
+  if(cardToUpdate)
+    cardToUpdate.amount = await collectionService.incrementCardAmountInCollection(cardId);
+}
+
+const handleDecrement = async(cardId: string) => {
+  const cardToUpdate = cards.value.find(x => x.id === cardId);
+  if(cardToUpdate)
+    cardToUpdate.amount = await collectionService.decrementCardAmountInCollection(cardId);
+}
+
+const handleFlipBack = async(cardId: string) => {
+  const cardToUpdate = cards.value.find(x => x.id === cardId);
+  if(cardToUpdate)
+    cardToUpdate.amount = await collectionService.getCardAmountInCollection(cardId);
 }
 
 </script>

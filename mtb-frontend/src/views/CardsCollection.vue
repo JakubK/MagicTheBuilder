@@ -1,9 +1,15 @@
 <template>
     <div class="card-collection">
-        <BaseHeader>My Cards</BaseHeader>
-        <div class="card-collection__cards">
-            <CardItem class="card-collection__card" v-for="(card, index) in cards" :card="card" :key="index" />
-        </div>
+			<BaseHeader>My Cards</BaseHeader>
+			<div class="card-collection__cards">
+					<CardItem 
+						class="card-collection__card"
+						v-for="card in cards" :card="card" 
+						:key="card.id" 
+						@flipped-back="handleFlipBack($event)"
+						@increment="handleIncrement($event)"
+						@decrement="handleDecrement($event)" />
+			</div>
     </div>
 </template>
 
@@ -28,6 +34,25 @@ onMounted(async() => {
     })
     cards.value = cardResponse.content;
 })
+
+
+const handleIncrement = async(cardId: string) => {
+  const cardToUpdate = cards.value.find(x => x.id === cardId);
+  if(cardToUpdate)
+    cardToUpdate.amount = await collectionService.incrementCardAmountInCollection(cardId);
+}
+
+const handleDecrement = async(cardId: string) => {
+  const cardToUpdate = cards.value.find(x => x.id === cardId);
+  if(cardToUpdate)
+    cardToUpdate.amount = await collectionService.decrementCardAmountInCollection(cardId);
+}
+
+const handleFlipBack = async(cardId: string) => {
+  const cardToUpdate = cards.value.find(x => x.id === cardId);
+  if(cardToUpdate)
+    cardToUpdate.amount = await collectionService.getCardAmountInCollection(cardId);
+}
 
 </script>
 

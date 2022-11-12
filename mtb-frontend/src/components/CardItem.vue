@@ -54,7 +54,7 @@
                 </svg>
               </div>
               <div class="card-reverse__action card-reverse__count">
-                {{ amountInCollection }}
+                {{ card.amount }}
               </div>
               <div @click="decrementCollection" class="card-reverse__action">
                 <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -77,8 +77,8 @@
 import { Card } from '@/models/card';
 import { PropType, ref, watch } from 'vue';
 import Icon from './Icon.vue';
-import { collectionService } from '@/services/collection';
 
+const emit = defineEmits(['increment', 'decrement', 'flippedBack']);
 const props = defineProps({
   card: {
     type: Object as PropType<Card>,
@@ -87,22 +87,21 @@ const props = defineProps({
 });
 
 const flipped = ref(false);
-const amountInCollection = ref(0);
 
 watch(flipped, async (_, newVal) => {
   if(newVal === false)
   {
     //  Fetch new count
-    amountInCollection.value = await collectionService.getCardAmountInCollection(props.card.id);
+    emit('flippedBack', props.card.id);
   }
 });
 
-const incrementCollection = async() => {
-  amountInCollection.value = await collectionService.incrementCardAmountInCollection(props.card.id);
+const incrementCollection = () => {
+  emit('increment', props.card.id);
 }
 
-const decrementCollection = async () => {
-  amountInCollection.value = await collectionService.decrementCardAmountInCollection(props.card.id);
+const decrementCollection = () => {
+  emit('decrement', props.card.id)
 }
 
 </script>

@@ -10,4 +10,5 @@ export interface Card {
     toughness: string;
     set: string;
     manaCost: string;
+    amount: number;
 }

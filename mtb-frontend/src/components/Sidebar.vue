@@ -11,10 +11,10 @@
     </header>
     <div class="sidebar__content">
       <div class="sidebar__upper-content">
-        <SidebarItemVue v-for="(item, index) in topItems" :key="index" :item="item" :active="active" />
+        <SidebarItemVue v-for="(item, index) in topItems" :key="index + 'x'" :item="item" :active="active" />
       </div>
       <div class="sidebar__lower-content">
-        <SidebarItemVue v-for="(item, index) in bottomItems" :key="index" :item="item" :active="active" />
+        <SidebarItemVue v-for="(item, index) in bottomItems" :key="index + 'y'" :item="item" :active="active" />
       </div>
     </div>
   </nav>

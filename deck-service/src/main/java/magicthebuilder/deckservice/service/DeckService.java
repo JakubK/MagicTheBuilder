@@ -215,6 +215,7 @@ public class DeckService {
             Card commander = cardService.getCardById(dto.getCommander());
             deck.setCommander(commander);
         }
+        saveDeck(deck);
     }
 
     public void deleteDeck(UUID deckId, long userId) {

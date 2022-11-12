@@ -29,12 +29,12 @@ public class CardRepository {
 
 
     @PostConstruct
-    private void downloadAllCards() {
+    private void downloadAllCards() throws InterruptedException {
         Gson gson = new Gson();
         java.net.URI uri;
         HttpResponse<String> getResponse;
         try {
-            uri = new URI("http://localhost:8081/api/internal/cards/all");
+            uri = new URI("http://card-service:8080/api/internal/cards/all");
         } catch (URISyntaxException e) {
             throw new RuntimeException(e);
         }
@@ -43,14 +43,18 @@ public class CardRepository {
                 .GET()
                 .build();
         HttpClient httpClient = HttpClient.newHttpClient();
-        try {
-            getResponse = httpClient.send(getRequest, HttpResponse.BodyHandlers.ofString());
-        } catch (IOException | InterruptedException e) {
-            throw new RuntimeException(e);
+
+        MtgCard[] mtgCards = null;
+        while (mtgCards == null || mtgCards.length == 0) {
+            try {
+                getResponse = httpClient.send(getRequest, HttpResponse.BodyHandlers.ofString());
+                mtgCards = gson.fromJson(getResponse.body(), MtgCard[].class);
+                break;
+            } catch (IOException | InterruptedException e) {
+                Thread.sleep(10000);
+            }
         }
-        MtgCard[] mtgCards = gson.fromJson(getResponse.body(), MtgCard[].class);
         cards = Arrays.stream(mtgCards).collect(Collectors.toMap(MtgCard::getId, mtgCard -> mtgCard));
-        System.out.println(cards.size());
-        System.out.println(cards.keySet().toArray()[0]);
+        System.out.println(cards.size() + " downloaded from card service");
     }
 }

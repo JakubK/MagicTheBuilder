@@ -5,7 +5,7 @@ https://api.magicthegathering.io/v1/cards/758df5d5-992f-5d30-b6bc-87cb1a0788ab
 
 
 ###
-http://localhost:8080/api/cards/all
+http://localhost:8080/api/internal/cards/ids
 
 ###
 http://localhost:8080/api/cards?phrase=mage%20alabaster%20dragon&color=Red
@@ -21,7 +21,7 @@ http://localhost:8080/api/cards?phrase=Black%20Lotus
 
 
 ###
-http://localhost:8080/api/cards/b2c955c0-7f0b-5748-ab5d-98af82d8c682
+http://localhost:8080/api/cards?ids=aeb1b742-645c-5dab-ba9b-35d51649e074
 
 
 ###

@@ -1,11 +1,12 @@
 import { AccessLevel } from "./accessLevel";
 
 export interface Deck {
+    id: string;
     accessLevel: AccessLevel;
     creationDate: Date;
     deckSize: number;
     gameMode: string;
-    id: string;
     ownerId: number;
     sideboardSize: number;
+    name: string;
 }

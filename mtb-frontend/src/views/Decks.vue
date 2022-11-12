@@ -54,7 +54,13 @@
       </div>
     </div>
     <Teleport to="body">
-      <DeckModal :method="method" :deck="deck" @close="showModal = false" v-if="showModal"/>
+      <DeckModal 
+        v-if="showModal"
+        :method="method"
+        :deck="deck"
+        @close="showModal = false"
+        @created="handleCreate($event)"
+        @updated="handleUpdate($event)" />
     </Teleport>
   </div>
 </template>
@@ -97,6 +103,17 @@ const handleDelete = async(deckId: string) => {
   await decksService.deleteDeck(deckId);
   const deckIndex = decks.value.findIndex(x => x.id === deckId);
   decks.value.splice(deckIndex, 1);
+}
+
+const handleUpdate = (data: any) => {
+  const deckIndex = decks.value.findIndex(x => x.id === data.id);
+  decks.value[deckIndex].accessLevel = data.form.accessLevel; 
+  decks.value[deckIndex].gameMode = data.form.gameMode;
+  decks.value[deckIndex].name = data.form.name;
+}
+
+const handleCreate = (newDeck: Deck) => {
+  decks.value.push(newDeck);
 }
 
 onMounted(async() => {

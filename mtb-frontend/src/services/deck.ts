@@ -3,7 +3,7 @@ import { Deck } from "@/models/deck";
 import request from './api';
 
 export const decksService = {
-    async createDeck(payload: Partial<CreateDeckRequest>): Promise<string> {
+    async createDeck(payload: Partial<CreateDeckRequest>): Promise<Deck> {
         const response = await request.post('auth/decks', payload);
         return response.data;
     },

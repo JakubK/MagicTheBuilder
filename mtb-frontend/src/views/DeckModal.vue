@@ -56,7 +56,7 @@ const props = defineProps({
 	}
 });
 
-const emit = defineEmits(['close']);
+const emit = defineEmits(['close', 'created', 'updated']);
 const accessLevel: Ref<any[]> = ref([]);
 const gameMode: Ref<any[]> = ref([]);
 
@@ -104,10 +104,17 @@ const submitDeckCreation = async() => {
   //  Check front validation
   const isValid = await v$.value.$validate();
   if(isValid) {
-		if(props.method === 'POST')
-    	await decksService.createDeck(form);
-		else
+		if(props.method === 'POST') {
+    	const newDeck = await decksService.createDeck(form);
+			emit('created', newDeck);
+		}
+		else {
 			await decksService.updateDeck(props.deck?.id!,form);
+			emit('updated', {
+				id: props.deck?.id,
+				form
+			});
+		}
 		emit('close');
   }
 }

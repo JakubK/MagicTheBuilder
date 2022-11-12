@@ -76,7 +76,6 @@ defineProps({
   }
 })
 
-
 const method = ref('');
 const deck = ref();
 
@@ -94,9 +93,10 @@ const initUpdateDeck = (targetDeck: Deck) => {
   showModal.value = true;
 }
 
-
 const handleDelete = async(deckId: string) => {
   await decksService.deleteDeck(deckId);
+  const deckIndex = decks.value.findIndex(x => x.id === deckId);
+  decks.value.splice(deckIndex, 1);
 }
 
 onMounted(async() => {

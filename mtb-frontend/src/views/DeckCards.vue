@@ -78,7 +78,7 @@ onMounted(async() => {
 			amount: deck.value?.cards[i].amount!
 		}))
     //  Sideboard
-    const sideboardIds = deck.value.sideboardCards.map(x => x.cardId);
+    const sideboardIds = deck.value.sideboard.map(x => x.cardId);
     if(sideboardIds.length === 0)
       return;
     const sideboardCardsResponse = await cardsService.getCards({
@@ -88,7 +88,7 @@ onMounted(async() => {
     sideboard.value = sideboardCardsResponse.content;
 		sideboard.value = sideboard.value.map((x,i) => ({
 			...x,
-			amount: deck.value?.sideboardCards[i].amount!
+			amount: deck.value?.sideboard[i].amount!
 		}));
 });
 

@@ -67,7 +67,23 @@ const routes: RouteRecordRaw[] = [
           {
             path: ':id',
             component: DeckCards,
-            props: true
+            props: true,
+          },
+          {
+            path: 'deck/:id',
+            component: Cards,
+            props: {
+              title: 'Query cards for your Deck',
+              cardSource: CardSource.Deck
+            }
+          },
+          {
+            path: 'side/:id',
+            component: Cards,
+            props: {
+              title: 'Query cards for your Sideboard',
+              cardSource: CardSource.Sideboard
+            }
           },
           {
             path: 'collection',

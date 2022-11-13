@@ -10,6 +10,7 @@ export interface Deck {
     sideboardSize: number;
     name: string;
     cards: DeckCard[];
+    sideboardCards: DeckCard[];
 }
 
 interface DeckCard {

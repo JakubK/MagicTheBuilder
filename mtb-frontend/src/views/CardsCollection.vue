@@ -1,7 +1,7 @@
 <template>
     <div class="card-collection">
 			<BaseHeader>My Cards</BaseHeader>
-			<div class="card-collection__cards">
+			<div class="card-collection__cards" v-if="cards.length > 0">
 					<CardItem 
 						class="card-collection__card"
 						v-for="card in cards" :card="card" 
@@ -10,10 +10,18 @@
 						@increment="handleIncrement($event)"
 						@decrement="handleDecrement($event)" />
 			</div>
+      <div v-else>
+        <h3>Collection is empty</h3>
+        <p>Go to Cards Browser to make it from scratch</p>
+        <router-link to="/cards/browse">
+          <Button>Cards browser</Button>
+        </router-link>
+      </div>
     </div>
 </template>
 
 <script lang="ts" setup>
+import Button from '@/components/Button.vue';
 import CardItem from '@/components/CardItem.vue';
 import BaseHeader from '@/components/typography/BaseHeader.vue';
 import { Card } from '@/models/card';

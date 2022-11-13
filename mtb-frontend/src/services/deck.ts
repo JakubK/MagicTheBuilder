@@ -40,5 +40,15 @@ export const decksService = {
     async addToSideboard(deckId: string, cardId: string): Promise<number> {
         const response = await request.post(`auth/decks/${deckId}/add/sideboard/${cardId}`);
         return response.data;
-    }
+    },
+
+
+    async getCardAmountInDeck(deckId: string, cardId: string): Promise<number> {
+        const response = await request.get('auth/collections/' + cardId);
+        return response.data;
+    },
+    async getCardAmountInSide(deckId: string, cardId: string): Promise<number> {
+        const response = await request.get('auth/collections/' + cardId);
+        return response.data;
+    },
 }

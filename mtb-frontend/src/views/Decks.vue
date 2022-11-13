@@ -15,19 +15,21 @@
         <div class="deck__content">
           <span>{{ deck.name }}</span>
           <span class="deck__icons">
-            <Icon>
-              <svg width="25" height="25" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <g clip-path="url(#clip0_607_380)">
-                  <path d="M1.49756 12.192C1.49756 12.192 5.49756 4.19205 12.4976 4.19205C19.4976 4.19205 23.4976 12.192 23.4976 12.192C23.4976 12.192 19.4976 20.192 12.4976 20.192C5.49756 20.192 1.49756 12.192 1.49756 12.192Z" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                  <path d="M12.4976 15.192C14.1544 15.192 15.4976 13.8489 15.4976 12.192C15.4976 10.5352 14.1544 9.19205 12.4976 9.19205C10.8407 9.19205 9.49756 10.5352 9.49756 12.192C9.49756 13.8489 10.8407 15.192 12.4976 15.192Z" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                </g>
-                <defs>
-                  <clipPath id="clip0_607_380">
-                    <rect width="24" height="24" fill="white" transform="translate(0.497559 0.192047)"/>
-                  </clipPath>
-                </defs>
-              </svg>
-            </Icon>
+            <router-link :to="'/decks/' + deck.id ">
+              <Icon>
+                <svg width="25" height="25" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <g clip-path="url(#clip0_607_380)">
+                    <path d="M1.49756 12.192C1.49756 12.192 5.49756 4.19205 12.4976 4.19205C19.4976 4.19205 23.4976 12.192 23.4976 12.192C23.4976 12.192 19.4976 20.192 12.4976 20.192C5.49756 20.192 1.49756 12.192 1.49756 12.192Z" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M12.4976 15.192C14.1544 15.192 15.4976 13.8489 15.4976 12.192C15.4976 10.5352 14.1544 9.19205 12.4976 9.19205C10.8407 9.19205 9.49756 10.5352 9.49756 12.192C9.49756 13.8489 10.8407 15.192 12.4976 15.192Z" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  </g>
+                  <defs>
+                    <clipPath id="clip0_607_380">
+                      <rect width="24" height="24" fill="white" transform="translate(0.497559 0.192047)"/>
+                    </clipPath>
+                  </defs>
+                </svg>
+              </Icon>
+            </router-link>
             <Icon @click="initUpdateDeck(deck)">
               <svg width="25" height="25" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg">
                <path d="M11.4976 4.19205H4.49756C3.96713 4.19205 3.45842 4.40276 3.08334 4.77783C2.70827 5.15291 2.49756 5.66161 2.49756 6.19205V20.192C2.49756 20.7225 2.70827 21.2312 3.08334 21.6063C3.45842 21.9813 3.96713 22.192 4.49756 22.192H18.4976C19.028 22.192 19.5367 21.9813 19.9118 21.6063C20.2868 21.2312 20.4976 20.7225 20.4976 20.192V13.192" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>

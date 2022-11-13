@@ -23,7 +23,7 @@ public class AuthorizationFilter implements GatewayFilter {
 
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
-        ServerHttpRequest request = (ServerHttpRequest) exchange.getRequest();
+        ServerHttpRequest request = exchange.getRequest();
 
         final List<String> authorizationPrefix = List.of(
                 "/api/auth/"
@@ -45,7 +45,7 @@ public class AuthorizationFilter implements GatewayFilter {
                 jwtUtil.validate(token);
             } catch (Exception e) {
                 ServerHttpResponse response = exchange.getResponse();
-                response.setStatusCode(HttpStatus.BAD_REQUEST);
+                response.setStatusCode(HttpStatus.UNAUTHORIZED);
                 return response.setComplete();
             }
 

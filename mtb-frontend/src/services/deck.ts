@@ -51,4 +51,9 @@ export const decksService = {
         const response = await request.get('auth/collections/' + cardId);
         return response.data;
     },
+
+    async getCardUsageInDecks(cardId: string): Promise<any> {
+        const response = await request.get('auth/decks/withCard/' + cardId);
+        return response.data;
+    }
 }

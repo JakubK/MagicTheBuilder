@@ -81,6 +81,20 @@ public class DeckService {
                 .toList();
     }
 
+    public long getCardAmountInDeck(UUID id, String cardId) {
+        Deck deck = getDeckById(id);
+        return deck.getCards().stream()
+                .filter(card -> Objects.equals(card.getId(), cardId))
+                .count();
+    }
+
+    public long getCardAmountInSideboard(UUID id, String cardId) {
+        Deck deck = getDeckById(id);
+        return deck.getSideboard().stream()
+                .filter(card -> Objects.equals(card.getId(), cardId))
+                .count();
+    }
+
 
     public void saveDeck(Deck deck) {
         repository.save(deck);

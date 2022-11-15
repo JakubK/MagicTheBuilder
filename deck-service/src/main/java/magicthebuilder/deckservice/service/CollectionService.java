@@ -90,7 +90,7 @@ public class CollectionService {
         }
     }
 
-    public void setCardAmount(CardInCollectionPutRequest dto, Long userId) {
+    public int setCardAmount(CardInCollectionPutRequest dto, Long userId) {
         Collection coll = getCollectionById(userId);
         List<CardInCollection> collectionCards = getCollectionById(userId).getCards();
         CardInCollection cardInCollection;
@@ -103,10 +103,12 @@ public class CollectionService {
                 coll.setCards(collectionCards);
                 saveCollection(coll);
                 cardInCollectionRepository.delete(cardInCollection);
+                return 0;
             } else {
                 cardInCollection.setAmount(dto.getAmount());
                 cardInCollectionRepository.save(cardInCollection);
                 saveCollection(coll);
+                return dto.getAmount();
             }
         } else {
             cardInCollection = new CardInCollection(cardService.getCardById(dto.getCardId()));
@@ -115,6 +117,7 @@ public class CollectionService {
             newCollection.add(cardInCollection);
             cardInCollectionRepository.save(cardInCollection);
             saveCollection(coll);
+            return dto.getAmount();
         }
     }
 

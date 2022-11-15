@@ -38,8 +38,8 @@ public class AuthCollectionController {
     }
 
     @PutMapping("")
-    public void setAmountOfCardInCollection(@RequestBody CardInCollectionPutRequest dto, @RequestHeader(value = "id") Long userId) {
-        collectionService.setCardAmount(dto, userId);
+    public int setAmountOfCardInCollection(@RequestBody CardInCollectionPutRequest dto, @RequestHeader(value = "id") Long userId) {
+        return collectionService.setCardAmount(dto, userId);
     }
 
 

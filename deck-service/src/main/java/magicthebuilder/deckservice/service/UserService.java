@@ -35,11 +35,6 @@ public class UserService {
             throw new UnrecognizedUserIdException(id);
         }
     }
-
-    public void flushDatabase() {
-        userRepository.deleteAll();
-    }
-
     public List<User> findAll() {
         return userRepository.findAll();
     }

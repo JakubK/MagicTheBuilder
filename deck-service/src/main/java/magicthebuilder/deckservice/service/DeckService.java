@@ -6,7 +6,6 @@ import magicthebuilder.deckservice.entity.Card;
 import magicthebuilder.deckservice.entity.Deck;
 import magicthebuilder.deckservice.entity.User;
 import magicthebuilder.deckservice.entity.enums.DeckAccessLevelEnum;
-import magicthebuilder.deckservice.entity.enums.GameMode;
 import magicthebuilder.deckservice.exception.customexceptions.InaccessibleDeckException;
 import magicthebuilder.deckservice.exception.customexceptions.InaccessibleResourceException;
 import magicthebuilder.deckservice.exception.customexceptions.UnrecognizedDeckException;
@@ -17,7 +16,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 public class DeckService {
@@ -249,10 +247,6 @@ public class DeckService {
 
         return new DeckLegalityCheckResponseDto();
     }
-    public void flushDatabase() {
-        repository.deleteAll();
-    }
-
 
     private Deck getDeckById(UUID id) {
         Optional<Deck> optDeck = repository.findById(id);

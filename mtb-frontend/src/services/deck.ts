@@ -44,11 +44,11 @@ export const decksService = {
 
 
     async getCardAmountInDeck(deckId: string, cardId: string): Promise<number> {
-        const response = await request.get('auth/collections/' + cardId);
+        const response = await request.get(`/decks/${deckId}/${cardId}/amount/deck`);
         return response.data;
     },
     async getCardAmountInSide(deckId: string, cardId: string): Promise<number> {
-        const response = await request.get('auth/collections/' + cardId);
+        const response = await request.get(`/decks/${deckId}/${cardId}/amount/sideboard`);
         return response.data;
     },
 

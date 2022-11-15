@@ -1,7 +1,7 @@
 <template>
   <div class="cards-view">
     
-    <BaseHeader>{{ title }} <Button @click="handleFinish" v-if="cardSource > 0">Finish editing</Button></BaseHeader>
+    <BaseHeader>{{ title }} <Button @click="handleFinish" v-if="cardSource > 0">Back</Button></BaseHeader>
     <div class="cards-view__query">
       <div v-click-outside="resetQuery" class="cards-view__input">
         <TextInput v-model="search" placeholder="Type the name of card you're looking for...">
@@ -60,6 +60,7 @@
         :card="card"
         :key="card.id"
         @flipped-back="handleFlipBack($event)"
+        @amount-changed="handleAmountChange($event)"
         @increment="handleIncrement($event)"
         @decrement="handleDecrement($event)" />
     </div>
@@ -87,6 +88,7 @@ import { CardSource } from '@/models/cardSource';
 import { useRoute } from 'vue-router';
 import { decksService } from '@/services/deck';
 import router from '@/router';
+import { AmountChangedEvent } from '@/models/amountChangedEvent';
 
 
 const vClickOutside = ClickOutside.directive;
@@ -246,6 +248,18 @@ const handleFlipBack = async(cardId: string) => {
       cardToUpdate.amount = await decksService.getCardAmountInDeck(id.value, cardId);
     else // Sideboard
       cardToUpdate.amount = await decksService.getCardAmountInSide(id.value, cardId);
+  }
+}
+
+const handleAmountChange = async(payload: AmountChangedEvent) => {
+  const cardToUpdate = cards.value.find(x => x.id === payload.cardId);
+  if(cardToUpdate) {
+    if(props.cardSource === CardSource.Collection)
+      cardToUpdate.amount = await collectionService.setInCollection(payload);
+    else if(props.cardSource === CardSource.Deck)
+      cardToUpdate.amount = await decksService.setInDeck(id.value, payload);
+    else // Sideboard
+      cardToUpdate.amount = await decksService.setInSide(id.value, payload);
   }
 }
 

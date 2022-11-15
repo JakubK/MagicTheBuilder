@@ -53,8 +53,11 @@
                     stroke-linejoin="round" />
                 </svg>
               </div>
-              <div class="card-reverse__action card-reverse__count">
+              <div v-if="!editionVisible" @click="showEdition" class="card-reverse__action card-reverse__count">
                 {{ card.amount }}
+              </div>
+              <div v-else v-click-outside="applyEdition" class="card-reverse__action card-reverse__count card-reverse__edit">
+                <input v-model="editedAmount"/>
               </div>
               <div @click="decrementCollection" class="card-reverse__action">
                 <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -78,13 +81,33 @@ import { Card } from '@/models/card';
 import { PropType, ref, watch } from 'vue';
 import Icon from './Icon.vue';
 
-const emit = defineEmits(['increment', 'decrement', 'flippedBack']);
+import ClickOutside from 'click-outside-vue3';
+const vClickOutside = ClickOutside.directive;
+
+const emit = defineEmits(['increment', 'decrement', 'amountChanged', 'flippedBack']);
 const props = defineProps({
   card: {
     type: Object as PropType<Card>,
     required: true,
   }
 });
+
+
+const editionVisible = ref(false);
+const editedAmount = ref(-1);
+
+const showEdition = () => {
+  editedAmount.value = props.card.amount;
+  editionVisible.value = true;
+}
+
+const applyEdition = () => {
+  emit('amountChanged', {
+    cardId: props.card.id,
+    amount: editedAmount.value
+  });
+  editionVisible.value = false;
+}
 
 const flipped = ref(false);
 

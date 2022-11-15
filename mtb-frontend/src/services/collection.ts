@@ -1,9 +1,15 @@
+import { AmountChangedEvent } from '@/models/amountChangedEvent';
 import { GetCollectionResponse } from '@/models/getCollectionResponse';
 import request from './api';
 
 export const collectionService = {
     async getCardAmountInCollection(cardId: string): Promise<number> {
         const response = await request.get('auth/collections/' + cardId);
+        return response.data;
+    },
+
+    async setInCollection(payload: AmountChangedEvent): Promise<number> {
+        const response = await request.put('auth/collections', payload);
         return response.data;
     },
 

@@ -1,3 +1,4 @@
+import { AmountChangedEvent } from "@/models/amountChangedEvent";
 import { CreateDeckRequest } from "@/models/createDeckRequest";
 import { Deck } from "@/models/deck";
 import request from './api';
@@ -30,6 +31,15 @@ export const decksService = {
     },
     async addToDeck(deckId: string, cardId: string): Promise<number> {
         const response = await request.post(`auth/decks/${deckId}/add/deck/${cardId}`);
+        return response.data;
+    },
+
+    async setInDeck(deckId: string, payload: AmountChangedEvent): Promise<number> {
+        const response = await request.put(`/auth/decks/${deckId}/deck`, payload);
+        return response.data;
+    },
+    async setInSide(deckId: string, payload: AmountChangedEvent): Promise<number> {
+        const response = await request.put(`/auth/decks/${deckId}/sideboard`, payload);
         return response.data;
     },
 

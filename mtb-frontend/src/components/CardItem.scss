@@ -102,6 +102,10 @@
     bottom: 2.2em;
   }
 
+  &__edit input {
+    max-width: 3em;
+  }
+
   &__flip {
     cursor: pointer;
   }

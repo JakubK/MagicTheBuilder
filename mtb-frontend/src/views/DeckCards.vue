@@ -16,6 +16,7 @@
               v-for="card in cards" :card="card" 
               :key="card.id" 
               @increment="handleIncrementDeck($event)"
+              @amount-changed="handleChangeDeck($event)"
               @decrement="handleDecrementDeck($event)" />
           </div>
         </div>
@@ -28,9 +29,10 @@
           <div class="deck-cards__cards">
             <CardItem
               class="deck-cards__card"
-              v-for="card in cards" :card="card" 
+              v-for="card in sideboard" :card="card" 
               :key="card.id" 
               @increment="handleIncrementSide($event)"
+              @amount-changed="handleChangeSide($event)"
               @decrement="handleDecrementSide($event)" />
           </div>
         </div>
@@ -41,6 +43,7 @@
 import Button from '@/components/Button.vue';
 import CardItem from '@/components/CardItem.vue';
 import BaseHeader from '@/components/typography/BaseHeader.vue';
+import { AmountChangedEvent } from '@/models/amountChangedEvent';
 import { Card } from '@/models/card';
 import { Deck } from '@/models/deck';
 import { cardsService } from '@/services/cards';
@@ -100,6 +103,12 @@ const buttonText = computed(() => {
   return showCards.value ? 'Show sideboard' : 'Show cards';
 })
 
+const handleChangeDeck = async(payload: AmountChangedEvent) => {
+  const cardToUpdate = cards.value.find(x => x.id === payload.cardId);
+  if(cardToUpdate)
+    cardToUpdate.amount = await decksService.setInDeck(props.id, payload);
+}
+
 const handleIncrementDeck = async(cardId: string) => {
   const cardToUpdate = cards.value.find(x => x.id === cardId);
   if(cardToUpdate)
@@ -110,6 +119,12 @@ const handleDecrementDeck = async(cardId: string) => {
   const cardToUpdate = cards.value.find(x => x.id === cardId);
   if(cardToUpdate)
     cardToUpdate.amount = await decksService.removeFromDeck(props.id, cardId);
+}
+
+const handleChangeSide = async(payload: AmountChangedEvent) => {
+  const cardToUpdate = cards.value.find(x => x.id === payload.cardId);
+  if(cardToUpdate)
+    cardToUpdate.amount = await decksService.setInSide(props.id, payload);
 }
 
 const handleIncrementSide = async(cardId: string) => {

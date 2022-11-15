@@ -7,6 +7,7 @@
 						v-for="card in cards" :card="card" 
 						:key="card.id" 
 						@flipped-back="handleFlipBack($event)"
+            @amount-changed="handleAmountChange($event)"
 						@increment="handleIncrement($event)"
 						@decrement="handleDecrement($event)" />
 			</div>
@@ -24,6 +25,7 @@
 import Button from '@/components/Button.vue';
 import CardItem from '@/components/CardItem.vue';
 import BaseHeader from '@/components/typography/BaseHeader.vue';
+import { AmountChangedEvent } from '@/models/amountChangedEvent';
 import { Card } from '@/models/card';
 import { cardsService } from '@/services/cards';
 import { onMounted, Ref, ref } from 'vue';
@@ -60,6 +62,12 @@ const handleFlipBack = async(cardId: string) => {
   const cardToUpdate = cards.value.find(x => x.id === cardId);
   if(cardToUpdate)
     cardToUpdate.amount = await collectionService.getCardAmountInCollection(cardId);
+}
+
+const handleAmountChange = async(payload: AmountChangedEvent) => {
+  const cardToUpdate = cards.value.find(x => x.id === payload.cardId);
+  if(cardToUpdate)
+    cardToUpdate.amount = await collectionService.setInCollection(payload);
 }
 
 </script>

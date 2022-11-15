@@ -17,7 +17,7 @@ api.interceptors.request.use(request => {
 api.interceptors.response.use(response => response, error => {
     if(error.response.status === 401) {
         localStorage.clear();
-        router.push('/auth/login');
+        router.push('/auth');
     }
 })
 

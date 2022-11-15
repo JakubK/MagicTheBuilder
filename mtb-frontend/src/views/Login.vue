@@ -29,6 +29,7 @@ import { mapErrors} from '@/utils/errors';
 import Button from '@/components/Button.vue';
 import { authService } from '@/services/auth';
 import router from '@/router';
+import { useRoute } from 'vue-router';
 
 const form = reactive<SignIn>({
   email: '',
@@ -47,13 +48,15 @@ const rules = {
 
 const v$ = useVuelidate(rules, form);
 
+const route = useRoute();
 const submitLogin = async() => {
   const isValid = await v$.value.$validate();
   if(isValid) {
     //  Send the actual form
     const jwt = await authService.login(form);
     localStorage.setItem('jwt', jwt);
-    router.push('/');
+    const redirect = route.query.redirect ? route.query.redirect : '/cards/browse';
+    router.push(redirect as string);
   }
 }
 

@@ -94,9 +94,9 @@ public class AuthDeckController {
     }
 
     @GetMapping("/{deckId}/validate")
-    public DeckLegalityCheckResponseDto checkDeckLegality(@PathVariable("deckId") UUID deckId,
+    public List<String> checkDeckLegality(@PathVariable("deckId") UUID deckId,
                                                        @RequestHeader(value = "id") Long userId) {
-        return deckService.checkDeckLegality(deckId,userId);
+        return deckService.checkAndSetLegality(deckId,userId);
     }
 
     @DeleteMapping("/{deckID}")

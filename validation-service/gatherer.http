@@ -13,6 +13,12 @@ Content-Type: application/json
       "amount": 1
     }
   ],
-  "sideboard": []
+  "sideBoard": []
 }
 
+
+###
+POST http://localhost:8084/api/internal/decks/validate
+Content-Type: application/json
+
+{"format":"Standard","deck":[],"sideBoard":[]}

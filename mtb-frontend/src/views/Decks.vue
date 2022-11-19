@@ -116,7 +116,7 @@ const handleUpdate = (data: any) => {
   decks.value[deckIndex].name = data.form.name;
 
   if(data.form.accessLevel === AccessLevel.notPublic) { //  Generate link
-    navigator.clipboard.writeText(`${import.meta.env.VITE_APP_URL}/decks/${data.form.id}`);
+    navigator.clipboard.writeText(`${import.meta.env.VITE_APP_URL}/decks/public/${data.id}`);
   }
 }
 

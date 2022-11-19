@@ -6,6 +6,8 @@ import Main from "@/views/Main.vue";
 import Decks from "@/views/Decks.vue";
 import CardsCollection from "@/views/CardsCollection.vue";
 import PublicCardsCollection from "@/views/PublicCardsCollection.vue";
+import PublicDeckCards from "@/views/PublicDeckCards.vue";
+
 import { CardSource } from "@/models/cardSource";
 import DeckCards from "@/views/DeckCards.vue";
 import PublicDecks from "@/views/PublicDecks.vue";
@@ -83,6 +85,16 @@ const routes: RouteRecordRaw[] = [
               title: 'Query cards for your Deck',
               cardSource: CardSource.Deck
             }
+          },
+          {
+            path: 'public/:id',
+            component: PublicDeckCards,
+            props: true
+          },
+          {
+            path: 'user/:id',
+            component: PublicDecks,
+            props: true
           },
           {
             path: 'side/:id',

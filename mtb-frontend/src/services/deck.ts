@@ -19,8 +19,10 @@ export const decksService = {
     async deleteDeck(deckId: string): Promise<any> {
         await request.delete(`auth/decks/${deckId}`);
     },
-
-
+    async getUserDecks(userId: string): Promise<Deck[]> {
+        const response = await request.get(`decks/user/${userId}`);
+        return response.data;
+    },
     async getOwnerDeck(deckId: string): Promise<Deck> {
         const response = await request.get(`auth/decks/${deckId}`);
         return response.data;
@@ -28,6 +30,10 @@ export const decksService = {
 
     async getPublicDecks(): Promise<Deck[]> {
         const response = await request.get(`decks`);
+        return response.data;
+    },
+    async getNonPublicDeck(deckId: string): Promise<Deck> {
+        const response = await request.get(`decks/${deckId}`);
         return response.data;
     },
 

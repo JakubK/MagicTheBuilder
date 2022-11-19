@@ -1,6 +1,7 @@
 package magicthebuilder.deckservice.service;
 
 
+import com.google.gson.Gson;
 import magicthebuilder.deckservice.dto.*;
 import magicthebuilder.deckservice.entity.Card;
 import magicthebuilder.deckservice.entity.Deck;
@@ -15,6 +16,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.util.*;
 
 @Service
@@ -40,7 +47,7 @@ public class DeckService {
 
     public DetailedDeckGetResponseDto getOwnersDeck(UUID id, Long userId) {
         Deck deck = getDeckById(id);
-        validateUserAccessToDeck(id,userId);
+        validateUserAccessToDeck(id, userId);
         return new DetailedDeckGetResponseDto(deck);
 
     }
@@ -108,9 +115,9 @@ public class DeckService {
 
     }
 
-    public int addCardToDeck(UUID deckId,String cardId, Long userId) {
+    public int addCardToDeck(UUID deckId, String cardId, Long userId) {
         Deck deck = getDeckById(deckId);
-        validateUserAccessToDeck(deckId,userId);
+        validateUserAccessToDeck(deckId, userId);
         Card cardToAdd = cardService.getCardById(cardId);
         List<Card> deckCards = deck.getCards();
         deckCards.add(cardToAdd);
@@ -119,67 +126,63 @@ public class DeckService {
         return amountOfCardInDeck(deckId, cardId);
     }
 
-    public int addCardToSideboard(UUID deckId,String cardId, Long userId) {
+    public int addCardToSideboard(UUID deckId, String cardId, Long userId) {
         Deck deck = getDeckById(deckId);
-        validateUserAccessToDeck(deckId,userId);
+        validateUserAccessToDeck(deckId, userId);
         Card cardToAdd = cardService.getCardById(cardId);
         List<Card> sideboardCards = deck.getSideboard();
         sideboardCards.add(cardToAdd);
         deck.setSideboard(sideboardCards);
         saveDeck(deck);
-        return amountOfCardInSideboard(deckId,cardId);
+        return amountOfCardInSideboard(deckId, cardId);
     }
 
-    public int removeCardFromDeck(UUID deckId,String cardId, Long userId) {
+    public int removeCardFromDeck(UUID deckId, String cardId, Long userId) {
         Deck deck = getDeckById(deckId);
-        validateUserAccessToDeck(deckId,userId);
+        validateUserAccessToDeck(deckId, userId);
         Card cardToRemove = cardService.getCardById(cardId);
-        if(amountOfCardInDeck(deckId,cardId)==0) {
+        if (amountOfCardInDeck(deckId, cardId) == 0) {
             return 0;
         } else {
             List<Card> deckCards = deck.getCards();
             deckCards.remove(cardToRemove);
             deck.setCards(deckCards);
             saveDeck(deck);
-            return amountOfCardInDeck(deckId,cardId);
+            return amountOfCardInDeck(deckId, cardId);
         }
     }
 
-    public int removeCardFromSideboard(UUID deckId,String cardId, Long userId) {
+    public int removeCardFromSideboard(UUID deckId, String cardId, Long userId) {
         Deck deck = getDeckById(deckId);
-        validateUserAccessToDeck(deckId,userId);
+        validateUserAccessToDeck(deckId, userId);
         Card cardToRemove = cardService.getCardById(cardId);
-        if(amountOfCardInSideboard(deckId,cardId)==0) {
+        if (amountOfCardInSideboard(deckId, cardId) == 0) {
             return 0;
         } else {
             List<Card> sideboardCards = deck.getCards();
             sideboardCards.remove(cardToRemove);
             deck.setCards(sideboardCards);
             saveDeck(deck);
-            return amountOfCardInDeck(deckId,cardId);
+            return amountOfCardInDeck(deckId, cardId);
         }
     }
 
     public int setAmountOfCardInDeck(UUID deckId, CardInDeckAmountPutRequest dto, Long userId) {
         Deck deck = getDeckById(deckId);
-        validateUserAccessToDeck(deckId,userId);
+        validateUserAccessToDeck(deckId, userId);
         Card cardToAdjust = cardService.getCardById(dto.getCardId());
         List<Card> deckCards = deck.getCards();
         int currentAmount = amountOfCardInDeck(deckId, cardToAdjust.getId());
-        if(dto.getAmount() == 0){
-            for(int i = currentAmount; i > 0 ; i--)
-            {
+        if (dto.getAmount() == 0) {
+            for (int i = currentAmount; i > 0; i--) {
                 deckCards.remove(cardToAdjust);
             }
-        }
-        else if (dto.getAmount() > currentAmount) {
-            for(int i = dto.getAmount(); i > currentAmount ; i--)
-            {
+        } else if (dto.getAmount() > currentAmount) {
+            for (int i = dto.getAmount(); i > currentAmount; i--) {
                 deckCards.add(cardToAdjust);
             }
         } else {
-            for(int i = currentAmount; i > dto.getAmount() ; i--)
-            {
+            for (int i = currentAmount; i > dto.getAmount(); i--) {
                 deckCards.remove(cardToAdjust);
             }
         }
@@ -190,24 +193,20 @@ public class DeckService {
 
     public int setAmountOfCardInSideboard(UUID deckId, CardInDeckAmountPutRequest dto, Long userId) {
         Deck deck = getDeckById(deckId);
-        validateUserAccessToDeck(deckId,userId);
+        validateUserAccessToDeck(deckId, userId);
         Card cardToAdjust = cardService.getCardById(dto.getCardId());
         List<Card> deckSideboard = deck.getSideboard();
         int currentAmount = amountOfCardInDeck(deckId, cardToAdjust.getId());
-        if(dto.getAmount() == 0){
-            for(int i = currentAmount; i > 0 ; i--)
-            {
+        if (dto.getAmount() == 0) {
+            for (int i = currentAmount; i > 0; i--) {
                 deckSideboard.remove(cardToAdjust);
             }
-        }
-        else if (dto.getAmount() > currentAmount) {
-            for(int i = dto.getAmount(); i > currentAmount ; i--)
-            {
+        } else if (dto.getAmount() > currentAmount) {
+            for (int i = dto.getAmount(); i > currentAmount; i--) {
                 deckSideboard.add(cardToAdjust);
             }
         } else {
-            for(int i = currentAmount; i > dto.getAmount() ; i--)
-            {
+            for (int i = currentAmount; i > dto.getAmount(); i--) {
                 deckSideboard.remove(cardToAdjust);
             }
         }
@@ -218,12 +217,11 @@ public class DeckService {
 
     public void updateDeckInfo(UUID deckId, DeckUpdateRequestDto dto, long userId) {
         Deck deck = getDeckById(deckId);
-        validateUserAccessToDeck(deckId,userId);
+        validateUserAccessToDeck(deckId, userId);
         deck.setName(dto.getName());
         deck.setGameMode(dto.getGameMode());
         deck.setAccessLevel(dto.getAccessLevel());
-        if(dto.getCommander() != null)
-        {
+        if (dto.getCommander() != null) {
             Card commander = cardService.getCardById(dto.getCommander());
             deck.setCommander(commander);
         }
@@ -239,13 +237,14 @@ public class DeckService {
         }
     }
 
-    public DeckLegalityCheckResponseDto checkDeckLegality(UUID deckId, Long userId) {
-        //extend this to check if deck is legal in selected gameMode in the future
+    public List<String> checkAndSetLegality(UUID deckId, Long userId) {
         Deck deck = getDeckById(deckId);
-        validateUserAccessToDeck(deckId,userId);
-        DeckLegalityCheckRequestDto requestToValidationService = new DeckLegalityCheckRequestDto(deck);
+        validateUserAccessToDeck(deckId, userId);
 
-        return new DeckLegalityCheckResponseDto();
+        var brokenRules = requestValidation(deck);
+        deck.setValid(brokenRules.isEmpty());
+        saveDeck(deck);
+        return brokenRules;
     }
 
     private Deck getDeckById(UUID id) {
@@ -261,28 +260,48 @@ public class DeckService {
         return repository.findAllByOwner(userService.findById(userId));
     }
 
-    private void validateUserAccessToDeck(UUID deckId, Long userId)
-    {
+    private void validateUserAccessToDeck(UUID deckId, Long userId) {
         Deck deck = getDeckById(deckId);
         if (!deck.getOwner().getId().equals(userId)) {
             throw new InaccessibleDeckException(deckId);
         }
     }
 
-    private int amountOfCardInDeck(UUID deckId, String cardId)
-    {
+    private int amountOfCardInDeck(UUID deckId, String cardId) {
         Deck deck = getDeckById(deckId);
         return (int) deck.getCards().stream()
                 .filter(card -> card.getId().equals(cardId))
                 .count();
     }
 
-    private int amountOfCardInSideboard(UUID deckId, String cardId)
-    {
+    private int amountOfCardInSideboard(UUID deckId, String cardId) {
         Deck deck = getDeckById(deckId);
         return (int) deck.getSideboard().stream()
                 .filter(card -> card.getId().equals(cardId))
                 .count();
     }
 
+
+    public static List<String> requestValidation(Deck deck) {
+        Gson gson = new Gson();
+        HttpClient httpClient = HttpClient.newHttpClient();
+        DeckLegalityCheckDto deckLegalityCheckDto = new DeckLegalityCheckDto(deck);
+        String postBody = gson.toJson(deckLegalityCheckDto);
+
+        List<String> brokenRules = new ArrayList<>();
+        try {
+            HttpRequest postRequest = HttpRequest.newBuilder()
+//                    .uri(new URI("http://localhost:8084/api/internal/decks/validate"))
+                    .uri(new URI("http://validation-service:8080/api/internal/decks/validate"))
+                    .POST(HttpRequest.BodyPublishers.ofString(postBody))
+                    .header("Content-Type", "application/json")
+                    .build();
+            HttpResponse<String> postResponse = httpClient.send(postRequest, HttpResponse.BodyHandlers.ofString());
+            brokenRules = List.of(gson.fromJson(postResponse.body(), String[].class));
+        } catch (IOException | InterruptedException | URISyntaxException e) {
+            System.out.println(e);
+        }
+
+        return brokenRules;
+    }
 }

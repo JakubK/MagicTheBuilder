@@ -1,6 +1,15 @@
 .decks-view {
   padding: 2em;
 
+  &__head {
+    display: flex;
+    align-items: center;
+
+    >div {
+      margin-left: 1em;
+    }
+  }
+
   &__decks {
     padding: 3em;
     display: flex;
@@ -10,4 +19,25 @@
   &__card {
     margin: 1em;
   }
+
+  &__empty {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    justify-content: center;
+  }
 }
+
+.deck {
+  padding: 1em;
+  border: 1px solid black;
+  border-radius: 1em;
+  width: 300px;
+
+  &__content, &__icons, &__features {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+}
+

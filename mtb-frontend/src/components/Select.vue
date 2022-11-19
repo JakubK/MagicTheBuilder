@@ -2,7 +2,8 @@
   <div v-click-outside="() => active = false" class="select">
     <div class="select__wrapper">
       <div @click="active = true" class="select__front">
-        <span>{{ placeholder }}</span>
+        <span v-if="multiple && modelValue.length === 0">{{ placeholder }}</span>
+        <span v-else>{{ modelValue[0]?.label }}</span>
         <svg width="14" height="9" viewBox="0 0 14 9" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path d="M1 1.81104L7 7.81104L13 1.81104" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
@@ -43,6 +44,11 @@ const props = defineProps({
     type: Array as PropType<Array<{label: string, checked: boolean}>>,
     required: false,
     default: []
+  },
+  multiple: {
+    type: Boolean,
+    required: false,
+    default: true
   }
 });
 
@@ -54,7 +60,17 @@ const isChecked = (label: string): boolean => {
 
 const active = ref(false);
 const selectOption = (option: string) => {
-  if(props.modelValue!.filter(x => x.label === option).length === 0) {
+  if(props.modelValue!.filter(x => x.label === option).length === 0) { //Select:
+      if(!props.multiple) {
+        emit('input', option);
+        emit('update:modelValue', [
+          {
+            label: option,
+            checked: true
+          }
+        ]);
+        return;
+      }
       const updatedArray = props.modelValue!
         .filter(x => x.label !== option)
         .map(x => x);
@@ -66,7 +82,7 @@ const selectOption = (option: string) => {
     emit('update:modelValue', updatedArray);
   }
   else {
-    //  Remove from array
+    //  Deselect: Remove from array
     const updatedArray = props.modelValue!.filter(x => x.label !== option);
     emit('update:modelValue', updatedArray);
   }

@@ -6,4 +6,5 @@ export interface GetCardsRequest {
     size: number;
     sortBy: string;
     sets: string;
+    ids: string;
 }

@@ -1,6 +1,7 @@
 <template>
   <div class="cards-view">
-    <BaseHeader>{{ title }}</BaseHeader>
+    
+    <BaseHeader>{{ title }} <Button @click="handleFinish" v-if="cardSource > 0">Back</Button></BaseHeader>
     <div class="cards-view__query">
       <div v-click-outside="resetQuery" class="cards-view__input">
         <TextInput v-model="search" placeholder="Type the name of card you're looking for...">
@@ -54,7 +55,14 @@
       </div>
     </div>
     <div class="cards-view__cards">
-      <CardItem class="cards-view__card" v-for="(card, index) in cards" :card="card" :key="index" />
+      <CardItem class="cards-view__card"
+        v-for="card in cards"
+        :card="card"
+        :key="card.id"
+        @flipped-back="handleFlipBack($event)"
+        @amount-changed="handleAmountChange($event)"
+        @increment="handleIncrement($event)"
+        @decrement="handleDecrement($event)" />
     </div>
     <Button class="cards-view__more" @click="loadMore">Load more results</Button>
   </div>
@@ -69,12 +77,18 @@ import CheckBox from '@/components/CheckBox.vue';
 import Select from '@/components/Select.vue';
 import Button from '@/components/Button.vue';
 
-import { onMounted, Ref, ref, watch } from 'vue';
+import { onMounted, PropType, Ref, ref, watch } from 'vue';
 import debounce from 'lodash.debounce';
 import ClickOutside from 'click-outside-vue3';
 import { Card } from '@/models/card';
 import { cardsService } from '@/services/cards';
 import { metaDataService } from '@/services/metaData';
+import { collectionService } from '@/services/collection';
+import { CardSource } from '@/models/cardSource';
+import { useRoute } from 'vue-router';
+import { decksService } from '@/services/deck';
+import router from '@/router';
+import { AmountChangedEvent } from '@/models/amountChangedEvent';
 
 
 const vClickOutside = ClickOutside.directive;
@@ -87,15 +101,32 @@ const sortingOptions = [
   'type'
 ]
 
-defineProps({
+const props = defineProps({
   title: {
     type: String,
+    required: true
+  },
+  cardSource: {
+    type: Number as PropType<CardSource>,
     required: true
   }
 })
 
+
+const handleFinish = () => {
+  router.go(-1);
+}
+
+const route = useRoute();
+const id = ref('');
+
 const cards: Ref<Card[]> = ref([]);
 const page = ref(0);
+
+if (props.cardSource > 0) {
+  const segments = route.fullPath.split('/');
+  id.value = segments[segments.length - 1];
+}
 
 const loadMore = async () => {
   page.value++;
@@ -182,6 +213,54 @@ const handleQueryRequest = async(more: boolean = false) => {
     cards.value = [...cards.value , ...cardsResponse.content];
   else
     cards.value = cardsResponse.content;
+}
+
+const handleIncrement = async(cardId: string) => {
+  const cardToUpdate = cards.value.find(x => x.id === cardId);
+  if(cardToUpdate) {
+    if(props.cardSource === CardSource.Collection)
+      cardToUpdate.amount = await collectionService.incrementCardAmountInCollection(cardId);
+    else if(props.cardSource === CardSource.Deck)
+      cardToUpdate.amount = await decksService.addToDeck(id.value, cardId);
+    else // Sideboard
+      cardToUpdate.amount = await decksService.addToSideboard(id.value, cardId);
+  }
+}
+
+const handleDecrement = async(cardId: string) => {
+  const cardToUpdate = cards.value.find(x => x.id === cardId);
+  if(cardToUpdate) {
+    if(props.cardSource === CardSource.Collection)
+      cardToUpdate.amount = await collectionService.decrementCardAmountInCollection(cardId);
+    else if(props.cardSource === CardSource.Deck)
+      cardToUpdate.amount = await decksService.removeFromDeck(id.value, cardId);
+    else // Sideboard
+      cardToUpdate.amount = await decksService.removeFromSideboard(id.value, cardId);
+  }
+}
+
+const handleFlipBack = async(cardId: string) => {
+  const cardToUpdate = cards.value.find(x => x.id === cardId);
+  if(cardToUpdate) {
+    if(props.cardSource === CardSource.Collection)
+      cardToUpdate.amount = await collectionService.getCardAmountInCollection(cardId);
+    else if(props.cardSource === CardSource.Deck)
+      cardToUpdate.amount = await decksService.getCardAmountInDeck(id.value, cardId);
+    else // Sideboard
+      cardToUpdate.amount = await decksService.getCardAmountInSide(id.value, cardId);
+  }
+}
+
+const handleAmountChange = async(payload: AmountChangedEvent) => {
+  const cardToUpdate = cards.value.find(x => x.id === payload.cardId);
+  if(cardToUpdate) {
+    if(props.cardSource === CardSource.Collection)
+      cardToUpdate.amount = await collectionService.setInCollection(payload);
+    else if(props.cardSource === CardSource.Deck)
+      cardToUpdate.amount = await decksService.setInDeck(id.value, payload);
+    else // Sideboard
+      cardToUpdate.amount = await decksService.setInSide(id.value, payload);
+  }
 }
 
 </script>

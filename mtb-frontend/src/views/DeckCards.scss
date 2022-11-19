@@ -1,0 +1,13 @@
+.deck-cards {
+  padding: 2em;
+
+  &__cards {
+    padding: 3em;
+    display: flex;
+    flex-wrap: wrap;
+    }
+
+    &__card {
+        margin: 1em;
+    }
+}

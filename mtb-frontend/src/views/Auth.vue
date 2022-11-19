@@ -3,17 +3,17 @@
     <div class="auth__wrapper">
       <Login />
       <Register />
-      <div class="auth__card" :class="{ 'auth__card--right': right }">
-        <div v-if="right" class="card__text card__sign-in">
+      <div class="auth__card" :class="{ 'auth__card--right': startRight }">
+        <div v-if="!startRight" class="card__text card__sign-in">
           <h2>Got an account already?</h2>
           <p>Sign in here!</p>
           <p>Sign in to browse and manage your cards, organize them into decks and so much more!</p>
-          <Button type="ghost" @click="right = !right">Switch</Button>
+          <Button type="ghost" @click="handleClick">Switch</Button>
         </div>
-        <div v-if="!right" class="card__text card__sign-up">
+        <div v-else class="card__text card__sign-up">
           <h2>No account yet? <br/> Make one in matter of seconds!</h2>
           <p>Sign up to browse and manage your cards, organize them into decks and so much more!</p>
-          <Button type="ghost" @click="right = !right">Switch</Button>
+          <Button type="ghost" @click="handleClick">Switch</Button>
         </div>
       </div>
     </div>
@@ -21,10 +21,12 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue';
+import { onMounted } from 'vue';
 import Login from "./Login.vue";
 import Register from "./Register.vue";
 import Button from '@/components/Button.vue';
+
+import router from '@/router';
 
 const props = defineProps({
   startRight: {
@@ -34,7 +36,18 @@ const props = defineProps({
   }
 })
 
-const right = ref(props.startRight);
+onMounted(() => {
+  localStorage.clear();
+})
+
+const handleClick = () => {
+  if(!props.startRight) {
+    router.push('/auth/login');
+  }
+  else {
+    router.push('/auth/register');
+  } 
+}
 
 </script>
 

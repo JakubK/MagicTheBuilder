@@ -4,6 +4,13 @@ import CardDetails from "@/views/CardDetails.vue";
 import Cards from "@/views/Cards.vue";
 import Main from "@/views/Main.vue";
 import Decks from "@/views/Decks.vue";
+import CardsCollection from "@/views/CardsCollection.vue";
+import PublicCardsCollection from "@/views/PublicCardsCollection.vue";
+import PublicDeckCards from "@/views/PublicDeckCards.vue";
+
+import { CardSource } from "@/models/cardSource";
+import DeckCards from "@/views/DeckCards.vue";
+import PublicDecks from "@/views/PublicDecks.vue";
 
 const routes: RouteRecordRaw[] = [
   {
@@ -29,6 +36,9 @@ const routes: RouteRecordRaw[] = [
   {
     path: '/',
     component: Main,
+    meta: {
+      requiresAuth: true
+    },
     children: [
       {
         path: 'cards',
@@ -37,16 +47,19 @@ const routes: RouteRecordRaw[] = [
         children: [
           {
             path: 'collection',
-            component: Cards,
-            props: {
-              title: 'My cards collection'
-            }
+            component: CardsCollection,
+          },
+          {
+            path: 'collection/:id',
+            component: PublicCardsCollection,
+            props: true
           },
           {
             path: 'browse',
             component: Cards,
             props: {
-              title: 'All cards'
+              title: 'All cards',
+              cardSource: CardSource.Collection
             }
           },
           {
@@ -61,6 +74,37 @@ const routes: RouteRecordRaw[] = [
         redirect: 'decks/collection',
         children: [
           {
+            path: ':id',
+            component: DeckCards,
+            props: true,
+          },
+          {
+            path: 'deck/:id',
+            component: Cards,
+            props: {
+              title: 'Query cards for your Deck',
+              cardSource: CardSource.Deck
+            }
+          },
+          {
+            path: 'public/:id',
+            component: PublicDeckCards,
+            props: true
+          },
+          {
+            path: 'user/:id',
+            component: PublicDecks,
+            props: true
+          },
+          {
+            path: 'side/:id',
+            component: Cards,
+            props: {
+              title: 'Query cards for your Sideboard',
+              cardSource: CardSource.Sideboard
+            }
+          },
+          {
             path: 'collection',
             component: Decks,
             props: {
@@ -69,7 +113,7 @@ const routes: RouteRecordRaw[] = [
           },
           {
             path: 'browse',
-            component: Decks,
+            component: PublicDecks,
             props: {
               title: 'Community decks'
             }
@@ -80,14 +124,23 @@ const routes: RouteRecordRaw[] = [
   },
   {
     path: '/logout',
-    redirect: '/auth',
-    beforeEnter: () => localStorage.clear()
+    redirect: '/auth'
   }
 ]
 
 const router = createRouter({
   history: createWebHistory(),
   routes
+});
+
+
+router.beforeEach((to, _) => {
+  if(to.meta.requiresAuth && !localStorage.getItem('jwt')) {
+    return {
+      path: '/auth/login',
+      query: { redirect: to.fullPath }
+    }
+  }
 });
 
 export default router;

@@ -29,6 +29,11 @@ export const collectionService = {
         return response.data;
     },
 
+    async getUserCollection(id:string, page: number, size: number): Promise<GetCollectionResponse> {
+        const response = await request.get(`auth/collections/${id}?page=${page}&size=${size}`);
+        return response.data; 
+    }
+
     async setAccessLevel(accessLevel: AccessLevel): Promise<any> {
         const response = await request.post(`auth/collections/setAccessLevel/${accessLevel}`);
         return response.data;

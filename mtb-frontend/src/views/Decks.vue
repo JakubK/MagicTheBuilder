@@ -64,6 +64,7 @@
         @created="handleCreate($event)"
         @updated="handleUpdate($event)" />
     </Teleport>
+    <Button v-if="showMoreBtn" @click="loadMore">Load more</Button>
   </div>
 </template>
 
@@ -118,10 +119,27 @@ const handleCreate = (newDeck: Deck) => {
   decks.value.push(newDeck);
 }
 
+const page = ref(0);
 onMounted(async() => {
   //Fetch decks here
-  decks.value = await decksService.getMyDecks();
+  await fetchDecks();
 })
+
+const showMoreBtn = ref(false);
+const loadMore = async() => {
+  page.value++;
+  await fetchDecks(true);
+}
+
+const fetchDecks = async(more: boolean  = false) => {
+  showMoreBtn.value = true;
+  if(more)
+    decks.value = [...decks.value, ...await decksService.getMyDecks(page.value, 20)]
+  else
+    decks.value = await decksService.getMyDecks(page.value, 20);
+  if(decks.value.length === 0)
+    showMoreBtn.value = false;
+}
 
 </script>
 

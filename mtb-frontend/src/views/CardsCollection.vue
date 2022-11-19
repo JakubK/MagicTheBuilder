@@ -2,7 +2,7 @@
     <div class="card-collection">
 			<BaseHeader>My Cards</BaseHeader>
       <Button @click="toggleVisibility">
-        Switch visibility from {{ accessLevel  }}
+        Switch visibility from {{ accessButtonText  }}
       </Button>
 			<div class="card-collection__cards" v-if="cards.length > 0">
 					<CardItem 
@@ -33,7 +33,7 @@ import { AccessLevel } from '@/models/accessLevel';
 import { AmountChangedEvent } from '@/models/amountChangedEvent';
 import { Card } from '@/models/card';
 import { cardsService } from '@/services/cards';
-import { onMounted, Ref, ref } from 'vue';
+import { computed, onMounted, Ref, ref } from 'vue';
 
 import { collectionService } from '../services/collection';
 
@@ -43,6 +43,10 @@ const accessLevel: Ref<AccessLevel> = ref(AccessLevel.public);
 onMounted(async() => {
     await handleGetRequest();
 });
+
+const accessButtonText = computed(() => {
+  return accessLevel.value === AccessLevel.private ? 'Make public' : 'Make private';
+})
 
 const handleGetRequest = async() => {
   //  Fetch cards
@@ -57,7 +61,7 @@ const handleGetRequest = async() => {
   const cardResponse = await cardsService.getCards({
       ids: cardsIds.join(',')
   })
-  cards.value = cardResponse.content;
+  cards.value = [...cards.value, ...cardResponse.content];
 }
 
 const page = ref(0);

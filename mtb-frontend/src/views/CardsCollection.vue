@@ -1,7 +1,9 @@
 <template>
     <div class="card-collection">
 			<BaseHeader>My Cards</BaseHeader>
-      <Select placeholder="" v-model="accessLevelString" :multiple="false" @input="handleChangeVisibility" :options="availableAccessLevels"></Select>
+      <Button @click="toggleVisibility">
+        Switch visibility from {{ accessLevel  }}
+      </Button>
 			<div class="card-collection__cards" v-if="cards.length > 0">
 					<CardItem 
 						class="card-collection__card"
@@ -19,13 +21,13 @@
           <Button>Cards browser</Button>
         </router-link>
       </div>
+      <Button v-if="showMoreBtn" @click="loadMore">Load more</Button>
     </div>
 </template>
 
 <script lang="ts" setup>
 import Button from '@/components/Button.vue';
 import CardItem from '@/components/CardItem.vue';
-import Select from '@/components/Select.vue';
 import BaseHeader from '@/components/typography/BaseHeader.vue';
 import { AccessLevel } from '@/models/accessLevel';
 import { AmountChangedEvent } from '@/models/amountChangedEvent';
@@ -36,28 +38,42 @@ import { onMounted, Ref, ref } from 'vue';
 import { collectionService } from '../services/collection';
 
 const cards: Ref<Card[]> = ref([]);
-const accessLevelString: Ref<any[]> = ref([]);
-const availableAccessLevels: Ref<string[]> = ref([AccessLevel.notPublic, AccessLevel.private, AccessLevel.public]);
+const accessLevel: Ref<AccessLevel> = ref(AccessLevel.public);
 
 onMounted(async() => {
-    //  Fetch cards
-    const response = await collectionService.getCollection();
-    const cardsIds = response.cards.map(x => x.cardId);
-    if(cardsIds.length === 0)
-        return;
-    const cardResponse = await cardsService.getCards({
-        ids: cardsIds.join(',')
-    })
-    cards.value = cardResponse.content;
-
-    accessLevelString.value = [];
-    accessLevelString.value.push({
-      label: response.accessLevel
-    });
+    await handleGetRequest();
 });
 
-const handleChangeVisibility = (x : any) => {
-  collectionService.setAccessLevel(x);
+const handleGetRequest = async() => {
+  //  Fetch cards
+  showMoreBtn.value = true;
+  const response = await collectionService.getCollection(page.value, 20);
+  userId.value = response.userId;
+  if (response.cards.length === 0)
+    showMoreBtn.value = false;
+  const cardsIds = response.cards.map(x => x.cardId);
+  if(cardsIds.length === 0)
+      return;
+  const cardResponse = await cardsService.getCards({
+      ids: cardsIds.join(',')
+  })
+  cards.value = cardResponse.content;
+}
+
+const page = ref(0);
+const userId = ref('');
+const showMoreBtn = ref(false);
+const loadMore = async() => {
+  page.value++;
+  await handleGetRequest();
+}
+
+const toggleVisibility = async() => {
+  accessLevel.value = accessLevel.value === AccessLevel.private ? AccessLevel.public : AccessLevel.private;
+  await collectionService.setAccessLevel(accessLevel.value);
+  if(accessLevel.value === AccessLevel.public) { // Save link to collection in clipboard
+    navigator.clipboard.writeText(`${import.meta.env.VITE_APP_URL}/cards/collection/${userId.value}`);
+  }
 }
 
 const handleIncrement = async(cardId: string) => {

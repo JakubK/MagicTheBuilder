@@ -4,7 +4,8 @@ import CardDetails from "@/views/CardDetails.vue";
 import Cards from "@/views/Cards.vue";
 import Main from "@/views/Main.vue";
 import Decks from "@/views/Decks.vue";
-import CardsCollectionVue from "@/views/CardsCollection.vue";
+import CardsCollection from "@/views/CardsCollection.vue";
+import PublicCardsCollection from "@/views/PublicCardsCollection.vue";
 import { CardSource } from "@/models/cardSource";
 import DeckCards from "@/views/DeckCards.vue";
 
@@ -43,7 +44,11 @@ const routes: RouteRecordRaw[] = [
         children: [
           {
             path: 'collection',
-            component: CardsCollectionVue,
+            component: CardsCollection,
+          },
+          {
+            path: 'collection/:id',
+            component: PublicCardsCollection
           },
           {
             path: 'browse',

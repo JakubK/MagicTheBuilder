@@ -24,8 +24,8 @@ export const collectionService = {
         return response.data;
     },
 
-    async getCollection(): Promise<GetCollectionResponse> {
-        const response = await request.get('auth/collections');
+    async getCollection(page: number, size: number): Promise<GetCollectionResponse> {
+        const response = await request.get(`auth/collections?page=${page}&size=${size}`);
         return response.data;
     },
 

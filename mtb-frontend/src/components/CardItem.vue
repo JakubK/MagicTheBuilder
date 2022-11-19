@@ -41,7 +41,10 @@
                   stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
               </svg>
             </Icon>
-            <div class="card-reverse__counter">
+            <div v-if="readOnly" class="card-reverse__counter">
+              {{ card.amount }}
+            </div>
+            <div v-else class="card-reverse__counter">
               <div class="card-reverse__action">
                 <svg @click="incrementCollection" width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path
@@ -89,6 +92,11 @@ const props = defineProps({
   card: {
     type: Object as PropType<Card>,
     required: true,
+  },
+  readOnly: {
+    type: Boolean,
+    required: false,
+    default: false
   }
 });
 

@@ -77,6 +77,7 @@ import DeckModal from './DeckModal.vue';
 import { Deck } from '@/models/deck';
 import { decksService } from '@/services/deck';
 import { onMounted, Ref, ref } from 'vue';
+import { AccessLevel } from '@/models/accessLevel';
 
 defineProps({
   title: {
@@ -113,6 +114,10 @@ const handleUpdate = (data: any) => {
   decks.value[deckIndex].accessLevel = data.form.accessLevel; 
   decks.value[deckIndex].gameMode = data.form.gameMode;
   decks.value[deckIndex].name = data.form.name;
+
+  if(data.form.accessLevel === AccessLevel.notPublic) { //  Generate link
+    navigator.clipboard.writeText(`${import.meta.env.VITE_APP_URL}/decks/${data.form.id}`);
+  }
 }
 
 const handleCreate = (newDeck: Deck) => {

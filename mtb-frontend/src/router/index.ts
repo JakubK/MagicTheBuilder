@@ -8,6 +8,7 @@ import CardsCollection from "@/views/CardsCollection.vue";
 import PublicCardsCollection from "@/views/PublicCardsCollection.vue";
 import { CardSource } from "@/models/cardSource";
 import DeckCards from "@/views/DeckCards.vue";
+import PublicDecks from "@/views/PublicDecks.vue";
 
 const routes: RouteRecordRaw[] = [
   {
@@ -48,7 +49,8 @@ const routes: RouteRecordRaw[] = [
           },
           {
             path: 'collection/:id',
-            component: PublicCardsCollection
+            component: PublicCardsCollection,
+            props: true
           },
           {
             path: 'browse',
@@ -99,7 +101,7 @@ const routes: RouteRecordRaw[] = [
           },
           {
             path: 'browse',
-            component: Decks,
+            component: PublicDecks,
             props: {
               title: 'Community decks'
             }

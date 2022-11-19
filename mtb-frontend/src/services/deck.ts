@@ -25,6 +25,12 @@ export const decksService = {
         const response = await request.get(`auth/decks/${deckId}`);
         return response.data;
     },
+
+    async getPublicDecks(): Promise<Deck[]> {
+        const response = await request.get(`decks`);
+        return response.data;
+    },
+
     async removeFromDeck(deckId: string, cardId: string): Promise<number> {
         const response = await request.post(`auth/decks/${deckId}/remove/deck/${cardId}`);
         return response.data;

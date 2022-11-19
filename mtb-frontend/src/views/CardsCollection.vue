@@ -2,7 +2,7 @@
     <div class="card-collection">
 			<BaseHeader>My Cards</BaseHeader>
       <Button @click="toggleVisibility">
-        Switch visibility from {{ accessButtonText  }}
+         {{ accessButtonText  }}
       </Button>
 			<div class="card-collection__cards" v-if="cards.length > 0">
 					<CardItem 

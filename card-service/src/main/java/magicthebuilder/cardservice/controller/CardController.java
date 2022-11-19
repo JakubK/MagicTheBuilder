@@ -3,6 +3,7 @@ package magicthebuilder.cardservice.controller;
 
 import lombok.AllArgsConstructor;
 import magicthebuilder.cardservice.entity.MtgCard;
+import magicthebuilder.cardservice.model.CardsRequestModelBuilder;
 import magicthebuilder.cardservice.service.CardService;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
@@ -17,7 +18,6 @@ import static org.springframework.http.HttpStatus.NOT_FOUND;
 @AllArgsConstructor
 public class CardController {
     private final CardService cardService;
-
 
 
     @GetMapping("{id}")
@@ -39,7 +39,22 @@ public class CardController {
             @RequestParam(value = "size", required = false) Integer size,
             @RequestParam(value = "sortBy", required = false) String sortBy
     ) {
-        // TODO: Pack it up in some class
-        return cardService.getCards(ids, phrase, colors, types, sets, formats, sortBy, page, size);
+        var params = new CardsRequestModelBuilder()
+                .setIds(ids)
+                .setPhrase(phrase)
+                .setColors(colors)
+                .setTypes(types)
+                .setSets(sets)
+                .setFormats(formats)
+                .setPage(page)
+                .setSize(size)
+                .setSortBy(sortBy)
+                .build();
+        return cardService.getCards(params);
     }
 }
+
+
+
+
+

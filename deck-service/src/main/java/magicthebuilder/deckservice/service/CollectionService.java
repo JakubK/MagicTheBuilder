@@ -12,7 +12,6 @@ import magicthebuilder.deckservice.repository.CollectionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.awt.print.Pageable;
 import java.util.List;
 import java.util.Optional;
 
@@ -90,7 +89,7 @@ public class CollectionService {
         }
     }
 
-    public void setCardAmount(CardInCollectionPutRequest dto, Long userId) {
+    public int setCardAmount(CardInCollectionPutRequest dto, Long userId) {
         Collection coll = getCollectionById(userId);
         List<CardInCollection> collectionCards = getCollectionById(userId).getCards();
         CardInCollection cardInCollection;
@@ -103,10 +102,12 @@ public class CollectionService {
                 coll.setCards(collectionCards);
                 saveCollection(coll);
                 cardInCollectionRepository.delete(cardInCollection);
+                return 0;
             } else {
                 cardInCollection.setAmount(dto.getAmount());
                 cardInCollectionRepository.save(cardInCollection);
                 saveCollection(coll);
+                return dto.getAmount();
             }
         } else {
             cardInCollection = new CardInCollection(cardService.getCardById(dto.getCardId()));
@@ -115,6 +116,7 @@ public class CollectionService {
             newCollection.add(cardInCollection);
             cardInCollectionRepository.save(cardInCollection);
             saveCollection(coll);
+            return dto.getAmount();
         }
     }
 
@@ -133,6 +135,11 @@ public class CollectionService {
         }
     }
 
+    public void updateCollectionAccessLevel(CollectionAccessLevelEnum accessLevelEnum, Long userId) {
+        Collection coll = getCollectionById(userId);
+        coll.setAccessLevel(accessLevelEnum);
+        saveCollection(coll);
+    }
 
     private Collection getCollectionById(Long userId) {
         Optional<Collection> collOpt = findById(userId);
@@ -142,10 +149,4 @@ public class CollectionService {
             throw new UnrecognizedUserIdException(userId);
         }
     }
-
-    public void flushDatabase() {
-        repository.deleteAll();
-    }
-
-
 }

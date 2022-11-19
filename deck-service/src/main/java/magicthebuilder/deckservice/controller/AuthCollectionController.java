@@ -2,10 +2,9 @@ package magicthebuilder.deckservice.controller;
 
 import magicthebuilder.deckservice.dto.CardInCollectionPutRequest;
 import magicthebuilder.deckservice.dto.CollectionGetResponseDto;
+import magicthebuilder.deckservice.entity.enums.CollectionAccessLevelEnum;
 import magicthebuilder.deckservice.service.CollectionService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -32,14 +31,20 @@ public class AuthCollectionController {
         return collectionService.addCardToCollection(cardId, userId);
     }
 
+    @PostMapping("/setAccessLevel/{accessLevel}")
+    public void setCollectionAccessLevel(@PathVariable("accessLevel") CollectionAccessLevelEnum accessLevel,
+                                        @RequestHeader(value = "id") Long userId) {
+        collectionService.updateCollectionAccessLevel(accessLevel, userId);
+    }
+
     @PostMapping("/remove/{cardId}")
     public int removeCardFromCollection(@PathVariable("cardId") String cardId, @RequestHeader(value = "id") Long userId) {
         return collectionService.removeCardFromCollection(cardId, userId);
     }
 
     @PutMapping("")
-    public void setAmountOfCardInCollection(@RequestBody CardInCollectionPutRequest dto, @RequestHeader(value = "id") Long userId) {
-        collectionService.setCardAmount(dto, userId);
+    public int setAmountOfCardInCollection(@RequestBody CardInCollectionPutRequest dto, @RequestHeader(value = "id") Long userId) {
+        return collectionService.setCardAmount(dto, userId);
     }
 
 

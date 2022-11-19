@@ -34,11 +34,4 @@ public class CardService {
         repository.saveAll(cards);
     }
 
-    public Boolean checkIfCardExists(String id) {
-        return repository.findById(id).isPresent();
-    }
-
-    public void flushDatabase() {
-        repository.deleteAll();
-    }
 }

@@ -26,8 +26,8 @@ services:
   cards-db:
     image: mongo:6.0.2
     container_name: cards-db
-    #    ports:
-    #      - "27017:27017"
+    ports:
+      - "27017:27017"
     #    volumes:
     #      - data:/data
     environment:
@@ -83,6 +83,7 @@ services:
       - "8083:8080"
     depends_on:
       - user-db
+      - rabbitMq
     environment:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://user-db:5432/users
       - jwt.token.secret=secret
@@ -110,6 +111,10 @@ services:
     environment:
       - RABBITMQ_DEFAULT_USER=mtbRabbit
       - RABBITMQ_DEFAULT_PASS=password
+  validation-service:
+    build: "validation-service"
+    ports:
+      - "8084:8080"
 
 
 volumes:

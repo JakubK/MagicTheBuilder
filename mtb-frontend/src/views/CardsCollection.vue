@@ -1,6 +1,7 @@
 <template>
     <div class="card-collection">
 			<BaseHeader>My Cards</BaseHeader>
+      <Select placeholder="" v-model="accessLevelString" :multiple="false" @input="handleChangeVisibility" :options="availableAccessLevels"></Select>
 			<div class="card-collection__cards" v-if="cards.length > 0">
 					<CardItem 
 						class="card-collection__card"
@@ -24,7 +25,9 @@
 <script lang="ts" setup>
 import Button from '@/components/Button.vue';
 import CardItem from '@/components/CardItem.vue';
+import Select from '@/components/Select.vue';
 import BaseHeader from '@/components/typography/BaseHeader.vue';
+import { AccessLevel } from '@/models/accessLevel';
 import { AmountChangedEvent } from '@/models/amountChangedEvent';
 import { Card } from '@/models/card';
 import { cardsService } from '@/services/cards';
@@ -33,8 +36,11 @@ import { onMounted, Ref, ref } from 'vue';
 import { collectionService } from '../services/collection';
 
 const cards: Ref<Card[]> = ref([]);
+const accessLevelString: Ref<any[]> = ref([]);
+const availableAccessLevels: Ref<string[]> = ref([AccessLevel.notPublic, AccessLevel.private, AccessLevel.public]);
 
 onMounted(async() => {
+    //  Fetch cards
     const response = await collectionService.getCollection();
     const cardsIds = response.cards.map(x => x.cardId);
     if(cardsIds.length === 0)
@@ -43,8 +49,16 @@ onMounted(async() => {
         ids: cardsIds.join(',')
     })
     cards.value = cardResponse.content;
-})
 
+    accessLevelString.value = [];
+    accessLevelString.value.push({
+      label: response.accessLevel
+    });
+});
+
+const handleChangeVisibility = (x : any) => {
+  collectionService.setAccessLevel(x);
+}
 
 const handleIncrement = async(cardId: string) => {
   const cardToUpdate = cards.value.find(x => x.id === cardId);

@@ -62,6 +62,7 @@ const active = ref(false);
 const selectOption = (option: string) => {
   if(props.modelValue!.filter(x => x.label === option).length === 0) { //Select:
       if(!props.multiple) {
+        emit('input', option);
         emit('update:modelValue', [
           {
             label: option,

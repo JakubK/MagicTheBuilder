@@ -1,3 +1,4 @@
+import { AccessLevel } from '@/models/accessLevel';
 import { AmountChangedEvent } from '@/models/amountChangedEvent';
 import { GetCollectionResponse } from '@/models/getCollectionResponse';
 import request from './api';
@@ -25,6 +26,11 @@ export const collectionService = {
 
     async getCollection(): Promise<GetCollectionResponse> {
         const response = await request.get('auth/collections');
+        return response.data;
+    },
+
+    async setAccessLevel(accessLevel: AccessLevel): Promise<any> {
+        const response = await request.post(`auth/collections/setAccessLevel/${accessLevel}`);
         return response.data;
     }
 }

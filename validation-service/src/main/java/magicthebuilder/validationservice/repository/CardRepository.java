@@ -3,9 +3,8 @@ package magicthebuilder.validationservice.repository;
 
 import com.google.gson.Gson;
 import lombok.Getter;
-import magicthebuilder.validationservice.entity.MtgCard;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
+import lombok.Setter;
+import magicthebuilder.cardservice.entity.MtgCard;
 import org.springframework.stereotype.Repository;
 
 import javax.annotation.PostConstruct;
@@ -16,15 +15,13 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 @Repository
 public class CardRepository {
 
     @Getter
+    @Setter
     private java.util.Map<String, MtgCard> cards;
 
 

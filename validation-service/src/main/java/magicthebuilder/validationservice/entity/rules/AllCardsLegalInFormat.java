@@ -1,9 +1,9 @@
 package magicthebuilder.validationservice.entity.rules;
 
 import io.magicthegathering.javasdk.resource.Legality;
+import magicthebuilder.cardservice.entity.MtgCard;
 import magicthebuilder.validationservice.dto.DeckLegalityCheckDto;
 import magicthebuilder.validationservice.dto.MultipleCardDto;
-import magicthebuilder.validationservice.entity.MtgCard;
 
 import java.util.Arrays;
 import java.util.Map;

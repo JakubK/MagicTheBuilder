@@ -8,11 +8,13 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.TextIndexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.io.Serializable;
+
 
 @Data
 @NoArgsConstructor
 @Document
-public class MtgCard {
+public class MtgCard implements Serializable {
     public MtgCard(Card card) {
         this.id = card.getId();
         this.layout = card.getLayout();

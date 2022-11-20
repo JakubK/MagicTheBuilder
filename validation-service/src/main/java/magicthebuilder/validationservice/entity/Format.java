@@ -2,6 +2,7 @@ package magicthebuilder.validationservice.entity;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import magicthebuilder.cardservice.entity.MtgCard;
 import magicthebuilder.validationservice.dto.DeckLegalityCheckDto;
 import magicthebuilder.validationservice.entity.rules.Rule;
 

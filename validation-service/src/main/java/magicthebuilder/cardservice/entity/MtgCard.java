@@ -1,4 +1,4 @@
-package magicthebuilder.validationservice.entity;
+package magicthebuilder.cardservice.entity;
 
 import io.magicthegathering.javasdk.resource.Card;
 import io.magicthegathering.javasdk.resource.Legality;
@@ -6,10 +6,12 @@ import io.magicthegathering.javasdk.resource.Ruling;
 import lombok.*;
 
 
+import java.io.Serializable;
+
 
 @Data
 @NoArgsConstructor
-public class MtgCard {
+public class MtgCard implements Serializable {
     public MtgCard(Card card) {
         this.id = card.getId();
         this.layout = card.getLayout();
@@ -27,6 +29,7 @@ public class MtgCard {
         this.text = card.getText();
         this.originalText = card.getOriginalText();
         this.flavor = card.getFlavor();
+        this.artist = card.getArtist();
         this.number = card.getNumber();
         this.power = card.getPower();
         this.toughness = card.getToughness();
@@ -34,6 +37,7 @@ public class MtgCard {
         this.multiverseid = card.getMultiverseid();
         this.variations = card.getVariations();
         this.imageName = card.getImageName();
+        this.watermark = card.getWatermark();
         this.border = card.getBorder();
         this.timeshifted = card.isTimeshifted();
         this.hand = card.getHand();
@@ -44,6 +48,7 @@ public class MtgCard {
         this.set = card.getSet();
         this.setName = card.getSetName();
         this.printings = card.getPrintings();
+        this.imageUrl = card.getImageUrl();
         this.legalities = card.getLegalities();
         this.rulings = card.getRulings();
     }
@@ -64,6 +69,7 @@ public class MtgCard {
     private String text;
     private String originalText;
     private String flavor;
+    private String artist;
     private String number;
     private String power;
     private String toughness;
@@ -71,6 +77,7 @@ public class MtgCard {
     private int multiverseid = -1;
     private String[] variations;
     private String imageName;
+    private String watermark;
     private String border;
     private boolean timeshifted;
     private int hand;
@@ -81,6 +88,8 @@ public class MtgCard {
     private String set;
     private String setName;
     private String[] printings;
+    private String imageUrl;
+    private Boolean hasCachedImage = false;
     private Legality[] legalities;
     private Ruling[] rulings;
 }

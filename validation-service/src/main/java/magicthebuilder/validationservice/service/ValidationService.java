@@ -1,8 +1,8 @@
 package magicthebuilder.validationservice.service;
 
+import magicthebuilder.cardservice.entity.MtgCard;
 import magicthebuilder.validationservice.dto.DeckLegalityCheckDto;
 import magicthebuilder.validationservice.entity.Format;
-import magicthebuilder.validationservice.entity.MtgCard;
 import magicthebuilder.validationservice.repository.CardRepository;
 import magicthebuilder.validationservice.repository.FormatsRepository;
 import org.springframework.beans.factory.annotation.Autowired;

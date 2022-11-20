@@ -29,7 +29,7 @@ public class MetaDataRepository {
         return types == null ? downloadTypes() : types;
     }
 
-    @Scheduled(cron = "* */2 * * * *")
+    @Scheduled(cron = "* */90 * * * *")
     public void updateData() {
         types = downloadTypes();
         sets = downloadSets();

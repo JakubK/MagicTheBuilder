@@ -1,6 +1,6 @@
 package magicthebuilder.validationservice;
 
-import magicthebuilder.validationservice.entity.MtgCard;
+import magicthebuilder.cardservice.entity.MtgCard;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 

@@ -27,6 +27,8 @@ services:
       - RABBITMQ_PORT=5672
       - RABBITMQ_USERNAME=mtbRabbit
       - RABBITMQ_PASSWORD=password
+      - CARD_EXCHANGE_NAME=cardExchange
+      - CARD_ID_EXCHANGE_NAME=cardIdExchange
   cards-db:
     image: mongo:6.0.2
     container_name: cards-db
@@ -60,6 +62,7 @@ services:
       - RABBITMQ_PORT=5672
       - RABBITMQ_USERNAME=mtbRabbit
       - RABBITMQ_PASSWORD=password
+      - CARD_ID_EXCHANGE_NAME=cardIdExchange
   deck-db:
     image: postgres:15.0-alpine3.16
     restart: always
@@ -128,6 +131,7 @@ services:
       - RABBITMQ_PORT=5672
       - RABBITMQ_USERNAME=mtbRabbit
       - RABBITMQ_PASSWORD=password
+      - CARD_EXCHANGE_NAME=cardExchange
 
 volumes:
   deck-db:

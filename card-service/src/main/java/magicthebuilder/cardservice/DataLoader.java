@@ -63,6 +63,6 @@ public class DataLoader {
 
     private void SendUpdatesToRabbit(List<MtgCard> newCards) {
         cardPublisher.sendMsg(newCards);
-//        cardIdPublisher.sendMsg(newCards.stream().map(MtgCard::getId).toList());
+        cardIdPublisher.sendMsg(newCards.stream().map(MtgCard::getId).toList());
     }
 }

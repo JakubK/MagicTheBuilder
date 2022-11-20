@@ -1,11 +1,10 @@
 package magicthebuilder.deckservice.rabbit;
 
-import org.springframework.amqp.core.Binding;
-import org.springframework.amqp.core.BindingBuilder;
-import org.springframework.amqp.core.Queue;
-import org.springframework.amqp.core.TopicExchange;
+import org.springframework.amqp.core.*;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 
 @Configuration
 public class RabbitConfig {
@@ -14,19 +13,24 @@ public class RabbitConfig {
 
     static final String queueName = "userSyncQueue";
 
+
+
+    @Value("${cardIdExchangeName}")
+    private String exchangeName;
+
     @Bean
-    Queue userSyncQueue() {
+    public Queue userSyncQueue() {
         return new Queue(queueName, false);
     }
 
     @Bean
-    TopicExchange exchange() {
+    public TopicExchange exchange() {
         return new TopicExchange(topicExchangeName);
     }
 
     @Bean
-    Binding binding(Queue queue, TopicExchange exchange) {
-        return BindingBuilder.bind(queue).to(exchange).with("foo.bar.#");
+    public Binding binding(Queue userSyncQueue, TopicExchange exchange) {
+        return BindingBuilder.bind(userSyncQueue).to(exchange).with("foo.bar.#");
     }
 
     @Bean
@@ -34,4 +38,23 @@ public class RabbitConfig {
         return new Receiver();
     }
 
+    @Bean
+    public FanoutExchange exchangeCards() {
+        return new FanoutExchange(exchangeName);
+    }
+
+    @Bean
+    public Queue deleteQueue() {
+        return new AnonymousQueue();
+    }
+
+    @Bean
+    public Binding bindingCards(FanoutExchange exchangeCards, Queue deleteQueue) {
+        return BindingBuilder.bind(deleteQueue).to(exchangeCards);
+    }
+
+    @Bean
+    public CardReceiver receiverCards() {
+        return new CardReceiver();
+    }
 }

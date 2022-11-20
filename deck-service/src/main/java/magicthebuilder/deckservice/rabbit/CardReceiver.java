@@ -9,18 +9,18 @@ import java.util.List;
 
 public class CardReceiver {
 
-//    @Autowired
-//    public void setCardRepository(CardRepository cardRepository) {
-//        this.cardRepository = cardRepository;
-//    }
-//
-//    private CardRepository cardRepository;
-//
-//    @RabbitListener(queues = "#{deleteQueue.name}")
-//    public void receive(List<String> newCards) {
-//        cardRepository.saveAll(newCards.stream().map(Card::new).toList());
-//        System.out.println("Got " + newCards.size() + " from rabbit");
-//    }
+    @Autowired
+    public void setCardRepository(CardRepository cardRepository) {
+        this.cardRepository = cardRepository;
+    }
+
+    private CardRepository cardRepository;
+
+    @RabbitListener(queues = "#{deleteQueue.name}")
+    public void receive(List<String> newCards) {
+        cardRepository.saveAll(newCards.stream().map(Card::new).toList());
+        System.out.println("Got " + newCards.size() + " from rabbit");
+    }
 }
 
 

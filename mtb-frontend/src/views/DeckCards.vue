@@ -5,7 +5,9 @@
         </div>
         <div v-if="showCards">
           <BaseHeader>{{ deck?.name }} 
-            Deck Cards 
+            Deck Cards
+            <p>{{ validityText }}</p>
+            <Button @click="handleValidate">Validate</Button>
             <router-link :to="'/decks/deck/'+ deck?.id">
               <Button>Add another card</Button>
             </router-link>
@@ -36,6 +38,9 @@
               @decrement="handleDecrementSide($event)" />
           </div>
         </div>
+        <Teleport to="body">
+          <ValidationModal v-if="showValidationModal" @close="showValidationModal = false"/> 
+        </Teleport>
     </div>
 </template>
 
@@ -50,6 +55,7 @@ import { cardsService } from '@/services/cards';
 import { collectionService } from '@/services/collection';
 import { computed, onMounted, ref, Ref } from 'vue';
 import { decksService } from '../services/deck';
+import ValidationModal from './ValidationModal.vue';
 
 const props = defineProps({
   id: {
@@ -137,6 +143,22 @@ const handleDecrementSide = async(cardId: string) => {
   const cardToUpdate = cards.value.find(x => x.id === cardId);
   if(cardToUpdate)
     cardToUpdate.amount = await collectionService.decrementCardAmountInCollection(cardId);
+}
+
+const validityText = computed(() => {
+  return deck.value?.valid ? 'This deck is valid' : 'This deck is invalid'
+});
+
+const showValidationModal = ref(false);
+const handleValidate = async() => {
+  const errors = await decksService.validateDeck(props.id);
+  if(deck.value) {
+    deck.value.valid = errors.length === 0;
+    if(errors.length > 0) {
+      //  Show errors modal
+      showValidationModal.value = true;
+    }
+  }
 }
 
 </script>

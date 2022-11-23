@@ -43,7 +43,7 @@ public class UserService {
             throw new InvalidPasswordException();
         }
     }
-    public String register(RegisterRequestDto dto)
+    public void register(RegisterRequestDto dto)
     {
         User user = new User();
         validateUsernameNotAlreadyUsed(dto.getUsername());
@@ -58,7 +58,6 @@ public class UserService {
         user.setAllowDataProcessing(dto.isAllowDataProcessing());
         user = saveUser(user);
         sender.sendMsg(user.getId());
-        return user.getId().toString();
     }
 
     public User saveUser(User user){

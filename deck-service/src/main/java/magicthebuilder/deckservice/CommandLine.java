@@ -30,7 +30,7 @@ public class CommandLine implements CommandLineRunner {
         if (true) {   // DO YOU WANT TO RE-FILL DATABASE
             while (fillCards() != HttpStatus.OK) {
                 Thread.sleep(10000);
-                System.out.println("Próbuje pobrać karty z serwisu kart");
+                System.out.println("Attempting to download cards from card-service");
             }
             System.out.println("DATABASE FILLED");
         }
@@ -50,7 +50,7 @@ public class CommandLine implements CommandLineRunner {
             cardService.addCards(cards);
             result = responseEntity.getStatusCode();
         } catch (Exception e) {
-            System.out.println("Nie udało sie pobrać kart z card-service. Za 10s kolejna próba");
+            System.out.println("Failed to download cards from card-service. Attempting again in 10s");
         }
         return result;
 

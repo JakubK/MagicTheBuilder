@@ -7,13 +7,7 @@ import magicthebuilder.deckservice.entity.enums.CollectionAccessLevelEnum;
 import java.util.Collections;
 import java.util.List;
 
-@Getter
-@Setter
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
-@ToString
-@EqualsAndHashCode
+@Data
 public class CollectionGetResponseDto {
     private Long userId;
     private CollectionAccessLevelEnum accessLevel;

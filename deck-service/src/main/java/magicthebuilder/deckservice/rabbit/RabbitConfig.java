@@ -30,7 +30,7 @@ public class RabbitConfig {
 
     @Bean
     public Binding binding(Queue userSyncQueue, TopicExchange exchange) {
-        return BindingBuilder.bind(userSyncQueue).to(exchange).with("foo.bar.#");
+        return BindingBuilder.bind(userSyncQueue).to(exchange).with("mtb.uid.#");
     }
 
     @Bean

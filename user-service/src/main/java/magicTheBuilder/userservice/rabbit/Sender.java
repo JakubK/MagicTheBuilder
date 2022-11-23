@@ -13,7 +13,7 @@ public class Sender {
     private RabbitTemplate rabbitTemplate;
 
     public void sendMsg(final Long userId) {
-        rabbitTemplate.convertAndSend(exchange.getName(), "foo.bar.baz", userId);
+        rabbitTemplate.convertAndSend(exchange.getName(), "mtb.uid.foo", userId);
         System.out.println("Sent userID to deck-service. Id sent : " + userId);
     }
 }

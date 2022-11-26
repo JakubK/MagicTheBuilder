@@ -39,7 +39,7 @@
           </div>
         </div>
         <Teleport to="body">
-          <ValidationModal v-if="showValidationModal" @close="showValidationModal = false"/> 
+          <ValidationModal :errors="errors" v-if="showValidationModal" @close="showValidationModal = false"/> 
         </Teleport>
     </div>
 </template>
@@ -150,11 +150,12 @@ const validityText = computed(() => {
 });
 
 const showValidationModal = ref(false);
+const errors: Ref<string[]> = ref([]);
 const handleValidate = async() => {
-  const errors = await decksService.validateDeck(props.id);
+  errors.value = await decksService.validateDeck(props.id);
   if(deck.value) {
-    deck.value.valid = errors.length === 0;
-    if(errors.length > 0) {
+    deck.value.valid = errors.value.length === 0;
+    if(errors.value.length > 0) {
       //  Show errors modal
       showValidationModal.value = true;
     }

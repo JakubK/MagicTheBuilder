@@ -11,7 +11,7 @@
 				</Icon>
             </div>
             <div>
-                <div v-for="(error, index) in errors" :key="index">
+                <div class="modal__error" v-for="(error, index) in errors" :key="index">
                     {{ error }}
                 </div>
             </div>
@@ -20,6 +20,7 @@
 </template>
 
 <script lang="ts" setup>
+import Icon from '@/components/Icon.vue';
 import { PropType } from 'vue';
 
 defineProps({

@@ -52,11 +52,6 @@ const topItems: SidebarItem[] = [
       }
     ]
   },
-  {
-    title: 'Friends',
-    routerLink: '',
-    svg: usersIcon
-  }
 ]
 
 const bottomItems: SidebarItem[] = [
@@ -65,11 +60,6 @@ const bottomItems: SidebarItem[] = [
     routerLink: 'https://github.com/JakubK/MagicTheBuilder',
     isOuterLink: true,
     svg: githubIcon
-  },
-  {
-    title: 'Settings',
-    routerLink: '',
-    svg: cogIcon
   },
   {
     title: 'Log out',

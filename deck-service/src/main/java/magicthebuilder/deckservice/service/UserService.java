@@ -14,11 +14,13 @@ import java.util.Optional;
 @Service
 public class UserService {
 
-    @Autowired
     UserRepository userRepository;
-
-    @Autowired
     CollectionService collectionService;
+
+    public UserService(UserRepository userRepository, CollectionService collectionService) {
+        this.userRepository = userRepository;
+        this.collectionService = collectionService;
+    }
 
     public void add(User user) {
         userRepository.save(user);
@@ -35,6 +37,7 @@ public class UserService {
             throw new UnrecognizedUserIdException(id);
         }
     }
+
     public List<User> findAll() {
         return userRepository.findAll();
     }

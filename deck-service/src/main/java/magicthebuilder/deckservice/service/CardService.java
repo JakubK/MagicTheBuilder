@@ -13,8 +13,11 @@ import java.util.Optional;
 @Service
 public class CardService {
 
-    @Autowired
-    private CardRepository repository;
+    private final CardRepository repository;
+
+    public CardService(CardRepository _cardRepository) {
+        repository = _cardRepository;
+    }
 
     public Card getCardById(String id) {
         Optional<Card> card = repository.findById(id);

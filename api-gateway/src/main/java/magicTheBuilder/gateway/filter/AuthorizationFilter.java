@@ -1,9 +1,8 @@
-package magicTheBuilder.ApiGateway.filter;
+package magicTheBuilder.gateway.filter;
 
 
 import io.jsonwebtoken.Claims;
-import magicTheBuilder.ApiGateway.jwt.JwtUtil;
-import org.springframework.beans.factory.annotation.Autowired;
+import magicTheBuilder.gateway.jwt.JwtUtil;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.http.HttpStatus;
@@ -18,8 +17,12 @@ import java.util.function.Predicate;
 
 @Component
 public class AuthorizationFilter implements GatewayFilter {
-    @Autowired
-    private JwtUtil jwtUtil;
+
+    private final JwtUtil jwtUtil;
+
+    public AuthorizationFilter(JwtUtil util) {
+        this.jwtUtil = util;
+    }
 
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
@@ -49,7 +52,7 @@ public class AuthorizationFilter implements GatewayFilter {
                 return response.setComplete();
             }
 
-            Claims claims = jwtUtil.getClaims(token);
+            Claims claims = jwtUtil.parseClaims(token);
             exchange.getRequest().mutate().header("id", String.valueOf(claims.get("id"))).build();
         }
 

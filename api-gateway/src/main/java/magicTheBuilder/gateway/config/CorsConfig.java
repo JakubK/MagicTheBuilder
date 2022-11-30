@@ -1,4 +1,4 @@
-package magicTheBuilder.ApiGateway.config;
+package magicTheBuilder.gateway.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -10,7 +10,8 @@ import java.util.Arrays;
 import java.util.Collections;
 
 @Configuration
-public class CorsConfig{
+public class CorsConfig {
+
     @Bean
     public CorsWebFilter corsWebFilter() {
 

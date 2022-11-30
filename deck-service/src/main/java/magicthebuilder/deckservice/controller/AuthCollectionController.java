@@ -10,8 +10,12 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("api/auth/collections")
 public class AuthCollectionController {
-    @Autowired
-    CollectionService collectionService;
+
+    private final CollectionService collectionService;
+
+    public AuthCollectionController(CollectionService _collectionService) {
+        collectionService = _collectionService;
+    }
 
     @GetMapping("")
     public CollectionGetResponseDto getCollection(@RequestHeader(value = "id") Long userId,
@@ -33,7 +37,7 @@ public class AuthCollectionController {
 
     @PostMapping("/setAccessLevel/{accessLevel}")
     public void setCollectionAccessLevel(@PathVariable("accessLevel") CollectionAccessLevelEnum accessLevel,
-                                        @RequestHeader(value = "id") Long userId) {
+                                         @RequestHeader(value = "id") Long userId) {
         collectionService.updateCollectionAccessLevel(accessLevel, userId);
     }
 

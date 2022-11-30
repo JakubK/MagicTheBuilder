@@ -22,11 +22,9 @@ public class CollectionGetResponseDto {
                 .toList();
 
         List<MultipleCardDto> cardsInResponse;
-        if((page*size)+size < cardsInCollection.size()){
+        if ((page * size) + size < cardsInCollection.size()) {
             cardsInResponse = cardsInCollection.subList(page * size, (page * size) + size);
-        }
-        else if (page*size < cardsInCollection.size())
-        {
+        } else if (page * size < cardsInCollection.size()) {
             cardsInResponse = cardsInCollection.subList(page * size, cardsInCollection.size());
         } else {
             cardsInResponse = Collections.emptyList();

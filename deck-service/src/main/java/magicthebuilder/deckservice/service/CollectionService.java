@@ -18,14 +18,17 @@ import java.util.Optional;
 @Service
 public class CollectionService {
 
-    @Autowired
-    CollectionRepository repository;
+    private final CollectionRepository repository;
 
-    @Autowired
-    CardInCollectionRepository cardInCollectionRepository;
+    private final CardInCollectionRepository cardInCollectionRepository;
 
-    @Autowired
-    private CardService cardService;
+    private final CardService cardService;
+
+    public CollectionService(CardService _cardService, CardInCollectionRepository _cardInCollRepository, CollectionRepository _collectionRepository) {
+        this.repository = _collectionRepository;
+        this.cardInCollectionRepository = _cardInCollRepository;
+        this.cardService = _cardService;
+    }
 
     public void saveCollection(Collection collection) {
         repository.save(collection);
@@ -129,7 +132,7 @@ public class CollectionService {
     public CollectionGetResponseDto getUserCollection(Long userId, int page, int size) {
         Collection coll = getCollectionById(userId);
         if (coll.getAccessLevel() != CollectionAccessLevelEnum.PRIVATE) {
-            return new CollectionGetResponseDto(coll,page,size);
+            return new CollectionGetResponseDto(coll, page, size);
         } else {
             throw new InaccessibleResourceException(userId);
         }

@@ -15,8 +15,11 @@ import java.util.UUID;
 @RequestMapping("api/auth/decks")
 public class AuthDeckController {
 
-    @Autowired
-    private DeckService deckService;
+    private final DeckService deckService;
+
+    public AuthDeckController(DeckService _deckService) {
+        deckService = _deckService;
+    }
 
     @PostMapping()
     public UUID addDeck(@RequestBody CreateDeckDto deckDto,
@@ -26,51 +29,51 @@ public class AuthDeckController {
 
     @PostMapping("/{deckId}/add/deck/{cardId}")
     public int addCardToDeck(@PathVariable("cardId") String cardId,
-                                                       @PathVariable("deckId") UUID deckId,
-                                                       @RequestHeader(value = "id") Long userId) {
-        return deckService.addCardToDeck(deckId,cardId,userId);
+                             @PathVariable("deckId") UUID deckId,
+                             @RequestHeader(value = "id") Long userId) {
+        return deckService.addCardToDeck(deckId, cardId, userId);
     }
 
     @PostMapping("/{deckId}/add/sideboard/{cardId}")
     public int addCardToSideboard(@PathVariable("cardId") String cardId,
-                              @PathVariable("deckId") UUID deckId,
-                              @RequestHeader(value = "id") Long userId) {
-        return deckService.addCardToSideboard(deckId,cardId,userId);
+                                  @PathVariable("deckId") UUID deckId,
+                                  @RequestHeader(value = "id") Long userId) {
+        return deckService.addCardToSideboard(deckId, cardId, userId);
     }
 
     @PostMapping("/{deckId}/remove/deck/{cardId}")
     public int removeCardFromDeck(@PathVariable("cardId") String cardId,
-                             @PathVariable("deckId") UUID deckId,
-                             @RequestHeader(value = "id") Long userId) {
-        return deckService.removeCardFromDeck(deckId,cardId,userId);
+                                  @PathVariable("deckId") UUID deckId,
+                                  @RequestHeader(value = "id") Long userId) {
+        return deckService.removeCardFromDeck(deckId, cardId, userId);
     }
 
     @PostMapping("/{deckId}/remove/sideboard/{cardId}")
     public int removeCardFromSideboard(@PathVariable("cardId") String cardId,
-                                  @PathVariable("deckId") UUID deckId,
-                                  @RequestHeader(value = "id") Long userId) {
-        return deckService.removeCardFromSideboard(deckId,cardId,userId);
+                                       @PathVariable("deckId") UUID deckId,
+                                       @RequestHeader(value = "id") Long userId) {
+        return deckService.removeCardFromSideboard(deckId, cardId, userId);
     }
 
     @PutMapping("/{deckId}/deck")
     public int setAmountOfCardInDeck(@PathVariable("deckId") UUID deckId,
-                                       @RequestBody CardInDeckAmountPutRequest dto,
-                                       @RequestHeader(value = "id") Long userId) {
-        return deckService.setAmountOfCardInDeck(deckId,dto,userId);
+                                     @RequestBody CardInDeckAmountPutRequest dto,
+                                     @RequestHeader(value = "id") Long userId) {
+        return deckService.setAmountOfCardInDeck(deckId, dto, userId);
     }
 
     @PutMapping("/{deckId}/sideboard")
     public int setAmountOfCardInSideboard(@PathVariable("deckId") UUID deckId,
                                           @RequestBody CardInDeckAmountPutRequest dto,
                                           @RequestHeader(value = "id") Long userId) {
-        return deckService.setAmountOfCardInSideboard(deckId,dto,userId);
+        return deckService.setAmountOfCardInSideboard(deckId, dto, userId);
     }
 
     @PutMapping("/{deckId}")
     public void updateDeckInfo(@PathVariable("deckId") UUID deckId,
-                                          @RequestBody DeckUpdateRequestDto dto,
-                                          @RequestHeader(value = "id") Long userId) {
-        deckService.updateDeckInfo(deckId,dto,userId);
+                               @RequestBody DeckUpdateRequestDto dto,
+                               @RequestHeader(value = "id") Long userId) {
+        deckService.updateDeckInfo(deckId, dto, userId);
     }
 
     @GetMapping("/{deckID}")
@@ -95,8 +98,8 @@ public class AuthDeckController {
 
     @GetMapping("/{deckId}/validate")
     public List<String> checkDeckLegality(@PathVariable("deckId") UUID deckId,
-                                                       @RequestHeader(value = "id") Long userId) {
-        return deckService.checkAndSetLegality(deckId,userId);
+                                          @RequestHeader(value = "id") Long userId) {
+        return deckService.checkAndSetLegality(deckId, userId);
     }
 
     @DeleteMapping("/{deckID}")

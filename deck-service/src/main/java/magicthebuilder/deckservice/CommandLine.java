@@ -17,12 +17,14 @@ import java.util.*;
 @SpringBootApplication
 public class CommandLine implements CommandLineRunner {
 
-    @Autowired
-    private CardService cardService;
 
+    private final CardService cardService;
     @Value("${cardservice.url}")
     private String cardServiceUrl;
 
+    public CommandLine(CardService cardService) {
+        this.cardService = cardService;
+    }
 
     @Override
     public void run(String... args) throws InterruptedException {
@@ -36,8 +38,8 @@ public class CommandLine implements CommandLineRunner {
         }
     }
 
-    @Async        // should annotation stay?
-    HttpStatus fillCards() {
+        // should annotation stay?
+    public HttpStatus fillCards() {
         HttpStatus result = HttpStatus.I_AM_A_TEAPOT;
 
         RestTemplate restTemplate = new RestTemplate();
@@ -45,7 +47,7 @@ public class CommandLine implements CommandLineRunner {
         ResponseEntity<?> responseEntity;
 
         try {
-            responseEntity = restTemplate.exchange(cardServiceUrl+"/api/internal/cards/ids", HttpMethod.GET, null, String[].class);
+            responseEntity = restTemplate.exchange(cardServiceUrl + "/api/internal/cards/ids", HttpMethod.GET, null, String[].class);
             List<String> cards = Arrays.stream((String[]) Objects.requireNonNull(responseEntity.getBody())).toList();
             cardService.addCards(cards);
             result = responseEntity.getStatusCode();

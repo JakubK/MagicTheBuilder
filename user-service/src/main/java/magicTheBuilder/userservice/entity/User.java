@@ -15,7 +15,7 @@ import javax.persistence.*;
 @Entity
 @Table(name = "users")
 public class User {
-    @TableGenerator(name="UserIdGenerator", initialValue = 1000000)
+    @TableGenerator(name = "UserIdGenerator", initialValue = 1000000)
     @Id
     @GeneratedValue(strategy = GenerationType.TABLE, generator = "UserIdGenerator")
     private Long id;

@@ -51,6 +51,9 @@ public class UserService {
         if(dto.getPassword().equals(dto.getPassword_repeat())) {
             user.setPassword(bCryptPasswordEncoder.encode(dto.getPassword()));
         }
+        if(!dto.isAllowDataProcessing()){
+          throw new DataProcessingDeclinedException();
+        }
         validateEmailFormat(dto.getEmail());
         validateEmailNotAlreadyUsed(dto.getEmail());
         user.setEmail(dto.getEmail());

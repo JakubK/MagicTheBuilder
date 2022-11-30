@@ -5,6 +5,6 @@ RUN mvn verify --fail-never
 COPY /src src
 RUN mvn clean package -D maven.test.skip
 
-FROM gcr.io/distroless/java17-debian11
-COPY --from=build /app/target/user-service-0.1.0.jar user-service-0.1.0.jar
-CMD ["/user-service-0.1.0.jar"]
+FROM gcr.io/distroless/java17-debian11:nonroot@sha256:61c05080a2fbf2f6fcb2eb11b936e30ebc7eb5cad474056e5e356b5b1b94d200
+COPY --from=build /app/target/user-service-0.1.0.jar user-service.jar
+CMD ["/user-service.jar"]

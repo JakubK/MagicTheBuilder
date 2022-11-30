@@ -27,14 +27,44 @@ import java.util.*;
 @Service
 public class DeckService {
 
-    @Autowired
-    private CardService cardService;
-    @Autowired
-    private DeckRepository repository;
-    @Autowired
-    private UserService userService;
-    @Autowired
-    private CollectionService collectionService;
+
+    private final CardService cardService;
+
+    private final DeckRepository repository;
+
+    private final UserService userService;
+
+    private final CollectionService collectionService;
+
+    public DeckService(CardService cardService, DeckRepository repository, UserService userService, CollectionService collectionService) {
+        this.cardService = cardService;
+        this.repository = repository;
+        this.userService = userService;
+        this.collectionService = collectionService;
+    }
+
+    public static List<String> requestValidation(Deck deck) {
+        Gson gson = new Gson();
+        HttpClient httpClient = HttpClient.newHttpClient();
+        DeckLegalityCheckDto deckLegalityCheckDto = new DeckLegalityCheckDto(deck);
+        String postBody = gson.toJson(deckLegalityCheckDto);
+
+        List<String> brokenRules = new ArrayList<>();
+        try {
+            HttpRequest postRequest = HttpRequest.newBuilder()
+//                    .uri(new URI("http://localhost:8084/api/internal/decks/validate"))
+                    .uri(new URI("http://validation-service:8080/api/internal/decks/validate"))
+                    .POST(HttpRequest.BodyPublishers.ofString(postBody))
+                    .header("Content-Type", "application/json")
+                    .build();
+            HttpResponse<String> postResponse = httpClient.send(postRequest, HttpResponse.BodyHandlers.ofString());
+            brokenRules = List.of(gson.fromJson(postResponse.body(), String[].class));
+        } catch (IOException | InterruptedException | URISyntaxException e) {
+            System.out.println(e);
+        }
+
+        return brokenRules;
+    }
 
     public DetailedDeckGetResponseDto getNotPrivateDeck(UUID id) {
         Deck deck = getDeckById(id);
@@ -51,7 +81,6 @@ public class DeckService {
         return new DetailedDeckGetResponseDto(deck);
 
     }
-
 
     public List<SimpleDeckGetResponseDto> getPublicDecks(Pageable paging) {
 
@@ -99,7 +128,6 @@ public class DeckService {
                 .filter(card -> Objects.equals(card.getId(), cardId))
                 .count();
     }
-
 
     public void saveDeck(Deck deck) {
         repository.save(deck);
@@ -279,29 +307,5 @@ public class DeckService {
         return (int) deck.getSideboard().stream()
                 .filter(card -> card.getId().equals(cardId))
                 .count();
-    }
-
-
-    public static List<String> requestValidation(Deck deck) {
-        Gson gson = new Gson();
-        HttpClient httpClient = HttpClient.newHttpClient();
-        DeckLegalityCheckDto deckLegalityCheckDto = new DeckLegalityCheckDto(deck);
-        String postBody = gson.toJson(deckLegalityCheckDto);
-
-        List<String> brokenRules = new ArrayList<>();
-        try {
-            HttpRequest postRequest = HttpRequest.newBuilder()
-//                    .uri(new URI("http://localhost:8084/api/internal/decks/validate"))
-                    .uri(new URI("http://validation-service:8080/api/internal/decks/validate"))
-                    .POST(HttpRequest.BodyPublishers.ofString(postBody))
-                    .header("Content-Type", "application/json")
-                    .build();
-            HttpResponse<String> postResponse = httpClient.send(postRequest, HttpResponse.BodyHandlers.ofString());
-            brokenRules = List.of(gson.fromJson(postResponse.body(), String[].class));
-        } catch (IOException | InterruptedException | URISyntaxException e) {
-            System.out.println(e);
-        }
-
-        return brokenRules;
     }
 }

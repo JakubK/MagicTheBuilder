@@ -11,6 +11,7 @@ export interface Deck {
     name: string;
     cards: DeckCard[];
     sideboard: DeckCard[];
+    valid: boolean;
 }
 
 interface DeckCard {

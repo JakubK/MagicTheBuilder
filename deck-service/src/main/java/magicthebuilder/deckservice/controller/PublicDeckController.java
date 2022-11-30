@@ -4,6 +4,7 @@ package magicthebuilder.deckservice.controller;
 import magicthebuilder.deckservice.dto.DetailedDeckGetResponseDto;
 import magicthebuilder.deckservice.dto.SimpleDeckGetResponseDto;
 import magicthebuilder.deckservice.entity.enums.GameMode;
+import magicthebuilder.deckservice.service.CollectionService;
 import magicthebuilder.deckservice.service.DeckService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -17,9 +18,12 @@ import java.util.UUID;
 @RequestMapping("api/decks")
 public class PublicDeckController {
 
-    @Autowired
-    private DeckService deckService;
 
+    private final DeckService deckService;
+
+    public PublicDeckController(DeckService _deckService) {
+        deckService = _deckService;
+    }
 
     @GetMapping("")
     public List<SimpleDeckGetResponseDto> getPublicDecks(

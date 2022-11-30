@@ -15,7 +15,8 @@ public class CommonExceptionHandler {
             DuplicatedEmailException.class,
             UnrecognizedEmailException.class,
             InvalidPasswordException.class,
-            InvalidEmailFormatException.class
+            InvalidEmailFormatException.class,
+            DataProcessingDeclinedException.class
     })
     public ResponseEntity<Object> InvalidDataExceptionHandler(RuntimeException e) {
         CustomErrorResponseEntity customErrorResponseEntity = new CustomErrorResponseEntity(

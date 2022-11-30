@@ -121,4 +121,4 @@ const submitDeckCreation = async() => {
 
 </script>
 
-<style lang="scss" scoped src="./DeckModal.scss"/>
+<style lang="scss" scoped src="./Modal.scss"/>

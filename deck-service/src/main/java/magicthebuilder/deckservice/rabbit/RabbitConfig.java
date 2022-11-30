@@ -14,7 +14,6 @@ public class RabbitConfig {
     static final String queueName = "userSyncQueue";
 
 
-
     @Value("${cardIdExchangeName}")
     private String exchangeName;
 

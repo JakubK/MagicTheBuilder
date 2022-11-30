@@ -38,12 +38,11 @@ public class DetailedDeckGetResponseDto {
         this.creationDate = deck.getCreationDate();
         this.cards = utils.CardListToMultipleCardsDto(deck.getCards());
         this.sideboard = utils.CardListToMultipleCardsDto(deck.getSideboard());
-        if(deck.getCommander() != null) {
+        if (deck.getCommander() != null) {
             this.commanderId = deck.getCommander().getId();
         }
         this.isValid = deck.isValid();
     }
-
 
 
 }

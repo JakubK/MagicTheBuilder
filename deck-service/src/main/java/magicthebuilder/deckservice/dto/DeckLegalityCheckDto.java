@@ -14,13 +14,14 @@ public class DeckLegalityCheckDto {
     private String format;
     private List<MultipleCardDto> deck;
     private List<MultipleCardDto> sideBoard;
-    private String commander=null;
-    public DeckLegalityCheckDto(Deck deck){
+    private String commander = null;
+
+    public DeckLegalityCheckDto(Deck deck) {
         ConversionUtils utils = new ConversionUtils();
         setFormat(deck.getGameMode().toString());
         setDeck(utils.CardListToMultipleCardsDto(deck.getCards()));
         setSideBoard(utils.CardListToMultipleCardsDto(deck.getSideboard()));
-        if(deck.getCommander()!= null){
+        if (deck.getCommander() != null) {
             setCommander(deck.getCommander().getId());
         }
     }

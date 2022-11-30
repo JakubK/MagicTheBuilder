@@ -9,12 +9,12 @@ import java.util.List;
 
 public class CardReceiver {
 
+    private CardRepository cardRepository;
+
     @Autowired
     public void setCardRepository(CardRepository cardRepository) {
         this.cardRepository = cardRepository;
     }
-
-    private CardRepository cardRepository;
 
     @RabbitListener(queues = "#{deleteQueue.name}")
     public void receive(List<String> newCards) {

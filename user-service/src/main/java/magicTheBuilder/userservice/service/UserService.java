@@ -1,7 +1,6 @@
 package magicTheBuilder.userservice.service;
 
 
-
 import magicTheBuilder.userservice.dto.LoginRequestDto;
 import magicTheBuilder.userservice.dto.RegisterRequestDto;
 import magicTheBuilder.userservice.entity.User;
@@ -20,36 +19,33 @@ import java.util.Optional;
 @Service
 public class UserService {
 
+    private final BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
     @Autowired
     private UserRepository userRepository;
-
     @Autowired
     private JwtUtil jwtUtil;
-
     @Autowired
     private Sender sender;
 
-    private final BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
-
-    public String login(LoginRequestDto dto)
-    {
+    public String login(LoginRequestDto dto) {
         User user = getUserByEmail(dto.getEmail());
         String encodedLoginPass = bCryptPasswordEncoder.encode(dto.getPassword());
-        if(bCryptPasswordEncoder.matches(dto.getPassword(),encodedLoginPass))
-        {
+        if (bCryptPasswordEncoder.matches(dto.getPassword(), encodedLoginPass)) {
             return jwtUtil.createToken(user);
-        }
-        else{
+        } else {
             throw new InvalidPasswordException();
         }
     }
-    public void register(RegisterRequestDto dto)
-    {
+
+    public void register(RegisterRequestDto dto) {
         User user = new User();
         validateUsernameNotAlreadyUsed(dto.getUsername());
         user.setUsername(dto.getUsername());
-        if(dto.getPassword().equals(dto.getPassword_repeat())) {
+        if (dto.getPassword().equals(dto.getPassword_repeat())) {
             user.setPassword(bCryptPasswordEncoder.encode(dto.getPassword()));
+        }
+        if (!dto.isAllowDataProcessing()) {
+            throw new DataProcessingDeclinedException();
         }
         validateEmailFormat(dto.getEmail());
         validateEmailNotAlreadyUsed(dto.getEmail());
@@ -60,34 +56,34 @@ public class UserService {
         sender.sendMsg(user.getId());
     }
 
-    public User saveUser(User user){
+    public User saveUser(User user) {
         return userRepository.save(user);
     }
 
-    private User getUserByEmail(String email){
+    private User getUserByEmail(String email) {
         Optional<User> user = userRepository.findByEmail(email);
-        if(user.isPresent()){
+        if (user.isPresent()) {
             return user.get();
         } else {
             throw new UnrecognizedEmailException();
         }
     }
 
-    private void validateUsernameNotAlreadyUsed(String username){
+    private void validateUsernameNotAlreadyUsed(String username) {
         Optional<User> user = userRepository.findByUsername(username);
-        if(user.isPresent()){
+        if (user.isPresent()) {
             throw new DuplicatedUsernameException(username);
         }
     }
 
-    private void validateEmailNotAlreadyUsed(String email){
+    private void validateEmailNotAlreadyUsed(String email) {
         Optional<User> user = userRepository.findByEmail(email);
-        if(user.isPresent()){
+        if (user.isPresent()) {
             throw new DuplicatedEmailException(email);
         }
     }
 
-    private void validateEmailFormat(String email){
+    private void validateEmailFormat(String email) {
         try {
             InternetAddress emailAddr = new InternetAddress(email);
             emailAddr.validate();

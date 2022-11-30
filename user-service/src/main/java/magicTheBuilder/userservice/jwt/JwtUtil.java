@@ -21,7 +21,7 @@ public class JwtUtil {
 
     public String createToken(User user) {
         Claims claims = Jwts.claims();
-        if(user == null) {  // JUST FOR DEVELOPMENT PURPOSES. SHOULD BE REMOVED AFTER DB SYNC WITH DECK-SERV WORKS
+        if (user == null) {  // JUST FOR DEVELOPMENT PURPOSES. SHOULD BE REMOVED AFTER DB SYNC WITH DECK-SERV WORKS
             claims.put("id", 1000000L);
         } else {
             claims.put("id", user.getId());

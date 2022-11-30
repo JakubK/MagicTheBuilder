@@ -1,29 +1,24 @@
-package magicTheBuilder.ApiGateway.config;
+package magicTheBuilder.gateway.config;
 
-import magicTheBuilder.ApiGateway.filter.AuthorizationFilter;
-import org.springframework.beans.factory.annotation.Autowired;
+import magicTheBuilder.gateway.filter.AuthorizationFilter;
 import org.springframework.cloud.gateway.route.RouteLocator;
-import org.springframework.cloud.gateway.route.builder.PredicateSpec;
 import org.springframework.cloud.gateway.route.builder.RouteLocatorBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 
 @Configuration
 public class GatewayConfig {
 
+    private final AuthorizationFilter filter;
 
-    final String uuidRegex = "{deckID:^[0-9a-fA-F]{8}\\b-[0-9a-fA-F]{4}\\b-[0-9a-fA-F]{4}\\b-[0-9a-fA-F]{4}\\b-[0-9a-fA-F]{12}$}";
-    final String userIdRegex = "{userID:\\d{7}}";
-    @Autowired
-    private AuthorizationFilter filter;
+    public GatewayConfig(AuthorizationFilter filter) {
+        this.filter = filter;
+    }
 
-    // TODO: Change hardcoded links to env variables
-    // TODO: Block cards/ids and cards/all
     @Bean
     public RouteLocator routes(RouteLocatorBuilder builder) {
         return builder.routes()
-                .route("publicDeckServiceRoute", predicateSpec -> predicateSpec
+                .route("deck-service", predicateSpec -> predicateSpec
                         .path("/api/decks/**", "/api/auth/decks/**", "/api/collections/**", "/api/auth/collections/**", "api/auth/decks/myDecks")
                         .filters(f -> f.filter(filter))
                         .uri("http://deck-service:8080"))

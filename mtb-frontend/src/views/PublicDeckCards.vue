@@ -6,6 +6,7 @@
         <div v-if="showCards">
           <BaseHeader>{{ deck?.name }} 
             Deck Cards 
+            <p>{{ validityText }}</p>
             <router-link :to="'/decks/deck/'+ deck?.id">
               <Button>Add another card</Button>
             </router-link>
@@ -95,6 +96,10 @@ onMounted(async() => {
 const handleClick = () => {
   showCards.value = !showCards.value
 }
+
+const validityText = computed(() => {
+  return deck.value?.valid ? 'This deck is valid' : 'This deck is invalid'
+})
 
 const buttonText = computed(() => {
   return showCards.value ? 'Show sideboard' : 'Show cards';

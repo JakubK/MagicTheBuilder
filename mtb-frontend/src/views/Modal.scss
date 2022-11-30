@@ -23,4 +23,9 @@
         align-items: center;
         justify-content: space-between;
     }
+
+    &__error {
+        margin: 0.5em;
+        border: 1px solid red;
+    }
 }

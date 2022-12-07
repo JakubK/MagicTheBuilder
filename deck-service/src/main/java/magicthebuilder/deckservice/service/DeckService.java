@@ -195,22 +195,22 @@ public class DeckService {
         }
     }
 
-    public int setAmountOfCardInDeck(UUID deckId, CardInDeckAmountPutRequest dto, Long userId) {
+    public int setAmountOfCardInDeck(UUID deckId, String cardId, int amount, Long userId) {
         Deck deck = getDeckById(deckId);
         validateUserAccessToDeck(deckId, userId);
-        Card cardToAdjust = cardService.getCardById(dto.getCardId());
+        Card cardToAdjust = cardService.getCardById(cardId);
         List<Card> deckCards = deck.getCards();
         int currentAmount = amountOfCardInDeck(deckId, cardToAdjust.getId());
-        if (dto.getAmount() == 0) {
+        if (amount == 0) {
             for (int i = currentAmount; i > 0; i--) {
                 deckCards.remove(cardToAdjust);
             }
-        } else if (dto.getAmount() > currentAmount) {
-            for (int i = dto.getAmount(); i > currentAmount; i--) {
+        } else if (amount > currentAmount) {
+            for (int i = amount; i > currentAmount; i--) {
                 deckCards.add(cardToAdjust);
             }
         } else {
-            for (int i = currentAmount; i > dto.getAmount(); i--) {
+            for (int i = currentAmount; i > amount; i--) {
                 deckCards.remove(cardToAdjust);
             }
         }
@@ -219,22 +219,22 @@ public class DeckService {
         return amountOfCardInDeck(deckId, cardToAdjust.getId());
     }
 
-    public int setAmountOfCardInSideboard(UUID deckId, CardInDeckAmountPutRequest dto, Long userId) {
+    public int setAmountOfCardInSideboard(UUID deckId, String cardId, int amount, Long userId)  {
         Deck deck = getDeckById(deckId);
         validateUserAccessToDeck(deckId, userId);
-        Card cardToAdjust = cardService.getCardById(dto.getCardId());
+        Card cardToAdjust = cardService.getCardById(cardId);
         List<Card> deckSideboard = deck.getSideboard();
         int currentAmount = amountOfCardInDeck(deckId, cardToAdjust.getId());
-        if (dto.getAmount() == 0) {
+        if (amount == 0) {
             for (int i = currentAmount; i > 0; i--) {
                 deckSideboard.remove(cardToAdjust);
             }
-        } else if (dto.getAmount() > currentAmount) {
-            for (int i = dto.getAmount(); i > currentAmount; i--) {
+        } else if (amount > currentAmount) {
+            for (int i = amount; i > currentAmount; i--) {
                 deckSideboard.add(cardToAdjust);
             }
         } else {
-            for (int i = currentAmount; i > dto.getAmount(); i--) {
+            for (int i = currentAmount; i > amount; i--) {
                 deckSideboard.remove(cardToAdjust);
             }
         }

@@ -34,7 +34,7 @@ public class PublicDeckController {
         return deckService.getPublicDecks(pageable);
     }
 
-    @GetMapping("/user/{userId}")
+    @GetMapping("/user/{userId}/decks")
     public List<SimpleDeckGetResponseDto> getUserPublicDecks(@PathVariable("userId") Long userId) {
         return deckService.getUserPublicDecks(userId);
     }
@@ -44,12 +44,12 @@ public class PublicDeckController {
         return deckService.getNotPrivateDeck(deckId);
     }
 
-    @GetMapping("/{deckID}/{cardId}/amount/deck")
+    @GetMapping("/{deckID}/deck/{cardId}/amount")
     public Long getCardAmountInDeck(@PathVariable("deckID") UUID deckId, @PathVariable("cardId") String cardId) {
         return deckService.getCardAmountInDeck(deckId, cardId);
     }
 
-    @GetMapping("/{deckID}/{cardId}/amount/sideboard")
+    @GetMapping("/{deckID}/sideboard/{cardId}/amount")
     public Long getCardAmountInSideboard(@PathVariable("deckID") UUID deckId, @PathVariable("cardId") String cardId) {
         return deckService.getCardAmountInSideboard(deckId, cardId);
     }

@@ -1,27 +1,34 @@
+import Select from '@/components/Select.vue';
 import { mount } from '@vue/test-utils'
 import { test, expect } from 'vitest';
-import Sidebar from '../components/Sidebar.vue';
 
 test('Select is not expanded by default', async () => {
-
+    const wrapper = mount(Select);
+    expect(wrapper.findAll('.select__options').length).toBe(0);
 });
 
-test('Select selection does return single array when not multiple', async() => {
+test('Select selection does emit single array when not multiple', async() => {
+    const wrapper = mount(Select, {
+        props: {
+            multiple: false,
+            modelValue: [],
+            options: [
+                {
+                    label: 'item1',
+                },
+                {
+                    label: 'item2',
+                }
+            ]
+        }
+    });
+    
+    const activator = wrapper.find('.select__front');
+    await activator.trigger('click');
 
-});
+    const options = wrapper.findAll('.select__option');
+    await options[0].trigger('click');
 
-test('Select selection does return multiple options when multiple', async() => {
-
-});
-
-test('Select unselecting works', async() => {
-
-});
-
-test('Select renders placeholder when nothing selected and multiple', async() => {
-
-});
-
-test('Select renders check on checked options', async() => {
-
+    expect(wrapper.findAll('svg').length).toBe(1);
+    
 });

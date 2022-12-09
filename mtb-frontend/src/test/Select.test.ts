@@ -30,5 +30,4 @@ test('Select selection does emit single array when not multiple', async() => {
     await options[0].trigger('click');
 
     expect(wrapper.findAll('svg').length).toBe(1);
-    
 });

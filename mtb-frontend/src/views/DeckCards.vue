@@ -7,7 +7,7 @@
           <BaseHeader>{{ deck?.name }} 
             Deck Cards
             <p>{{ validityText }}</p>
-            <Button @click="handleValidate">Validate</Button>
+            <Button @click="handleValidate">Validate</Button><br/><br/>
             <router-link :to="'/decks/deck/'+ deck?.id">
               <Button>Add another card</Button>
             </router-link>

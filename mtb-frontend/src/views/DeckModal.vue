@@ -106,7 +106,10 @@ const submitDeckCreation = async() => {
   if(isValid) {
 		if(props.method === 'POST') {
     	const newDeck = await decksService.createDeck(form);
-			emit('created', newDeck);
+			emit('created', {
+				id: newDeck,
+				...form
+			});
 		}
 		else {
 			await decksService.updateDeck(props.deck?.id!,form);

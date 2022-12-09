@@ -16,33 +16,35 @@ import cogIcon from '@/assets/cog.svg?raw';
 import logoutIcon from '@/assets/logout.svg?raw';
 import usersIcon from '@/assets/users.svg?raw';
 import { ref } from 'vue';
+import folderIcon from '@/assets/folder.svg?raw';
+import fileIcon from '@/assets/file.svg?raw';
 
 const leftMargin = ref();
 
 const topItems: SidebarItem[] = [
   {
     title: 'Cards',
-    svg: usersIcon,
+    svg: fileIcon,
     items: [
       {
         title: 'Collection',
-        svg: usersIcon,
+        svg: folderIcon,
         routerLink: '/cards/collection'
       },
       {
         title: 'Browse',
-        svg: usersIcon,
+        svg: fileIcon,
         routerLink: '/cards/browse'
       }
     ]
   },
   {
     title: 'Decks',
-    svg: usersIcon,
+    svg: folderIcon,
     items: [
       {
         title: 'My decks',
-        svg: usersIcon,
+        svg: folderIcon,
         routerLink: '/decks/collection'
       },
       {

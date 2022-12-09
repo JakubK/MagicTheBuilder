@@ -20,7 +20,7 @@ export const decksService = {
         await request.delete(`auth/decks/${deckId}`);
     },
     async getUserDecks(userId: string): Promise<Deck[]> {
-        const response = await request.get(`decks/user/${userId}`);
+        const response = await request.get(`user/${userId}/decks`);
         return response.data;
     },
     async getOwnerDeck(deckId: string): Promise<Deck> {
@@ -80,7 +80,7 @@ export const decksService = {
     },
 
     async validateDeck(deckId: string): Promise<string[]> {
-        const response = await request.get(`auth/decks/${deckId}/validate`);
+        const response = await request.get(`auth/decks/${deckId}/valid`);
         return response.data;
     }
 }

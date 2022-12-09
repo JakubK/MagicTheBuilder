@@ -30,7 +30,7 @@ export const collectionService = {
     },
 
     async getUserCollection(id:string, page: number, size: number): Promise<GetCollectionResponse> {
-        const response = await request.get(`collections/${id}?page=${page}&size=${size}`);
+        const response = await request.get(`collections/users/${id}/collection?page=${page}&size=${size}`);
         return response.data; 
     },
 

@@ -10,7 +10,7 @@ export const collectionService = {
     },
 
     async setInCollection(payload: AmountChangedEvent): Promise<number> {
-        const response = await request.put('auth/collections', payload);
+        const response = await request.put(`auth/collections/${payload.cardId}/${payload.amount}`);
         return response.data;
     },
 
@@ -35,7 +35,7 @@ export const collectionService = {
     },
 
     async setAccessLevel(accessLevel: AccessLevel): Promise<any> {
-        const response = await request.post(`auth/collections/setAccessLevel/${accessLevel}`);
+        const response = await request.post(`auth/collections/${accessLevel}`);
         return response.data;
     }
 }

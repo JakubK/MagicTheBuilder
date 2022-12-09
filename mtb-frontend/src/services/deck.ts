@@ -13,7 +13,7 @@ export const decksService = {
         return response.data;
     },
     async getMyDecks(page:number, size:number): Promise<Deck[]> {
-        const response = await request.get(`auth/decks/myDecks?page=${page}&size=${size}`);
+        const response = await request.get(`auth/decks?page=${page}&size=${size}`);
         return response.data;
     },
     async deleteDeck(deckId: string): Promise<any> {
@@ -47,11 +47,11 @@ export const decksService = {
     },
 
     async setInDeck(deckId: string, payload: AmountChangedEvent): Promise<number> {
-        const response = await request.put(`/auth/decks/${deckId}/deck`, payload);
+        const response = await request.put(`/auth/decks/${deckId}/cards/${payload.cardId}/${payload.amount}`);
         return response.data;
     },
     async setInSide(deckId: string, payload: AmountChangedEvent): Promise<number> {
-        const response = await request.put(`/auth/decks/${deckId}/sideboard`, payload);
+        const response = await request.put(`/auth/decks/${deckId}/sideboard/${payload.cardId}/${payload.amount}`);
         return response.data;
     },
 
@@ -66,11 +66,11 @@ export const decksService = {
 
 
     async getCardAmountInDeck(deckId: string, cardId: string): Promise<number> {
-        const response = await request.get(`/decks/${deckId}/${cardId}/amount/deck`);
+        const response = await request.get(`/decks/${deckId}/deck/${cardId}/amount`);
         return response.data;
     },
     async getCardAmountInSide(deckId: string, cardId: string): Promise<number> {
-        const response = await request.get(`/decks/${deckId}/${cardId}/amount/sideboard`);
+        const response = await request.get(`/decks/${deckId}/sideboard/${cardId}/amount`);
         return response.data;
     },
 

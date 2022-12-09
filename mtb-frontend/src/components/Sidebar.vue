@@ -39,10 +39,7 @@ defineProps({
   modelValue: Number,
 })
 
-const emit = defineEmits([
-  'resized',
-  'update:modelValue'
-]);
+const emit = defineEmits(['update:modelValue']);
 
 const handleArrowClick = () => {
   active.value = !active.value;

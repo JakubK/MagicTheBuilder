@@ -180,6 +180,10 @@ const colors = ref([
   {
     label: 'Black',
     checked: false,
+  },
+  {
+    label: 'Red',
+    checked: false
   }
 ])
 

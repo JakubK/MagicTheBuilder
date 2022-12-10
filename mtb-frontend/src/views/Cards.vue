@@ -98,7 +98,10 @@ const search = ref('');
 const sortBy: Ref<any[]> = ref([]);
 const sortingOptions = [
   'toughness',
-  'type'
+  'type',
+  'name',
+  'power',
+  'manaCost'
 ]
 
 const props = defineProps({

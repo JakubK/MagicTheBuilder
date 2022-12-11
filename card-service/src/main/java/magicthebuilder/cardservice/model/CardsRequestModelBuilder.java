@@ -76,7 +76,7 @@ public class CardsRequestModelBuilder {
     }
 
     public CardsRequestModelBuilder setSize(Integer size) {
-        if (size == null || size < 0 || size > 100)
+        if (size == null || size < 1 || size > 100)
             return this;
         this.size = size;
         return this;

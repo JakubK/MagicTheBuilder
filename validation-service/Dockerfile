@@ -6,5 +6,6 @@ COPY /src src
 RUN mvn clean package -D maven.test.skip
 
 FROM gcr.io/distroless/java17-debian11:nonroot@sha256:61c05080a2fbf2f6fcb2eb11b936e30ebc7eb5cad474056e5e356b5b1b94d200
+USER nonroot
 COPY --from=build /app/target/validation-service-0.1.0.jar validation-service.jar
 CMD ["/validation-service.jar"]

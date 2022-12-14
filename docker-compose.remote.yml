@@ -11,8 +11,6 @@ services:
     image: ghcr.io/jakubk/mtb-frontend:latest
   card-service:
     image: ghcr.io/jakubk/mtb-card-service:latest
-    ports:
-      - "8081:8080"
     depends_on:
       - cards-db
     environment:
@@ -28,27 +26,11 @@ services:
   cards-db:
     image: mongo:6.0.2
     container_name: cards-db
-    ports:
-      - "27017:27017"
-    #    volumes:
-    #      - data:/data
     environment:
       - MONGO_INITDB_ROOT_USERNAME=rootuser
       - MONGO_INITDB_ROOT_PASSWORD=rootpass
-  #  mongo-express:
-  #    image: mongo-express
-  #    container_name: mongo-express
-  #    restart: always
-  #    ports:
-  #      - "8081:8081"
-  #    environment:
-  #      - ME_CONFIG_MONGODB_ADMINUSERNAME=rootuser
-  #      - ME_CONFIG_MONGODB_ADMINPASSWORD=rootpass
-  #      - ME_CONFIG_MONGODB_SERVER=mongodb
   deck-service:
     image: ghcr.io/jakubk/mtb-deck-service:latest
-    ports:
-      - "8082:8080"
     depends_on:
       - deck-db
     environment:
@@ -66,28 +48,14 @@ services:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=password
       - POSTGRES_DB=mtb
-    #    ports:
-    #      - '5432:5432'
     volumes:
       - deck-db:/var/lib/postgresql/data
   api-gateway:
     image: ghcr.io/jakubk/mtb-api-gateway:latest
-    ports:
-      - "8080:8080"
-    #    depends_on:
-    #      - card-service
-    #      - user-service
-    #      - deck-service
     environment:
       - jwt.token.secret=secret
-  adminer:
-    image: adminer
-    ports:
-      - 8092:8080
   user-service:
     image: ghcr.io/jakubk/mtb-user-service:latest
-    ports:
-      - "8083:8080"
     depends_on:
       - user-db
       - rabbitMq
@@ -106,22 +74,15 @@ services:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=password
       - POSTGRES_DB=users
-    #    ports:
-    #      - '5432:5432'
     volumes:
       - user-db:/var/lib/postgresql/data
   rabbitMq:
     image: rabbitmq:3.6.10-management
-    ports:
-      - "5672:5672"
-      - "15672:15672"
     environment:
       - RABBITMQ_DEFAULT_USER=mtbRabbit
       - RABBITMQ_DEFAULT_PASS=password
   validation-service:
     image: ghcr.io/jakubk/mtb-validation-service:latest
-    ports:
-      - "8084:8080"
     environment:
       - RABBITMQ_HOST=rabbitMq
       - RABBITMQ_PORT=5672

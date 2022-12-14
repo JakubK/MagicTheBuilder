@@ -1,7 +1,5 @@
 version: "3.8"
 
-# TODO: Add .env file/s with env variables and secrets (Or some other recommended approach to secrets)
-
 services:
   reverse-proxy:
     build:

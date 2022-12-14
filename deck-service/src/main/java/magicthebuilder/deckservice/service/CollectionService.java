@@ -1,6 +1,5 @@
 package magicthebuilder.deckservice.service;
 
-import magicthebuilder.deckservice.dto.CardInCollectionPutRequest;
 import magicthebuilder.deckservice.dto.CollectionGetResponseDto;
 import magicthebuilder.deckservice.entity.CardInCollection;
 import magicthebuilder.deckservice.entity.Collection;
@@ -9,7 +8,6 @@ import magicthebuilder.deckservice.exception.customexceptions.InaccessibleResour
 import magicthebuilder.deckservice.exception.customexceptions.UnrecognizedUserIdException;
 import magicthebuilder.deckservice.repository.CardInCollectionRepository;
 import magicthebuilder.deckservice.repository.CollectionRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -92,34 +90,34 @@ public class CollectionService {
         }
     }
 
-    public int setCardAmount(CardInCollectionPutRequest dto, Long userId) {
+    public int setCardAmount(String cardId, int amount, Long userId) {
         Collection coll = getCollectionById(userId);
         List<CardInCollection> collectionCards = getCollectionById(userId).getCards();
         CardInCollection cardInCollection;
         Optional<CardInCollection> cardCollectionEntity = collectionCards.stream()
-                .filter(cardInColl -> cardInColl.getCard().getId().equals(dto.getCardId())).findFirst();
+                .filter(cardInColl -> cardInColl.getCard().getId().equals(cardId)).findFirst();
         if (cardCollectionEntity.isPresent()) {
             cardInCollection = cardCollectionEntity.get();
-            if (dto.getAmount() == 0) {
+            if (amount == 0) {
                 collectionCards.remove(cardInCollection);
                 coll.setCards(collectionCards);
                 saveCollection(coll);
                 cardInCollectionRepository.delete(cardInCollection);
                 return 0;
             } else {
-                cardInCollection.setAmount(dto.getAmount());
+                cardInCollection.setAmount(amount);
                 cardInCollectionRepository.save(cardInCollection);
                 saveCollection(coll);
-                return dto.getAmount();
+                return cardInCollection.getAmount();
             }
         } else {
-            cardInCollection = new CardInCollection(cardService.getCardById(dto.getCardId()));
-            cardInCollection.setAmount(dto.getAmount());
+            cardInCollection = new CardInCollection(cardService.getCardById(cardId));
+            cardInCollection.setAmount(amount);
             List<CardInCollection> newCollection = coll.getCards();
             newCollection.add(cardInCollection);
             cardInCollectionRepository.save(cardInCollection);
             saveCollection(coll);
-            return dto.getAmount();
+            return cardInCollection.getAmount();
         }
     }
 

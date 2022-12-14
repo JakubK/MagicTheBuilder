@@ -1,10 +1,8 @@
 package magicthebuilder.deckservice.controller;
 
-import magicthebuilder.deckservice.dto.CardInCollectionPutRequest;
 import magicthebuilder.deckservice.dto.CollectionGetResponseDto;
 import magicthebuilder.deckservice.entity.enums.CollectionAccessLevelEnum;
 import magicthebuilder.deckservice.service.CollectionService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -26,29 +24,34 @@ public class AuthCollectionController {
     }
 
     @GetMapping("/{cardId}")
-    public int getAmountOfCardInCollection(@PathVariable("cardId") String cardId, @RequestHeader(value = "id") Long userId) {
+    public int getAmountOfCardInCollection(@PathVariable("cardId") String cardId,
+                                           @RequestHeader(value = "id") Long userId) {
         return collectionService.getCardAmountInCollection(cardId, userId);
     }
 
-    @PostMapping("/add/{cardId}")
-    public int addCardToCollection(@PathVariable("cardId") String cardId, @RequestHeader(value = "id") Long userId) {
+    @PostMapping("/add/{cardId}") // adds single card to collection
+    public int addCardToCollection(@PathVariable("cardId") String cardId,
+                                   @RequestHeader(value = "id") Long userId) {
         return collectionService.addCardToCollection(cardId, userId);
     }
 
-    @PostMapping("/setAccessLevel/{accessLevel}")
+    @PutMapping("/{accessLevel}")
     public void setCollectionAccessLevel(@PathVariable("accessLevel") CollectionAccessLevelEnum accessLevel,
                                          @RequestHeader(value = "id") Long userId) {
         collectionService.updateCollectionAccessLevel(accessLevel, userId);
     }
 
-    @PostMapping("/remove/{cardId}")
-    public int removeCardFromCollection(@PathVariable("cardId") String cardId, @RequestHeader(value = "id") Long userId) {
+    @PostMapping("/remove/{cardId}") //removes single card from collection
+    public int removeCardFromCollection(@PathVariable("cardId") String cardId,
+                                        @RequestHeader(value = "id") Long userId) {
         return collectionService.removeCardFromCollection(cardId, userId);
     }
 
-    @PutMapping("")
-    public int setAmountOfCardInCollection(@RequestBody CardInCollectionPutRequest dto, @RequestHeader(value = "id") Long userId) {
-        return collectionService.setCardAmount(dto, userId);
+    @PutMapping("/{cardId}/{amount}")
+    public int putAmountOfCardInCollection(@PathVariable("cardId") String cardId,
+                                           @PathVariable("amount") int amount,
+                                           @RequestHeader(value = "id") Long userId) {
+        return collectionService.setCardAmount( cardId, amount, userId);
     }
 
 

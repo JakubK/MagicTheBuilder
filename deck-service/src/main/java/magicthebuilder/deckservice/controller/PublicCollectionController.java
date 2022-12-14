@@ -16,7 +16,7 @@ public class PublicCollectionController {
         this.collectionService = _collectionService;
     }
 
-    @GetMapping("/{userId}")
+    @GetMapping("/users/{userId}/collection")
     public CollectionGetResponseDto getCollection(@PathVariable("userId") Long id,
                                                   @RequestParam(defaultValue = "0") Integer page,
                                                   @RequestParam(defaultValue = "20") Integer size) {

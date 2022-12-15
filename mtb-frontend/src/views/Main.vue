@@ -12,14 +12,19 @@ import Sidebar from '@/components/Sidebar.vue';
 import { SidebarItem } from '@/models/sidebarItem';
 
 import githubIcon from '@/assets/github.svg?raw';
-import cogIcon from '@/assets/cog.svg?raw';
 import logoutIcon from '@/assets/logout.svg?raw';
 import usersIcon from '@/assets/users.svg?raw';
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import folderIcon from '@/assets/folder.svg?raw';
 import fileIcon from '@/assets/file.svg?raw';
+import { collectionService } from '@/services/collection';
 
 const leftMargin = ref();
+
+onMounted(async() => {
+  //  verify JWT by calling empty authorized GET
+  await collectionService.getCardAmountInCollection('-1');
+});
 
 const topItems: SidebarItem[] = [
   {

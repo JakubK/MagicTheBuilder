@@ -70,7 +70,7 @@ const submitRegister = async() => {
   if(isValid) {
     //  Send the actual form
     await authService.register(form);
-    router.push('/auth');
+    router.push('/auth/login');
   } 
 }
 

@@ -14,24 +14,18 @@ import PublicDecks from "@/views/PublicDecks.vue";
 
 const routes: RouteRecordRaw[] = [
   {
-    path: '/auth',
-    redirect: '/auth/login',
-    children: [
-      {
-        path: 'login',
-        component: Auth,
-        props: {
-          startRight: true
-        }
-      },
-      {
-        path: 'register',
-        component: Auth,
-        props: {
-          startRight: false
-        }
-      },
-    ]
+    path: '/auth/login',
+    component: Auth,
+    props: {
+      startRight: true
+    }
+  },
+  {
+    path: '/auth/register',
+    component: Auth,
+    props: {
+      startRight: false
+    }
   },
   {
     path: '/',
@@ -124,7 +118,7 @@ const routes: RouteRecordRaw[] = [
   },
   {
     path: '/logout',
-    redirect: '/auth'
+    redirect: '/auth/login'
   }
 ]
 

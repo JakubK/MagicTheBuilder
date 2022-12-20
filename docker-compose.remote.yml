@@ -1,0 +1,97 @@
+version: "3.8"
+
+# TODO: Add .env file/s with env variables and secrets (Or some other recommended approach to secrets)
+
+services:
+  reverse-proxy:
+    image: ghcr.io/jakubk/mtb-reverse-proxy:latest
+    ports:
+      - "80:80"
+  frontend:
+    image: ghcr.io/jakubk/mtb-frontend:latest
+  card-service:
+    image: ghcr.io/jakubk/mtb-card-service:latest
+    depends_on:
+      - cards-db
+    environment:
+      - CARDS_FILE_LOCATION=allCards
+      - MONGO_LOCATION=cards-db
+      - READ_CARDS_FROM_FILE=true
+      - RABBITMQ_HOST=rabbitMq
+      - RABBITMQ_PORT=5672
+      - RABBITMQ_USERNAME=mtbRabbit
+      - RABBITMQ_PASSWORD=password
+      - CARD_EXCHANGE_NAME=cardExchange
+      - CARD_ID_EXCHANGE_NAME=cardIdExchange
+  cards-db:
+    image: mongo:6.0.2
+    container_name: cards-db
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=rootuser
+      - MONGO_INITDB_ROOT_PASSWORD=rootpass
+  deck-service:
+    image: ghcr.io/jakubk/mtb-deck-service:latest
+    depends_on:
+      - deck-db
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://deck-db:5432/mtb
+      - CARD_SERVICE_URL=http://card-service:8080
+      - RABBITMQ_HOST=rabbitMq
+      - RABBITMQ_PORT=5672
+      - RABBITMQ_USERNAME=mtbRabbit
+      - RABBITMQ_PASSWORD=password
+      - CARD_ID_EXCHANGE_NAME=cardIdExchange
+  deck-db:
+    image: postgres:15.0-alpine3.16
+    restart: always
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=mtb
+    volumes:
+      - deck-db:/var/lib/postgresql/data
+  api-gateway:
+    image: ghcr.io/jakubk/mtb-api-gateway:latest
+    environment:
+      - jwt.token.secret=secret
+  user-service:
+    image: ghcr.io/jakubk/mtb-user-service:latest
+    depends_on:
+      - user-db
+      - rabbitMq
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://user-db:5432/users
+      - jwt.token.secret=secret
+      - jwt.token.time=60
+      - RABBITMQ_HOST=rabbitMq
+      - RABBITMQ_PORT=5672
+      - RABBITMQ_USERNAME=mtbRabbit
+      - RABBITMQ_PASSWORD=password
+  user-db:
+    image: postgres:15.0-alpine3.16
+    restart: always
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=users
+    volumes:
+      - user-db:/var/lib/postgresql/data
+  rabbitMq:
+    image: rabbitmq:3.6.10-management
+    environment:
+      - RABBITMQ_DEFAULT_USER=mtbRabbit
+      - RABBITMQ_DEFAULT_PASS=password
+  validation-service:
+    image: ghcr.io/jakubk/mtb-validation-service:latest
+    environment:
+      - RABBITMQ_HOST=rabbitMq
+      - RABBITMQ_PORT=5672
+      - RABBITMQ_USERNAME=mtbRabbit
+      - RABBITMQ_PASSWORD=password
+      - CARD_EXCHANGE_NAME=cardExchange
+
+volumes:
+  deck-db:
+    driver: local
+  user-db:
+    driver: local

@@ -1,0 +1,24 @@
+POST http://localhost:8084/api/internal/decks/validate
+Content-Type: application/json
+
+{
+  "format": "Standard",
+  "deck": [
+    {
+      "cardId": "96d9f512-3b9b-5dfa-bc86-cabc771e3e2a",
+      "amount": 1
+    },
+    {
+      "cardId": "b2c955c0-7f0b-5748-ab5d-98af82d8c682",
+      "amount": 1
+    }
+  ],
+  "sideBoard": []
+}
+
+
+###
+POST http://localhost:8084/api/internal/decks/validate
+Content-Type: application/json
+
+{"format":"Standard","deck":[],"sideBoard":[]}

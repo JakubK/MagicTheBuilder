@@ -1,0 +1,25 @@
+server:
+  port: 8080
+
+environments:
+  jwt:
+    token:
+      secret: secret
+
+
+spring:
+  application:
+    name: user-service
+
+  cloud:
+    gateway:
+      globalcors:
+        cors-configurations:
+          '[/**]':
+            allowedOrigins: "*"
+            allowedMethods:
+              - GET
+              - POST
+              - PUT
+              - DELETE
+

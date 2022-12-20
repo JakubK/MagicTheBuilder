@@ -1,0 +1,30 @@
+server:
+  port: 8080
+spring:
+  application:
+    name: user-service
+  datasource:
+    username: postgres
+    password: password
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/users}
+  jpa:
+    generate-ddl: true
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+  rabbitmq:
+    host: ${RABBITMQ_HOST:localhost}
+    port: ${RABBITMQ_PORT:5672}
+    username: ${RABBITMQ_USERNAME:mtbRabbit}
+    password: ${RABBITMQ_PASSWORD:password}
+
+
+
+environments:
+  jwt:
+    token:
+      secret: secret
+      time: 10 #in minutes
+
+
+

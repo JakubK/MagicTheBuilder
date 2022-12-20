@@ -1,0 +1,28 @@
+.login {
+  h2 {
+    font-family: 'Inter', sans-serif;
+    font-weight: 400;
+    font-size: 48px;
+    line-height: 58px;
+    text-align: center;
+
+    color: #011627;
+  }
+
+  &__form {
+    margin-top: 4em;
+  }
+
+  &__forgot {
+    font-family: 'Inter', sans-serif;
+    color: #2D7DD2;
+    font-weight: 400;
+    font-size: 16px;
+  }
+
+  &__remember {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+}

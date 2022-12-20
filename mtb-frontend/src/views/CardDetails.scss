@@ -1,0 +1,68 @@
+.card-details {
+  padding: 1em;
+
+  &__back {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+
+    font-family: 'Inter';
+    font-weight: 400;
+    font-size: 20px;
+    line-height: 15px;
+
+    color: #011627;
+
+    svg {
+      margin-right: 0.5em;
+    }
+  }
+
+  &__grid {
+    margin-top: 2em;
+
+    display: grid;
+    align-items: flex-start;
+    column-gap: 1em;
+    grid-template-columns: auto 1fr 1fr;
+  }
+
+  &__data,
+  &__usage {
+    padding: 1em;
+    border: 1px solid #011627;
+  }
+
+  &__data tr td:nth-child(2) {
+    text-align: right;
+  }
+
+}
+
+.deck {
+  font-family: 'Inter', sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 15px;
+
+  border: 1px solid #011627;
+  padding: 1em;
+
+  color: #011627;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  &__controls {
+    display: flex;
+    align-items: center;
+    svg {
+      cursor: pointer;
+    }
+    span {
+      display: block;
+      margin: 0 0.5em;
+    }
+  }
+}

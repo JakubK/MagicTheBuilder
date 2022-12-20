@@ -1,0 +1,57 @@
+.cards-view {
+  padding: 2em;
+
+  &__query {
+    display: flex;
+    justify-content: center;
+  }
+
+  &__input {
+    max-width: 45%;
+    width: 100%;
+    margin-right: 10px;
+
+    position: relative;
+  }
+
+  &__icon {
+    margin: 0 7px;
+  }
+
+  &__cards {
+    padding: 3em;
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  &__card {
+    margin: 1em;
+  }
+
+  &__order {
+    margin-top: 5em;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  &__filters {
+    width: 100%;
+
+    padding: 1.3em;
+    border: 1px solid black;
+
+    position: relative;
+  }
+}
+
+.filters {
+  &__row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    > * {
+      margin: 0 0.5em;
+    }
+  }
+}

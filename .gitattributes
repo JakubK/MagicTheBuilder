@@ -1,0 +1,2 @@
+allCards filter=lfs diff=lfs merge=lfs -text
+card-service/allCards filter=lfs diff=lfs merge=lfs -text

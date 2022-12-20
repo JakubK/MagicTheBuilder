@@ -32,7 +32,7 @@ public class AllCardsLegalInFormat implements Rule {
             legality.setFormat(deckInfo.getFormat());
             legality.setLegality("Legal");
             if (Arrays.stream(card.getLegalities()).noneMatch(legality::equals)) {
-                String msg = "Card " + card.getId() + " is illegal in format: " + legality.getFormat() + "\n";
+                String msg = "Card " + card.getName() + " is illegal in format: " + legality.getFormat() + "\n";
                 errMessage = errMessage != null ? errMessage + msg : msg;
             }
         }

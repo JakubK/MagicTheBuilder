@@ -24,9 +24,9 @@ public class ColorIdentitySameAsCommander implements Rule {
                 continue;
 
             if (errMessage == null) {
-                errMessage = "Card " + c.getId() + " has color/s which doesn't occur in commander\n";
+                errMessage = "Card " + c.getName() + " has color/s which doesn't occur in commander\n";
             } else {
-                errMessage += "Card " + c.getId() + " has color/s which doesn't occur in commander\n";
+                errMessage += "Card " + c.getName() + " has color/s which doesn't occur in commander\n";
             }
         }
 

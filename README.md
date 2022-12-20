@@ -6,7 +6,7 @@ Deck creation functionality is also available, with a built-in system for valida
 
 ### Prerequisites
 - project cloned/downloaded,
-- docker installed.
+- [docker](https://docs.docker.com/get-docker/) installed.
 
 To run the project use the following command in the main project folder:
 ```
